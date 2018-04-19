@@ -7,9 +7,12 @@ import javax.swing.*;
 
 public class HomeUI extends JPanel {
 	private JPanel homePanel;
+	
+	public HomeUI() {
+		initialize();
+	}
 
 	private void initialize() {
-		System.out.println("hey");
 		homePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
