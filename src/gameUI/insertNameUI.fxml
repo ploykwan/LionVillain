@@ -32,5 +32,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <Button layoutX="777.0" layoutY="373.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Skip &gt;&gt;" underline="true" />
    </children>
 </AnchorPane>
