@@ -1,6 +1,9 @@
 package gameUI;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Ma
@@ -8,18 +11,24 @@ import javax.swing.JFrame;
  *
  */
 public class MainFrame {
-	private final int width = 1280;
-	private final int hight = 720;
+	private final int FRAME_WIDTH = 1280;
+	private final int FRAME_HIGHT = 720;
+	private static JFrame frame;
 	
-//	public static void main(String[] args) {
-//		HomeUI home = new HomeUI();
-//		
-//		JFrame frame = new JFrame();
-//		
-//		frame.add(home);
-//		frame.setSize(1280,720);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setVisible(true);
-//	}
+	
+	private static void initialize(JPanel panel) {
+		frame = new JFrame("Lion Villain");
+		frame.getContentPane().add(panel);
+		frame.setSize(new Dimension(1280, 720));
+//		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+	}
+	
+	public static void main(String[] args) {
+		initialize(new gameUI.SinglePlayUI().getSinglePlayPanel());
+	}
 	
 }

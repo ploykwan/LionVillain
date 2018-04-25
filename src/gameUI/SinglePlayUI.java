@@ -12,7 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+/**
+ * Interface for single play mode.
+ * @author Kwankaew Uttama
+ *
+ */
 public class SinglePlayUI {
 
 	private JFrame frame = new JFrame();
@@ -58,12 +62,12 @@ public class SinglePlayUI {
 		distanceLabel.setBounds(44,70,300,25);
 		singlePlayPanel.add(distanceLabel);
 
-		label.setFont(new Font("LayijiMahaniyomV105", Font.PLAIN, 45));
+		label.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
 		label.setText("label");
 		label.setBounds(497, 178, 213, 57);
 		singlePlayPanel.add(label);
 
-		textfield.setFont(new Font("LayijiMahaniyomV105", Font.PLAIN, 45));
+		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
 		textfield.setBounds(711, 168, 106, 75);
 		singlePlayPanel.add(textfield);
 		
@@ -72,12 +76,16 @@ public class SinglePlayUI {
 		lion.setBounds(493, 375, 333, 264);
 		singlePlayPanel.add(lion);
 
-		frame.getContentPane().add(singlePlayPanel);
-		frame.setSize(new Dimension(1280, 720));
-		frame.setLocationRelativeTo(null);
-		frame.setTitle("Lion Villain");
-		frame.setResizable(false);
-		frame.setVisible(true);
+//		frame.getContentPane().add(singlePlayPanel);
+//		frame.setSize(new Dimension(1280, 720));
+//		frame.setLocationRelativeTo(null);
+//		frame.setTitle("Lion Villain");
+//		frame.setResizable(false);
+//		frame.setVisible(true);
+	}
+	
+	public JPanel getSinglePlayPanel() {
+		return singlePlayPanel;
 	}
 
 	// /**
