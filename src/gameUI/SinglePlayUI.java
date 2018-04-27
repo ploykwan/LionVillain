@@ -3,6 +3,8 @@ package gameUI;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -25,17 +27,26 @@ import javafx.event.ActionEvent;
 
 public class SinglePlayUI {
 
-	private JPanel singlePlayPanel;
+	// private StopWatch stopWatch;
+
+	private JPanel panel;
 	private JLabel lion, distance, time, distanceLabel, timeLabel;
-	private JLabel label = new JLabel();
-	private JTextField textfield = new JTextField();
+	private JLabel question;
+	private JTextField textfield;
+
+	int num1 = 0;
+	int num2 = 0;
+	char op;
+	int result;
+	Calculator game;
 
 	public SinglePlayUI() {
 		initialize();
 	}
 
 	private void initialize() {
-		singlePlayPanel = new JPanel() {
+		game = new Calculator();
+		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -47,61 +58,158 @@ public class SinglePlayUI {
 				}
 			}
 		};
-		singlePlayPanel.setBounds(0, 0, 1280, 720);
-		singlePlayPanel.setLayout(null);
+		panel.setBounds(0, 0, 1280, 720);
+		panel.setLayout(null);
 
 		timeLabel = new JLabel();
 		timeLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		timeLabel.setText("Time: ");
 		timeLabel.setBounds(44, 35, 80, 25);
-		singlePlayPanel.add(timeLabel);
+		panel.add(timeLabel);
+
+		time = new JLabel();
+		time.setFont(new Font("Andale Mono", Font.PLAIN, 20));
+		time.setText("00 sec"); // ใส่เวลา
+		time.setBounds(110, 35, 200, 25);
+		panel.add(time);
 
 		distanceLabel = new JLabel();
 		distanceLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		distanceLabel.setText("Distance: ");
 		distanceLabel.setBounds(44, 70, 300, 25);
-		singlePlayPanel.add(distanceLabel);
+		panel.add(distanceLabel);
+		
+		distance = new JLabel();
+		distance.setFont(new Font("Andale Mono",Font.PLAIN,20));
+		distance.setText("00 meter"); //Remaining distance
+		distance.setBounds(160, 70, 500, 25);
+		panel.add(distance);
 
-		label.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
-		label.setText("question");
-		label.setBounds(497, 178, 213, 57);
-		singlePlayPanel.add(label);
+		question = new JLabel();
+		question.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
+		question.setText("question");
+		question.setBounds(497, 178, 213, 57);
+		panel.add(question);
 
-		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
-		textfield.setBounds(711, 168, 106, 75);
-		singlePlayPanel.add(textfield);
+		textfield = new JTextField();
+		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
+		textfield.setBounds(711, 168, 120, 75);
+		textfield.addKeyListener(new SubmitAnswer());
+		panel.add(textfield);
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/lion_in_cage.png"));
 		lion = new JLabel(lion_in_cage);
 		lion.setBounds(493, 375, 333, 264);
-		singlePlayPanel.add(lion);
-
-		// frame.getContentPane().add(singlePlayPanel);
-		// frame.setSize(new Dimension(1280, 720));
-		// frame.setLocationRelativeTo(null);
-		// frame.setTitle("Lion Villain");
-		// frame.setResizable(false);
-		// frame.setVisible(true);
+		panel.add(lion);
 	}
 
 	public JPanel getSinglePlayModePanel() {
-		return singlePlayPanel;
+		return panel;
 	}
 
-//	public void enter(ActionEvent event) {
-//		String text = textfield.getText().trim();
-//		int value = Integer.parseInt(text);
-//		if (calculator.covert(value) == true) {
-//			try {
-//				label.setText(calculator.getMessage());
-//				textfield.setText(null);
-//			} catch (NumberFormatException e) {
-//
-//			}
-//		} else {
-//			
-//		}
-//	}
+	private String message;
+
+	public void question() {
+
+		char operator[] = { '+', '-', '*', '/' };
+		num1 = (int) (1 + (Math.random() * 99));
+		num2 = (int) (1 + (Math.random() * 99));
+		int id = (int) (Math.random() * 4);
+		op = operator[id];
+		switch (op) {
+		case '-':
+			if (num2 > num1) {
+				int temp = num1;
+				num1 = num2;
+				num2 = temp;
+			}
+			result = (int) (num1 - num2);
+			break;
+		case '/':
+			if (num2 > num1) {
+				int temp = num1;
+				num1 = num2;
+				num2 = temp;
+			}
+			if (num1 % num2 != 0) {
+				num1 -= (num1 % num2);
+			}
+			result = (int) (num1 / num2);
+			break;
+		}
+		setMessage(num1 + " " + op + " " + num2 + " =");
+		System.out.println(num1 + " " + op + " " + num2);
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void play() {
+		/**
+		 * !!!init first game
+		 */
+		// stopWatch = new StopWatch();
+
+	}
+
+	class SubmitAnswer implements KeyListener {
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				question.setText(getMessage());
+				int answer = 1;
+				try {
+					String ans = textfield.getText().trim();
+					answer = Integer.parseInt(ans);
+				} catch (NumberFormatException e1) {
+					textfield.setText("");
+				}
+				if (!game.check(answer, num1, num2, op)) {
+					System.out.println(answer + " ผิด");
+					textfield.setText("");
+				}
+				System.out.println(answer + " ถูก");
+				textfield.setText("");
+				question();
+				question.setText(getMessage());
+			}
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	// public void enter(ActionEvent event) {
+	// String text = textfield.getText().trim();
+	// int value = Integer.parseInt(text);
+	// if (calculator.covert(value) == true) {
+	// try {
+	// label.setText(calculator.getMessage());
+	// textfield.setText(null);
+	// } catch (NumberFormatException e) {
+	//
+	// }
+	// } else {
+	//
+	// }
+	// }
 
 	// /**
 	// * shows game-over pop-up.
