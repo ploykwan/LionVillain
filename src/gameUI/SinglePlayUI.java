@@ -208,7 +208,7 @@ public class SinglePlayUI implements Runnable {
 				e.printStackTrace();
 			}
 			timeup++;
-			time.setText(timeup + "");
+			time.setText(timeup + " sec");
 		}
 	}
 
