@@ -93,26 +93,33 @@ public class test2Controller {
 
 	public void question() {
 		char operator[] = { '+', '-', '*', '/' };
-			num1 = (int) (1 + (Math.random() * 12));
-			num2 = (int) (1 + (Math.random() * 12));
+			num1 = (int) (1 + (Math.random() * 99));
+			num2 = (int) (1 + (Math.random() * 99));
 			int id = (int) (Math.random() * 4);
 			op = operator[id];
-			setMessage(num1 + " " + op + " " + num2);
-			System.out.println(num1 + " " + op + " " + num2);
-//			switch (op) {
-//			case '+':
-//				result = (int) (num1 + num2);
-//				break;
-//			case '-':
-//				result = (int) (num1 - num2);
-//				break;
-//			case '*':
-//				result = (int) (num1 * num2);
-//				break;
-//			case '/':
-//				result = (int) (num1 / num2);
-//				break;
-//			}
+			switch (op) {
+			case '-':
+				if(num2 > num1) {
+					int temp = num1;
+					num1 = num2; 
+					num2 = temp;
+				}
+				result = (int) (num1 - num2);
+				break;
+			case '/':
+				if(num2 > num1) {
+					int temp = num1;
+					num1 = num2; 
+					num2 = temp;
+				}
+				if(num1%num2 != 0) {
+					num1 -= (num1%num2);
+				}
+				result = (int) (num1 / num2);
+				break;
+			}
+				setMessage(num1 + " " + op + " " + num2+" =");
+				System.out.println(num1 + " " + op + " " + num2);
 	}
 	public void setMessage(String message) {
 		this.Message = message;
