@@ -17,6 +17,7 @@ public class MainFrame {
 	
 	
 	private static void initialize(JPanel panel) {
+		System.out.println("ddd");
 		frame = new JFrame("Lion Villain");
 		frame.getContentPane().add(panel);
 		frame.setSize(new Dimension(1280, 720));
@@ -28,7 +29,8 @@ public class MainFrame {
 	}
 	
 	public static void main(String[] args) {
-		initialize(new gameUI.SinglePlayUI().getSinglePlayPanel());
+		//initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
+		initialize(new gameUI.SinglePlayUI().getSinglePlayModePanel());
 	}
 	
 }

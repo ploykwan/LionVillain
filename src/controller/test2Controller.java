@@ -30,61 +30,95 @@ public class test2Controller {
 	ImageView lion;
 	@FXML
 	ImageView winner;
-	
-	Calculator game ;
+
+	Calculator game;
 
 	Font font = new Font("LayijiMahaniyomV105.ttf", 40);
 
 	Random rand = new Random();
 	int score = 0;
 	int power = 5;
-	int x = 0;
-	int y = 0;
-	int oparator = 0;
-	int correctAns;
+	int num1 = 0;
+	int num2 = 0;
+	char op ;
+	int result;
+	String Message = "";
 
 	@FXML
 	public void initialize() {
 		// winner.setDisable(false);
 		label.setFont(font);
 		textfield.setFont(font);
-		label.setText("open");
+		game = new Calculator();
+		question();
+		label.setText(getMessage());
+		// game.question(ans);
 		textfield.setOnAction(this::answerHandle);
 
 	}
 
 	public void answerHandle(ActionEvent event) {
+		label.setText(getMessage());
+		String ans = textfield.getText().trim();
+		int answer = Integer.parseInt(ans);
 		try {
-			game = new Calculator();
-//		correctAns = x + y;
-			String ans = textfield.getText().trim();
-			int answer = Integer.parseInt(ans);
-			game.question(answer);
-			label.setText(game.getMessage());
+			System.out.println("ตรวจ");
+			if(!game.check(answer,num1,num2,op)) {
+				System.out.println("ตอบผิด");
+				textfield.clear();
+//				System.out.println("---");
+//				ans = textfield.getText().trim();
+//				answer = Integer.parseInt(ans);
+//				System.out.println("***");
+//				game.check(answer,num1,num2,op);
+//				answerHandle(event);
+			}
 			
+			System.out.println(getMessage());
+
 		} catch (Exception e) {
 			System.out.println("ffffff");
 		}
-
-//		if (answer == correctAns) {
-//			power += 5;
-//			lion.setX(lion.getX() + power);
-//			System.out.println("T: " + x + " + " + y + " = " + answer);
-//			score++;
-//		}
 		textfield.clear();
-//		x = rand.nextInt(10) + 1;
-//		y = rand.nextInt(10) + 1;
-		
-	
-//		label.setText(String.format("%d %s %d = ", , "+", y));
-		if (score == 2) {
-			System.out.println("WIN");
-			// winner();
-			// imagePopupWindowShow();
-			// winner.setDisable(true);
-		}
+		question();
+		label.setText(getMessage());
+		// if (score == 2) {
+		// System.out.println("WIN");
+		// // winner();
+		// // imagePopupWindowShow();
+		// // winner.setDisable(true);
+		// }
 
+	}
+
+	public void question() {
+		char operator[] = { '+', '-', '*', '/' };
+			num1 = (int) (1 + (Math.random() * 12));
+			num2 = (int) (1 + (Math.random() * 12));
+			int id = (int) (Math.random() * 4);
+			op = operator[id];
+			setMessage(num1 + " " + op + " " + num2);
+			System.out.println(num1 + " " + op + " " + num2);
+//			switch (op) {
+//			case '+':
+//				result = (int) (num1 + num2);
+//				break;
+//			case '-':
+//				result = (int) (num1 - num2);
+//				break;
+//			case '*':
+//				result = (int) (num1 * num2);
+//				break;
+//			case '/':
+//				result = (int) (num1 / num2);
+//				break;
+//			}
+	}
+	public void setMessage(String message) {
+		this.Message = message;
+	}
+	public String getMessage() {
+		return Message;
 	}
 
 	public void imagePopupWindowShow() {

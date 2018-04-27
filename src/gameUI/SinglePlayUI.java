@@ -12,8 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 /**
  * Interface for single play mode.
+ * 
  * @author Kwankaew Uttama
  *
  */
@@ -23,23 +25,24 @@ import javafx.event.ActionEvent;
 
 public class SinglePlayUI {
 
-	private JFrame frame = new JFrame();
-
 	private JPanel singlePlayPanel;
 	private JLabel lion, distance, time, distanceLabel, timeLabel;
 	private JLabel label = new JLabel();
 	private JTextField textfield = new JTextField();
 
-	Calculator calculator;
-
-	public void setCalculator(Calculator calculator) {
-		this.calculator = calculator;
-	}
-
-	public static void main(String[] args) {
-		new SinglePlayUI();
-	}
-
+//<<<<<<< Updated upstream
+//	Calculator calculator;
+//
+//	public void setCalculator(Calculator calculator) {
+//		this.calculator = calculator;
+//	}
+//
+//	public static void main(String[] args) {
+//		new SinglePlayUI();
+//	}
+//
+//=======
+//>>>>>>> Stashed changes
 	public SinglePlayUI() {
 		initialize();
 	}
@@ -73,7 +76,7 @@ public class SinglePlayUI {
 		singlePlayPanel.add(distanceLabel);
 
 		label.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
-		label.setText("label");
+		label.setText("question");
 		label.setBounds(497, 178, 213, 57);
 		singlePlayPanel.add(label);
 
@@ -94,7 +97,7 @@ public class SinglePlayUI {
 		// frame.setVisible(true);
 	}
 
-	public JPanel getSinglePlayPanel() {
+	public JPanel getSinglePlayModePanel() {
 		return singlePlayPanel;
 	}
 
