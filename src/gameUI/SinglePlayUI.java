@@ -30,19 +30,6 @@ public class SinglePlayUI {
 	private JLabel label = new JLabel();
 	private JTextField textfield = new JTextField();
 
-//<<<<<<< Updated upstream
-//	Calculator calculator;
-//
-//	public void setCalculator(Calculator calculator) {
-//		this.calculator = calculator;
-//	}
-//
-//	public static void main(String[] args) {
-//		new SinglePlayUI();
-//	}
-//
-//=======
-//>>>>>>> Stashed changes
 	public SinglePlayUI() {
 		initialize();
 	}
