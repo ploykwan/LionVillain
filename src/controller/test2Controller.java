@@ -21,7 +21,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class test2Controller {
+public class test2Controller implements Runnable{
 	@FXML
 	Label label;
 	@FXML
@@ -30,22 +30,27 @@ public class test2Controller {
 	ImageView lion;
 	@FXML
 	ImageView winner;
+	@FXML
+	Label textTime;
 
 	Calculator game;
 
 	Font font = new Font("LayijiMahaniyomV105.ttf", 40);
 
 	Random rand = new Random();
+	Thread tr = new Thread();
 	int score = 0;
 	int power = 5;
 	int num1 = 0;
 	int num2 = 0;
+	int timeup = 0;
 	char op ;
 	int result;
 	String Message = "";
 
 	@FXML
 	public void initialize() {
+		tr.start();
 		// winner.setDisable(false);
 		label.setFont(font);
 		textfield.setFont(font);
@@ -119,7 +124,6 @@ public class test2Controller {
 				break;
 			}
 				setMessage(num1 + " " + op + " " + num2+" =");
-				System.out.println(num1 + " " + op + " " + num2);
 	}
 	public void setMessage(String message) {
 		this.Message = message;
@@ -184,6 +188,20 @@ public class test2Controller {
 		dialog.add(label);
 		dialog.pack();
 		dialog.setVisible(true);
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				tr.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			timeup++;
+			textTime.setText(timeup+"");
+			
+		}
 	}
 
 }

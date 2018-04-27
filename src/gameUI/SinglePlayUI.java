@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import game.Calculator;
 import javafx.event.ActionEvent;
 
-public class SinglePlayUI {
+public class SinglePlayUI implements Runnable {
 
 	// private StopWatch stopWatch;
 
@@ -39,6 +39,8 @@ public class SinglePlayUI {
 	char op;
 	int result;
 	Calculator game;
+	Thread thread = new Thread(this);
+	int timeup = 0;
 
 	public SinglePlayUI() {
 		initialize();
@@ -78,10 +80,10 @@ public class SinglePlayUI {
 		distanceLabel.setText("Distance: ");
 		distanceLabel.setBounds(44, 70, 300, 25);
 		panel.add(distanceLabel);
-		
+
 		distance = new JLabel();
-		distance.setFont(new Font("Andale Mono",Font.PLAIN,20));
-		distance.setText("00 meter"); //Remaining distance
+		distance.setFont(new Font("Andale Mono", Font.PLAIN, 20));
+		distance.setText("00 meter"); // Remaining distance
 		distance.setBounds(160, 70, 500, 25);
 		panel.add(distance);
 
@@ -167,6 +169,7 @@ public class SinglePlayUI {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
+			thread.start();
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				question.setText(getMessage());
 				int answer = 1;
@@ -194,6 +197,19 @@ public class SinglePlayUI {
 
 		}
 
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			timeup++;
+			time.setText(timeup + "");
+		}
 	}
 
 	// public void enter(ActionEvent event) {
