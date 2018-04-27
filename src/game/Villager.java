@@ -5,10 +5,10 @@ public class Villager {
 	private double time;
 	private Calculator calculator;
 	private int people;
-	private String name;
+	private String nameVillage;
 
 	public Villager(String name, double time, int people, int distance) {
-		this.name = name;
+		this.nameVillage = name;
 		this.time = time;
 		this.people = people;
 		this.distance = distance;
@@ -16,7 +16,7 @@ public class Villager {
 	
 	@Override
 	public String toString() {
-		return name;
+		return nameVillage;
 	}
 	
 	public double getTime() {

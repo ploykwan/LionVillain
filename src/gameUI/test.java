@@ -17,7 +17,7 @@ public class test extends Application{
 	public void start(Stage primaryStage) {
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("indexUI.fxml"));
+			root = FXMLLoader.load(getClass().getResource("testUI.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("test");

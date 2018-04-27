@@ -17,14 +17,24 @@ import javax.swing.JTextField;
  * @author Kwankaew Uttama
  *
  */
+
+import game.Calculator;
+import javafx.event.ActionEvent;
+
 public class SinglePlayUI {
 
 	private JFrame frame = new JFrame();
 
 	private JPanel singlePlayPanel;
-	private JLabel lion,distance,time,distanceLabel,timeLabel ;
+	private JLabel lion, distance, time, distanceLabel, timeLabel;
 	private JLabel label = new JLabel();
 	private JTextField textfield = new JTextField();
+
+	Calculator calculator;
+
+	public void setCalculator(Calculator calculator) {
+		this.calculator = calculator;
+	}
 
 	public static void main(String[] args) {
 		new SinglePlayUI();
@@ -49,17 +59,17 @@ public class SinglePlayUI {
 		};
 		singlePlayPanel.setBounds(0, 0, 1280, 720);
 		singlePlayPanel.setLayout(null);
-		
+
 		timeLabel = new JLabel();
-		timeLabel.setFont(new Font("Andale Mono",Font.PLAIN,20));
+		timeLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		timeLabel.setText("Time: ");
 		timeLabel.setBounds(44, 35, 80, 25);
 		singlePlayPanel.add(timeLabel);
-		
+
 		distanceLabel = new JLabel();
-		distanceLabel.setFont(new Font("Andale Mono",Font.PLAIN,20));
+		distanceLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		distanceLabel.setText("Distance: ");
-		distanceLabel.setBounds(44,70,300,25);
+		distanceLabel.setBounds(44, 70, 300, 25);
 		singlePlayPanel.add(distanceLabel);
 
 		label.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
@@ -70,23 +80,38 @@ public class SinglePlayUI {
 		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
 		textfield.setBounds(711, 168, 106, 75);
 		singlePlayPanel.add(textfield);
-		
+
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/lion_in_cage.png"));
 		lion = new JLabel(lion_in_cage);
 		lion.setBounds(493, 375, 333, 264);
 		singlePlayPanel.add(lion);
 
-//		frame.getContentPane().add(singlePlayPanel);
-//		frame.setSize(new Dimension(1280, 720));
-//		frame.setLocationRelativeTo(null);
-//		frame.setTitle("Lion Villain");
-//		frame.setResizable(false);
-//		frame.setVisible(true);
+		// frame.getContentPane().add(singlePlayPanel);
+		// frame.setSize(new Dimension(1280, 720));
+		// frame.setLocationRelativeTo(null);
+		// frame.setTitle("Lion Villain");
+		// frame.setResizable(false);
+		// frame.setVisible(true);
 	}
-	
+
 	public JPanel getSinglePlayPanel() {
 		return singlePlayPanel;
 	}
+
+//	public void enter(ActionEvent event) {
+//		String text = textfield.getText().trim();
+//		int value = Integer.parseInt(text);
+//		if (calculator.covert(value) == true) {
+//			try {
+//				label.setText(calculator.getMessage());
+//				textfield.setText(null);
+//			} catch (NumberFormatException e) {
+//
+//			}
+//		} else {
+//			
+//		}
+//	}
 
 	// /**
 	// * shows game-over pop-up.

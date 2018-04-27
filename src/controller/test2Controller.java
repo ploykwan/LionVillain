@@ -8,8 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import game.Calculator;
-import game.Minus;
-import game.Plus;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -32,6 +30,8 @@ public class test2Controller {
 	ImageView lion;
 	@FXML
 	ImageView winner;
+	
+	Calculator game ;
 
 	Font font = new Font("LayijiMahaniyomV105.ttf", 40);
 
@@ -48,29 +48,36 @@ public class test2Controller {
 		// winner.setDisable(false);
 		label.setFont(font);
 		textfield.setFont(font);
-		x = rand.nextInt(10) + 1;
-		y = rand.nextInt(10) + 1;
-		label.setText(String.format("%d + %d = ", x, y));
+		label.setText("open");
 		textfield.setOnAction(this::answerHandle);
 
 	}
 
 	public void answerHandle(ActionEvent event) {
-		correctAns = x + y;
-		String ans = textfield.getText().trim();
-		int answer = Integer.parseInt(ans);
-
-		if (answer == correctAns) {
-			power += 5;
-			lion.setX(lion.getX() + power);
-			System.out.println("T: " + x + " + " + y + " = " + answer);
-			score++;
+		try {
+			game = new Calculator();
+//		correctAns = x + y;
+			String ans = textfield.getText().trim();
+			int answer = Integer.parseInt(ans);
+			game.question(answer);
+			label.setText(game.getMessage());
+			
+		} catch (Exception e) {
+			System.out.println("ffffff");
 		}
+
+//		if (answer == correctAns) {
+//			power += 5;
+//			lion.setX(lion.getX() + power);
+//			System.out.println("T: " + x + " + " + y + " = " + answer);
+//			score++;
+//		}
 		textfield.clear();
-		x = rand.nextInt(10) + 1;
-		y = rand.nextInt(10) + 1;
+//		x = rand.nextInt(10) + 1;
+//		y = rand.nextInt(10) + 1;
+		
 	
-		label.setText(String.format("%d %s %d = ", x, "+", y));
+//		label.setText(String.format("%d %s %d = ", , "+", y));
 		if (score == 2) {
 			System.out.println("WIN");
 			// winner();
