@@ -60,7 +60,6 @@ public class test2Controller implements Runnable {
 		label.setText(getMessage());
 		// game.question(ans);
 		textfield.setOnAction(this::answerHandle);
-
 	}
 
 	public void answerHandle(ActionEvent event) {

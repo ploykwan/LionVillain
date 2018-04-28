@@ -3,6 +3,7 @@ package game;
 import java.util.Scanner;
 
 public class Calculator {
+
 	private int num1, num2, result;
 	private int x, dx;
 
