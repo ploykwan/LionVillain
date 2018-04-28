@@ -4,10 +4,12 @@ import java.util.Scanner;
 
 public class Calculator {
 	private int num1, num2, result;
+	private Villager v = new Villager();
 	private int x, dx;
 
 	public Calculator() {
-		this.dx = 10;
+		v.setDx(10);
+//		this.dx = 10;
 	}
 
 	public int getNum1() {
@@ -41,30 +43,33 @@ public class Calculator {
 	}
 
 	public int push() {
-		x -= getDx();
-		return x;
+		// x -= getDx();
+		v.setX(v.getX() - v.getDx());
+		return v.getX();
 	}
 
 	public boolean isGameEnd() {
-		if (x <= -20)
+		if (v.getX() <= -20)
 			return true;
 		return false;
 	}
 
 	public int getX() {
-		return x;
+		return v.getX();
 	}
 
 	public int getDx() {
-		return dx;
+		return v.getDx();
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		v.setX(x);
+//		this.x = x;
 	}
 
 	public void setDx(int dx) {
-		this.dx += dx;
+		v.setDx(dx);
+//		this.dx += dx;
 	}
 
 	// public static void main(String[] args) {
