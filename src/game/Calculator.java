@@ -3,6 +3,7 @@ package game;
 import java.util.Scanner;
 
 public class Calculator {
+
 	private int num1, num2, result;
 	private Villager v = new Villager();
 	private int x, dx;
