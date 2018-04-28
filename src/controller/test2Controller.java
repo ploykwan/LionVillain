@@ -21,7 +21,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class test2Controller implements Runnable{
+public class test2Controller implements Runnable {
 	@FXML
 	Label label;
 	@FXML
@@ -44,7 +44,8 @@ public class test2Controller implements Runnable{
 	int num1 = 0;
 	int num2 = 0;
 	int timeup = 0;
-	char op ;
+	char op;
+
 	int result;
 	String Message = "";
 
@@ -66,23 +67,16 @@ public class test2Controller implements Runnable{
 		label.setText(getMessage());
 		String ans = textfield.getText().trim();
 		int answer = Integer.parseInt(ans);
-		try {
-			System.out.println("ตรวจ");
-			if(!game.check(answer,num1,num2,op)) {
-				System.out.println("ตอบผิด");
-				textfield.clear();
-//				System.out.println("---");
-//				ans = textfield.getText().trim();
-//				answer = Integer.parseInt(ans);
-//				System.out.println("***");
-//				game.check(answer,num1,num2,op);
-//				answerHandle(event);
-			}
-			
-			System.out.println(getMessage());
 
-		} catch (Exception e) {
-			System.out.println("ffffff");
+		if (!game.check(answer, num1, num2, op)) {
+			System.out.println("ตอบผิด");
+			textfield.clear();
+			// System.out.println("---");
+			// ans = textfield.getText().trim();
+			// answer = Integer.parseInt(ans);
+			// System.out.println("***");
+			// game.check(answer,num1,num2,op);
+			// answerHandle(event);
 		}
 		textfield.clear();
 		question();
@@ -98,36 +92,40 @@ public class test2Controller implements Runnable{
 
 	public void question() {
 		char operator[] = { '+', '-', '*', '/' };
-			num1 = (int) (1 + (Math.random() * 99));
-			num2 = (int) (1 + (Math.random() * 99));
-			int id = (int) (Math.random() * 4);
-			op = operator[id];
-			switch (op) {
-			case '-':
-				if(num2 > num1) {
-					int temp = num1;
-					num1 = num2; 
-					num2 = temp;
-				}
-				result = (int) (num1 - num2);
-				break;
-			case '/':
-				if(num2 > num1) {
-					int temp = num1;
-					num1 = num2; 
-					num2 = temp;
-				}
-				if(num1%num2 != 0) {
-					num1 -= (num1%num2);
-				}
-				result = (int) (num1 / num2);
-				break;
+		num1 = (int) (1 + (Math.random() * 99));
+		num2 = (int) (1 + (Math.random() * 99));
+		int id = (int) (Math.random() * 4);
+		op = operator[id];
+		switch (op) {
+		case '-':
+			if (num2 > num1) {
+				int temp = num1;
+				num1 = num2;
+				num2 = temp;
 			}
-				setMessage(num1 + " " + op + " " + num2+" =");
+			result = (int) (num1 - num2);
+			break;
+		case '/':
+			if (num2 > num1) {
+				int temp = num1;
+				num1 = num2;
+				num2 = temp;
+			}
+			if (num1 % num2 != 0) {
+				num1 -= (num1 % num2);
+			}
+			result = (int) (num1 / num2);
+			break;
+		}
+		setMessage(num1 + " " + op + " " + num2 + " =");
+		System.out.println(num1 + " " + op + " " + num2);
+
 	}
+
 	public void setMessage(String message) {
 		this.Message = message;
 	}
+
 	public String getMessage() {
 		return Message;
 	}
@@ -199,8 +197,8 @@ public class test2Controller implements Runnable{
 				e.printStackTrace();
 			}
 			timeup++;
-			textTime.setText(timeup+"");
-			
+			textTime.setText(timeup + "");
+
 		}
 	}
 

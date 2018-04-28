@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 public class Calculator {
 	private int num1, num2, result;
+	private int x, dx;
+
+	public Calculator() {
+		this.dx = 10;
+	}
 
 	public int getNum1() {
 		return num1;
@@ -33,6 +38,33 @@ public class Calculator {
 			return false;
 		}
 		return true;
+	}
+
+	public int push() {
+		x -= getDx();
+		return x;
+	}
+
+	public boolean isGameEnd() {
+		if (x <= -20)
+			return true;
+		return false;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getDx() {
+		return dx;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setDx(int dx) {
+		this.dx += dx;
 	}
 
 	// public static void main(String[] args) {

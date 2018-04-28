@@ -17,7 +17,7 @@ public class MainFrame {
 	
 	
 	private static void initialize(JPanel panel) {
-		System.out.println("ddd");
+		System.out.println("start");
 		frame = new JFrame("Lion Villain");
 		frame.getContentPane().add(panel);
 		frame.setSize(new Dimension(1280, 720));

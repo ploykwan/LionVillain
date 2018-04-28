@@ -1,5 +1,6 @@
 package gameUI;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -10,27 +11,24 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 /**
  * Interface for single play mode.
  * 
- * @author Kwankaew Uttama
+ * @author Kwankaew Uttama, Pimwalan
  *
  */
 
 import game.Calculator;
-import javafx.event.ActionEvent;
 
 public class SinglePlayUI implements Runnable {
 
-	// private StopWatch stopWatch;
-
 	private JPanel panel;
-	private JLabel lion, distance, time, distanceLabel, timeLabel;
+	private JLabel lion, distance, time, distanceLabel, timeLabel, endLabel;
 	private JLabel question;
 	private JTextField textfield;
 
@@ -38,14 +36,16 @@ public class SinglePlayUI implements Runnable {
 	int num2 = 0;
 	char op;
 	int result;
+	private String message;
 	Calculator game;
 	Thread thread = new Thread(this);
-	int timeup = 0;
+	double timeup = 0;
 
 	public SinglePlayUI() {
 		initialize();
 	}
 
+	@SuppressWarnings("serial")
 	private void initialize() {
 		game = new Calculator();
 		panel = new JPanel() {
@@ -83,39 +83,37 @@ public class SinglePlayUI implements Runnable {
 
 		distance = new JLabel();
 		distance.setFont(new Font("Andale Mono", Font.PLAIN, 20));
-		distance.setText("00 meter"); // Remaining distance
 		distance.setBounds(160, 70, 500, 25);
 		panel.add(distance);
 
 		question = new JLabel();
-		question.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
+		question.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 40));
 		question.setText("question");
 		question.setBounds(497, 178, 213, 57);
 		panel.add(question);
 
 		textfield = new JTextField();
 		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
-		textfield.setBounds(711, 168, 120, 75);
-		textfield.addKeyListener(new SubmitAnswer());
+		textfield.setBounds(710, 168, 105, 75);
 		panel.add(textfield);
 
-		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/lion_in_cage.png"));
+		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion_left.png"));
 		lion = new JLabel(lion_in_cage);
-		lion.setBounds(493, 375, 333, 264);
 		panel.add(lion);
+
+		play();
 	}
 
 	public JPanel getSinglePlayModePanel() {
 		return panel;
 	}
 
-	private String message;
-
 	public void question() {
 
 		char operator[] = { '+', '-', '*', '/' };
-		num1 = (int) (1 + (Math.random() * 99));
-		num2 = (int) (1 + (Math.random() * 99));
+		// TODO ค่อยแก้เลข
+		num1 = (int) (1 + (Math.random() * 1));
+		num2 = (int) (1 + (Math.random() * 1));
 		int id = (int) (Math.random() * 4);
 		op = operator[id];
 		switch (op) {
@@ -138,6 +136,12 @@ public class SinglePlayUI implements Runnable {
 			}
 			result = (int) (num1 / num2);
 			break;
+		case '*':
+			if (num2 > 10) {
+				num2 = num2 % 10;
+			}
+			result = num1 * num2;
+			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
 		System.out.println(num1 + " " + op + " " + num2);
@@ -152,99 +156,85 @@ public class SinglePlayUI implements Runnable {
 	}
 
 	public void play() {
-		/**
-		 * !!!init first game
-		 */
-		// stopWatch = new StopWatch();
-
-	}
-
-	class SubmitAnswer implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			thread.start();
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				question.setText(getMessage());
-				int answer = 1;
-				try {
-					String ans = textfield.getText().trim();
-					answer = Integer.parseInt(ans);
-				} catch (NumberFormatException e1) {
-					textfield.setText("");
+		thread.start();
+		game.setX(750); // set first lion's position ; panel center:493
+		lion.setBounds(game.getX(), 375, 474, 253);
+		distance.setText(String.format("%d meter", game.getX() + 20));
+		question();
+		question.setText(getMessage());
+		textfield.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					question.setText(getMessage());
+					int answer = 1;
+					try {
+						String ans = textfield.getText().trim();
+						answer = Integer.parseInt(ans);
+					} catch (NumberFormatException e1) {
+						textfield.setText("");
+					}
+					if (!game.check(answer, num1, num2, op)) {
+						System.out.println(answer + " ผิด");
+						textfield.setText("");
+					} else { // correct answer
+						System.out.println(answer + " ถูก");
+						textfield.setText("");
+						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+						game.push();
+						lion.setBounds(game.getX(), 375, 474, 253);
+						distance.setText(String.format("%d meter", game.getX() + 20));
+					}
+					if (game.isGameEnd()) {
+						thread.stop();
+						gameEnd();
+					} else {
+						question();
+						question.setText(getMessage());
+					}
 				}
-				if (!game.check(answer, num1, num2, op)) {
-					System.out.println(answer + " ผิด");
-					textfield.setText("");
-				}
-				System.out.println(answer + " ถูก");
-				textfield.setText("");
-				question();
-				question.setText(getMessage());
+
 			}
 
-		}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
 
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
 
-		}
-
+		});
 	}
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
-				thread.sleep(1000);
+				thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			timeup++;
-			time.setText(timeup + " sec");
+			time.setText(String.format("%.2f sec", timeup * 0.01));
 		}
 	}
 
-	// public void enter(ActionEvent event) {
-	// String text = textfield.getText().trim();
-	// int value = Integer.parseInt(text);
-	// if (calculator.covert(value) == true) {
-	// try {
-	// label.setText(calculator.getMessage());
-	// textfield.setText(null);
-	// } catch (NumberFormatException e) {
-	//
-	// }
-	// } else {
-	//
-	// }
-	// }
-
-	// /**
-	// * shows game-over pop-up.
-	// * @param controller
-	// */
-	// private void showGameOverPopup(MainFXMLDocumentController controller) {
-	// @SuppressWarnings("deprecation")
-	// BorderPane content =BorderPaneBuilder.create()
-	// .minWidth(230).minHeight(130)
-	// .bottom(getBottomBox(controller))
-	// .center(getCenterBox())
-	// .style( "-fx-background-color:linear-gradient(darkslategrey, wheat, white);"
-	// + "-fx-background-radius:7;"
-	// + "-fx-border-radius:7")
-	// .build();
-	// pp = new Popup();
-	// pp.setAutoHide(true);
-	// pp.getContent().add(content);
-	// pp.show(controller.DOWN.getScene().getWindow());
-	// }
+	private void gameEnd() {
+		double time = timeup * 0.01; // เวลาทีทำได้
+		System.out.printf("%.2f sec\n", time);
+		textfield.removeKeyListener(textfield.getKeyListeners()[0]);
+		textfield.setVisible(false);
+		question.setVisible(false);
+		JPanel end = new JPanel();
+		end.setOpaque(false);
+		end.setBounds(320, 70, 675, 495);
+		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
+		endLabel = new JLabel(img);
+		end.add(endLabel);
+		panel.add(end);
+	}
 
 }
