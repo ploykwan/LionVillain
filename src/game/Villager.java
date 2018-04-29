@@ -3,7 +3,6 @@ package game;
 public class Villager {
 	private int distance;
 	private int people;
-	private boolean active;
 	private String nameVillage;
 	private int x,y,dx,dy;
 
@@ -14,7 +13,6 @@ public class Villager {
 		this.nameVillage = name;
 		this.people = people;
 		this.distance = distance;
-		this.active = active;
 	}
 	
 	public int getPeople() {
@@ -63,10 +61,6 @@ public class Villager {
 
 	public void setDy(int dy) {
 		this.dy = dy;
-	}
-	
-	public boolean getActive() {
-		return active;
 	}
 	
 	@Override

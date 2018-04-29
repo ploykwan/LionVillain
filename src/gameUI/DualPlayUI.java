@@ -25,9 +25,10 @@ public class DualPlayUI implements Runnable {
 	int num1 = 0, num2 = 0, result;
 	char op;
 	private String message;
-	Calculator game;
-	Thread thread = new Thread(this);
+	private Calculator game;
+	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
+
 
 	public DualPlayUI() {
 		initialize();
@@ -190,6 +191,12 @@ public class DualPlayUI implements Runnable {
 			}
 
 		});
+	}
+	
+	public void releaseV1() {
+		if(timedown != 0) {
+			
+		}
 	}
 
 	@Override
