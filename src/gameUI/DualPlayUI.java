@@ -29,7 +29,6 @@ public class DualPlayUI implements Runnable {
 	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
 
-
 	public DualPlayUI() {
 		initialize();
 	}
@@ -192,12 +191,12 @@ public class DualPlayUI implements Runnable {
 
 		});
 	}
-	
-	public void releaseV1() {
-		if(timedown != 0) {
-			
-		}
-	}
+
+//	public void releaseV1() {
+//		if (timedown != 0) {
+//
+//		}
+//	}
 
 	@Override
 	public void run() {
