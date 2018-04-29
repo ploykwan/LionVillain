@@ -17,11 +17,11 @@ public class DualVillager {
 	}
 	
 	public boolean V1Lose() {
-		return v1.getDistance() <= 0;
+		return v1.getDistance() < v2.getDistance();
 	}
 	
 	public boolean V2Lose() {
-		return v2.getDistance() <= 0;
+		return v2.getDistance() < v1.getDistance();
 	}
 	
 	public Villager getV1() {

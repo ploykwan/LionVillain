@@ -1,6 +1,7 @@
 package gameUI;
 
 import java.awt.Font;
+
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,18 +16,18 @@ import javax.swing.JTextField;
 
 import game.Calculator;
 
-public class DualPlayUI {
+public class DualPlayUI implements Runnable {
 
 	private JPanel panel;
-	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel,endLabel;
+	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel;
 	private JTextField answerField;
 
 	int num1 = 0, num2 = 0, result;
 	char op;
 	private String message;
 	Calculator game;
-//	Thread thread = new Thread(this);
-	double timeup = 0;
+	Thread thread = new Thread(this);
+	double timedown = 125 * 100;
 
 	public DualPlayUI() {
 		initialize();
@@ -80,7 +81,7 @@ public class DualPlayUI {
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
-//		lion.setBounds(493, 375, 333, 264);
+		// lion.setBounds(493, 375, 333, 264);
 		panel.add(lion);
 		play();
 
@@ -138,7 +139,7 @@ public class DualPlayUI {
 	}
 
 	public void play() {
-//		thread.start();
+		thread.start();
 		game.setX(340); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 630, 253);
 		myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
@@ -168,7 +169,7 @@ public class DualPlayUI {
 						myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
 					}
 					if (game.isGameEnd()) {
-//						thread.stop();
+						thread.stop();
 						gameEnd();
 					} else {
 						question();
@@ -190,22 +191,22 @@ public class DualPlayUI {
 
 		});
 	}
-//
-//	@Override
-//	public void run() {
-//		while (true) {
-//			try {
-//				thread.sleep(10);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			timeup++;
-//			timeLabel.setText(String.format("Time: %.2f sec", timeup * 0.01));
-//		}
-//	}
+
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			timedown--;
+			timeLabel.setText(String.format("Time: %.2f sec", timedown * 0.01));
+		}
+	}
 
 	private void gameEnd() {
-		double time = timeup * 0.01; // เวลาทีทำได้
+		double time = timedown * 0.01; // เวลาทีทำได้
 		System.out.printf("%.2f sec\n", time);
 		answerField.removeKeyListener(answerField.getKeyListeners()[0]);
 		answerField.setVisible(false);
