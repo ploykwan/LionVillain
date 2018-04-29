@@ -2,9 +2,8 @@ package game;
 
 public class Villager {
 	private int distance;
-	private double time;
-	private Calculator calculator;
 	private int people;
+	private boolean active;
 	private String nameVillage;
 	private int x,y,dx,dy;
 
@@ -13,22 +12,9 @@ public class Villager {
 	}
 	public Villager(String name, double time, int people, int distance) {
 		this.nameVillage = name;
-		this.time = time;
 		this.people = people;
 		this.distance = distance;
-	}
-	
-	@Override
-	public String toString() {
-		return nameVillage;
-	}
-	
-	public double getTime() {
-		return time;
-	}
-	
-	public void setTime(double time) {
-		this.time = time;
+		this.active = active;
 	}
 	
 	public int getPeople() {
@@ -79,5 +65,13 @@ public class Villager {
 		this.dy = dy;
 	}
 	
+	public boolean getActive() {
+		return active;
+	}
 	
+	@Override
+	public String toString() {
+		return nameVillage;
+	} 
+
 }

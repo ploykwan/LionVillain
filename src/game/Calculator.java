@@ -1,9 +1,6 @@
 package game;
 
-import java.util.Scanner;
-
 public class Calculator {
-
 	private int num1, num2, result;
 	private Villager v = new Villager();
 	private int x, dx;
@@ -11,14 +8,6 @@ public class Calculator {
 	public Calculator() {
 		v.setDx(10);
 //		this.dx = 10;
-	}
-
-	public int getNum1() {
-		return num1;
-	}
-
-	public int getNum2() {
-		return num2;
 	}
 
 	public boolean check(int ans, int num1, int num2, char op) {
@@ -72,9 +61,4 @@ public class Calculator {
 		v.setDx(dx);
 //		this.dx += dx;
 	}
-
-	// public static void main(String[] args) {
-	// Calculator calculator = new Calculator();
-	// calculator.question();
-	// }
 }
