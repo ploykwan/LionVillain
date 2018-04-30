@@ -1,8 +1,14 @@
 package gameUI;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import java.awt.Graphics;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -14,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
+import com.sun.glass.ui.Size;
 
 import game.Calculator;
 
@@ -89,6 +97,9 @@ public class DualPlayUI implements Runnable {
 		lion = new JLabel(lion_in_cage);
 		// lion.setBounds(493, 375, 333, 264);
 		panel.add(lion);
+		playing = new JPanel();
+		playing.setBounds(0, 0, 160, 175);
+		panel.add(playing);
 		play();
 
 	}
@@ -202,24 +213,45 @@ public class DualPlayUI implements Runnable {
 	
 	//ถูกแล้วปล่อยคนออก
 	public void releaseV1() {
-		if(timedown != 0) {
-			System.out.println("fffffffffff");
-			//game.V1Correct();
-			ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
-			people = new JLabel(peopleV1);
-//			people.setSize(peopleV1.getIconWidth(), peopleV1.getxIconHeight());
-			people.setLocation(panel.getWidth(), panel.getHeight());//ติดไว้ก่อนไม่แน่ใจ
-			System.out.println(panel.getWidth()+" "+panel.getHeight());
-			System.out.println(people.getX()+" "+people.getY());
-			people.setVisible(true);
-			playing.add(people);
-			
-			Timer timer = new Timer(10, null);
-			timer.addActionListener((e) -> {
-				people.setLocation(people.getX() - pointRight, people.getY());
-				System.out.println("gggg");
-			});
-		}
+		ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
+		people = new JLabel(peopleV1);
+		playing.add(people);
+		//playing.setLocation(panel.getWidth()/2, panel.getHeight()/2);
+		playing.setLocation(panel.getWidth()/2, panel.getHeight()/2);
+		System.out.println("1:"+panel.getWidth()/2+" "+ panel.getHeight()/2);
+		
+		Timer timer = new Timer(50, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+//		Timer timer = new Timer(50, new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent event) {
+//				System.out.println("hhhh");
+//			}
+//		});
+//		timer.start();
+		
+//		if(timedown != 0) {
+//			System.out.println("fffffffffff");
+//			//game.V1Correct();
+//			ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
+//			people = new JLabel(peopleV1);
+////			people.setSize(peopleV1.getIconWidth(), peopleV1.getxIconHeight());
+//			people.setLocation(panel.getWidth(), panel.getHeight());//ติดไว้ก่อนไม่แน่ใจ
+//			System.out.println(panel.getWidth()+" "+panel.getHeight());
+//			System.out.println(people.getX()+" "+people.getY());
+//			people.setVisible(true);
+//			playing.add(people);
+//			
+//			Timer timer = new Timer(10, null);
+//			timer.addActionListener((e) -> {
+//				people.setLocation(people.getX() - pointRight, people.getY());
+//				System.out.println("gggg");
+//			});
+//		}
 	}
 
 	@Override
