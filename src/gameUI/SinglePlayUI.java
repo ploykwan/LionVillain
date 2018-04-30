@@ -167,7 +167,7 @@ public class SinglePlayUI implements Runnable {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					question.setText(getMessage());
-					int answer = 1;
+					int answer = 9999;
 					try {
 						String ans = textfield.getText().trim();
 						answer = Integer.parseInt(ans);

@@ -13,8 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
-import Connection.GameClient;
 import game.Calculator;
 
 public class DualPlayUI implements Runnable {
@@ -29,6 +29,7 @@ public class DualPlayUI implements Runnable {
 	private Calculator game;
 	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
+
 
 	public DualPlayUI() {
 		initialize();
@@ -193,15 +194,24 @@ public class DualPlayUI implements Runnable {
 		});
 	}
 	
-	public void setAnswer(int answer) {
-		this.answer = answer;
+	//ถูกแล้วปล่อยคนออก
+	public void releaseV1() {
+		if(timedown != 0) {
+			game.V1Correct();
+			ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
+			JLabel people = new JLabel(peopleV1);
+			people.setSize(peopleV1.getIconWidth(), peopleV1.getIconHeight());
+			people.setLocation(panel.getWidth(), panel.getHeight()); //ติดไว้ก่อนไม่แน่ใจ
+			panel.add(people);
+			
+			Timer timer = new Timer(10, null);
+			timer.addActionListener((e) -> {
+				people.setLocation(people.getX() + game.getDx(), people.getY());
+				
+			});
+		}
 	}
 
-	// public void releaseV1() {
-	// if (timedown != 0) {
-	//
-	// }
-	// }
 
 	@Override
 	public void run() {
