@@ -17,8 +17,6 @@ public class MainFrame {
 	private final int FRAME_HIGHT = 720;
 	private static JFrame frame;
 	
-	private static GameClient g;
-	
 	
 	private static void initialize(JPanel panel) {
 		System.out.println("start");
@@ -33,9 +31,9 @@ public class MainFrame {
 	}
 	
 	public static void main(String[] args) {
-		initialize(new gameUI.waitingUI().getPanel());
+//		initialize(new gameUI.waitingUI().getPanel());
 		//initialize(new gameUI.SinglePlayUI().getSinglePlayModePanel());
-
+		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
 	}
 	
 }

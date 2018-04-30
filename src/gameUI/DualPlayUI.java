@@ -20,8 +20,10 @@ import game.Calculator;
 public class DualPlayUI implements Runnable {
 
 	private JPanel panel;
+	private JPanel playing = new JPanel();
 	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel;
 	private JTextField answerField;
+	private JLabel people;
 
 	int num1 = 0, num2 = 0, result, answer = 0;
 	char op;
@@ -29,6 +31,8 @@ public class DualPlayUI implements Runnable {
 	private Calculator game;
 	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
+	int pointRight = 560;
+	
 
 
 	public DualPlayUI() {
@@ -167,6 +171,8 @@ public class DualPlayUI implements Runnable {
 						answerField.setText("");
 						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						game.push();
+						releaseV1();
+						panel.add(playing);
 						lion.setBounds(game.getX(), 375, 630, 253);
 						myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
 					}
@@ -197,21 +203,24 @@ public class DualPlayUI implements Runnable {
 	//ถูกแล้วปล่อยคนออก
 	public void releaseV1() {
 		if(timedown != 0) {
-			game.V1Correct();
+			System.out.println("fffffffffff");
+			//game.V1Correct();
 			ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
-			JLabel people = new JLabel(peopleV1);
-			people.setSize(peopleV1.getIconWidth(), peopleV1.getIconHeight());
-			people.setLocation(panel.getWidth(), panel.getHeight()); //ติดไว้ก่อนไม่แน่ใจ
-			panel.add(people);
+			people = new JLabel(peopleV1);
+//			people.setSize(peopleV1.getIconWidth(), peopleV1.getxIconHeight());
+			people.setLocation(panel.getWidth(), panel.getHeight());//ติดไว้ก่อนไม่แน่ใจ
+			System.out.println(panel.getWidth()+" "+panel.getHeight());
+			System.out.println(people.getX()+" "+people.getY());
+			people.setVisible(true);
+			playing.add(people);
 			
 			Timer timer = new Timer(10, null);
 			timer.addActionListener((e) -> {
-				people.setLocation(people.getX() + game.getDx(), people.getY());
-				
+				people.setLocation(people.getX() - pointRight, people.getY());
+				System.out.println("gggg");
 			});
 		}
 	}
-
 
 	@Override
 	public void run() {
