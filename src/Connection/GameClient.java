@@ -21,6 +21,7 @@ public class GameClient {
 
 		client.getKryo().register(Calculator.class);
 		client.getKryo().register(Villager.class);
+		client.getKryo().register(GameAnswer.class);
 
 		client.addListener(new ClientListener());
 		client.start();
@@ -31,21 +32,24 @@ public class GameClient {
 		@Override
 		public void connected(Connection c) {
 			super.connected(c);
+			System.out.println("Connected to Server.");
 		}
-
-		@Override
-		public void disconnected(Connection c) {
-			super.disconnected(c);
-		}
-
+		
 		@Override
 		public void received(Connection c, Object o) {
 			super.received(c, o);
-			if( o instanceof Villager) {
-				Villager v = (Villager) o;
-				
+			if( o instanceof GameAnswer) {
+				GameAnswer v = (GameAnswer) o;
+				game.setAnswer(v.answer);
+				game.getDualPlayModePanel();
 			}
 		}
+	}
+	
+	public void sendAnswer(int ans) {
+		GameAnswer a = new GameAnswer();
+		a.answer = ans;
+		client.sendTCP(a);
 	}
 
 	public static void main(String[] args) {

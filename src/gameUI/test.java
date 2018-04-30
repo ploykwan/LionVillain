@@ -8,16 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import gameUI.*;
-
-
-public class test extends Application{
+public class test extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("testUI.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/gameUI/indexUI.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("test");
@@ -26,9 +23,9 @@ public class test extends Application{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 }

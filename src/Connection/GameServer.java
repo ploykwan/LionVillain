@@ -49,8 +49,9 @@ public class GameServer {
 		@Override
 		public void received(Connection c, Object o) {
 			super.received(c, o);
-			if(o instanceof Villager) {
-				Villager v = (Villager) o;
+			if(o instanceof GameAnswer) {
+				GameAnswer v = (GameAnswer) o;
+				c.sendTCP(v);
 			}
 		}
 	}

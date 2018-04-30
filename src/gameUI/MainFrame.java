@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Connection.GameClient;
+
 /**
  * Ma
  * @author kwankaew
@@ -14,6 +16,8 @@ public class MainFrame {
 	private final int FRAME_WIDTH = 1280;
 	private final int FRAME_HIGHT = 720;
 	private static JFrame frame;
+	
+	private static GameClient g;
 	
 	
 	private static void initialize(JPanel panel) {
@@ -29,8 +33,9 @@ public class MainFrame {
 	}
 	
 	public static void main(String[] args) {
-		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
+		initialize(new gameUI.waitingUI().getPanel());
 		//initialize(new gameUI.SinglePlayUI().getSinglePlayModePanel());
+
 	}
 	
 }
