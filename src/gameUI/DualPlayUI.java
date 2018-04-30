@@ -3,6 +3,8 @@ package gameUI;
 import java.awt.Font;
 
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -32,8 +34,6 @@ public class DualPlayUI implements Runnable {
 	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
 	int pointRight = 560;
-	
-
 
 	public DualPlayUI() {
 		initialize();
@@ -41,18 +41,19 @@ public class DualPlayUI implements Runnable {
 
 	private void initialize() {
 		game = new Calculator();
-		panel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				try {
-					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
-					g.drawImage(img, 0, 0, 1280, 720, null);
-				} catch (IOException e) {
-
-				}
-			}
-		};
+//		panel = new JPanel() {
+//			@Override
+//			protected void paintComponent(Graphics g) {
+//				super.paintComponent(g);
+//				try {
+//					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
+//					g.drawImage(img, 0, 0, 1280, 720, null);
+//				} catch (IOException e) {
+//
+//				}
+//			}
+//		};
+		panel = new JPanel();
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
 
@@ -156,7 +157,6 @@ public class DualPlayUI implements Runnable {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					questionLabel.setText(getMessage());
-					// int answer = 1;
 					try {
 						String ans = answerField.getText().trim();
 						answer = Integer.parseInt(ans);
@@ -199,26 +199,38 @@ public class DualPlayUI implements Runnable {
 
 		});
 	}
-	
-	//ถูกแล้วปล่อยคนออก
+
+	// ถูกแล้วปล่อยคนออก
 	public void releaseV1() {
 		if(timedown != 0) {
 			System.out.println("fffffffffff");
 			//game.V1Correct();
 			ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
 			people = new JLabel(peopleV1);
-//			people.setSize(peopleV1.getIconWidth(), peopleV1.getxIconHeight());
-			people.setLocation(panel.getWidth(), panel.getHeight());//ติดไว้ก่อนไม่แน่ใจ
-			System.out.println(panel.getWidth()+" "+panel.getHeight());
-			System.out.println(people.getX()+" "+people.getY());
-			people.setVisible(true);
+			people.setSize(peopleV1.getIconWidth(), peopleV1.getIconHeight());
+			people.setLocation(panel.getWidth() , panel.getHeight() - 30);//ติดไว้ก่อนไม่แน่ใจ
+			System.out.println(panel.getWidth()+" 1 "+panel.getHeight());
+			System.out.println(people.getX()+" 2 "+people.getY());
 			playing.add(people);
+			System.out.println();
+			System.out.println((playing.getX() + pointRight) +" 3 " + playing.getY() + panel.getWidth());
+			ActionListener actionlistener= new ActionListener()
+			{ 
+		
+			    public void actionPerformed(ActionEvent e) 
+			    {   
+			    	people.setLocation(playing.getX() + pointRight, playing.getY() + panel.getWidth() + 30);
+			    	System.out.println("new "+(people.getX() - pointRight) +" " + people.getY()+" "+people.getX()+" "+pointRight);
+			    }
+			}; 
+			Timer tiempo= new Timer(1000, actionlistener);
+			tiempo.start();
 			
-			Timer timer = new Timer(10, null);
-			timer.addActionListener((e) -> {
-				people.setLocation(people.getX() - pointRight, people.getY());
-				System.out.println("gggg");
-			});
+//			Timer timer = new Timer(2, null);
+//			timer.addActionListener((e) -> {
+//				people.setLocation(people.getX() - pointRight, people.getY());
+//				System.out.println("gggg");
+//			});
 		}
 	}
 
