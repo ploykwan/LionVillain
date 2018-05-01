@@ -29,13 +29,13 @@ public class SinglePlayUI implements Runnable {
 
 	private JPanel panel;
 	private JLabel lion, distance, time, distanceLabel, timeLabel, endLabel;
-	private JLabel question;
+	private JLabel question,witch;
 	private JTextField textfield;
 
 	int num1 = 0;
 	int num2 = 0;
 	char op;
-	int result;
+	int result,score = 0;
 	private String message;
 	Calculator game;
 	Thread thread = new Thread(this);
@@ -96,6 +96,12 @@ public class SinglePlayUI implements Runnable {
 		textfield.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
 		textfield.setBounds(710, 168, 105, 75);
 		panel.add(textfield);
+		
+		ImageIcon w = new ImageIcon(getClass().getResource("/res/witch_r.gif"));
+		witch = new JLabel(w);
+		witch.setBounds(800, 360, 299, 212);
+		witch.setVisible(false);
+		panel.add(witch);
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion_left.png"));
 		lion = new JLabel(lion_in_cage);
@@ -158,7 +164,7 @@ public class SinglePlayUI implements Runnable {
 	public void play() {
 		thread.start();
 		game.setX(750); // set first lion's position ; panel center:493
-		lion.setBounds(game.getX(), 375, 474, 253);
+		lion.setBounds(game.getX(), 375, 424, 253);
 		distance.setText(String.format("%d meter", game.getX() + 20));
 		question();
 		question.setText(getMessage());
@@ -178,11 +184,15 @@ public class SinglePlayUI implements Runnable {
 						System.out.println(answer + " ผิด");
 						textfield.setText("");
 					} else { // correct answer
+						if( score % 5 == 0) {
+							witch.setVisible(true);
+						}
+						score++;
 						System.out.println(answer + " ถูก");
 						textfield.setText("");
 						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						game.push();
-						lion.setBounds(game.getX(), 375, 474, 253);
+						lion.setBounds(game.getX(), 375, 424, 253);
 						distance.setText(String.format("%d meter", game.getX() + 20));
 					}
 					if (game.isGameEnd()) {

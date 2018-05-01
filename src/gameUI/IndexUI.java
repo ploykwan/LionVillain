@@ -1,6 +1,8 @@
 package gameUI;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -40,6 +42,10 @@ public class IndexUI {
 		single.setContentAreaFilled(false);
 		single.setBorderPainted(false);
 		single.setBounds(120,270,444,111);
+		single.addActionListener((e) -> {
+			InsertNameUI ui = new InsertNameUI();
+			MainFrame.setPanel(ui.getPanel());
+		});
 		panel.add(single);
 		
 		ImageIcon img2 = new ImageIcon(getClass().getResource("/res/player2_v4.png"));
@@ -48,6 +54,10 @@ public class IndexUI {
 		dual.setContentAreaFilled(false);
 		dual.setBorderPainted(false);
 		dual.setBounds(690,270,444,111);
+		dual.addActionListener((e) -> {
+			DualPlayUI ui = new DualPlayUI();
+			MainFrame.setPanel(ui.getDualPlayModePanel());
+		});
 		panel.add(dual);
 		
 	}

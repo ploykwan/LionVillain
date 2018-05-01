@@ -4,15 +4,20 @@ public class Villager {
 	private int distance;
 	private int people;
 	private String nameVillage;
+	private boolean active;
 	private int x,y,dx,dy;
+	private int speed = 10;
 
 	public Villager() {
 		
 	}
-	public Villager(String name, double time, int people, int distance) {
-		this.nameVillage = name;
-		this.people = people;
-		this.distance = distance;
+	public Villager(int x, int y, int dx, int dy, boolean active) {
+		setProperties(x, dx, dy, active);
+	}
+	
+	public void move() {
+		x += dx * speed;
+		y += dy * speed;
 	}
 	
 	public int getPeople() {
@@ -61,6 +66,18 @@ public class Villager {
 
 	public void setDy(int dy) {
 		this.dy = dy;
+	}
+	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public void setProperties(int x, int dx, int dy, boolean active) {
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.active = active;
 	}
 	
 	@Override
