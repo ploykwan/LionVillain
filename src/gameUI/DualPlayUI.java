@@ -33,7 +33,7 @@ public class DualPlayUI implements Runnable {
 	private JTextField answerField;
 	private JLabel people;
 
-	int num1 = 0, num2 = 0, result, answer = 0;
+	int num1 = 0, num2 = 0, result, answer = 999;
 	char op;
 	private String message;
 	private Calculator game;
@@ -47,19 +47,18 @@ public class DualPlayUI implements Runnable {
 
 	private void initialize() {
 		game = new Calculator();
-//		panel = new JPanel() {
-//			@Override
-//			protected void paintComponent(Graphics g) {
-//				super.paintComponent(g);
-//				try {
-//					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
-//					g.drawImage(img, 0, 0, 1280, 720, null);
-//				} catch (IOException e) {
-//
-//				}
-//			}
-//		};
-		panel = new JPanel();
+		panel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				try {
+					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
+					g.drawImage(img, 0, 0, 1280, 720, null);
+				} catch (IOException e) {
+
+				}
+			}
+		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
 

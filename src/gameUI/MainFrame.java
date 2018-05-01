@@ -32,8 +32,8 @@ public class MainFrame {
 	
 	public static void main(String[] args) {
 //		initialize(new gameUI.waitingUI().getPanel());
-		//initialize(new gameUI.SinglePlayUI().getSinglePlayModePanel());
-		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
+		initialize(new gameUI.SinglePlayUI().getSinglePlayModePanel());
+//		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
 	}
 	
 }
