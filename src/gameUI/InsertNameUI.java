@@ -49,6 +49,10 @@ public class InsertNameUI {
 		back.setContentAreaFilled(false);
 		back.setBorderPainted(false);
 		back.setBounds(675, 307, 150, 58);
+		back.addActionListener((e) -> {
+			IndexUI ui = new IndexUI();
+			MainFrame.setPanel(ui.getPanel());
+		});
 		panel.add(back);
 
 		ImageIcon img2 = new ImageIcon(getClass().getResource("/res/start_v2.png"));
@@ -57,6 +61,10 @@ public class InsertNameUI {
 		start.setContentAreaFilled(false);
 		start.setBorderPainted(false);
 		start.setBounds(495, 307, 138, 58);
+		start.addActionListener((e) -> {
+			SinglePlayUI ui = new SinglePlayUI();
+			MainFrame.setPanel(ui.getSinglePlayModePanel());
+		});
 		panel.add(start);
 
 		skip = new JButton("Skip >>");
@@ -66,6 +74,10 @@ public class InsertNameUI {
 		skip.setOpaque(false);
 		skip.setContentAreaFilled(false);
 		skip.setBorderPainted(false);
+		skip.addActionListener((e) -> {
+			DualPlayUI ui = new DualPlayUI();
+			MainFrame.setPanel(ui.getDualPlayModePanel());
+		}); 
 		panel.add(skip);
 
 	}

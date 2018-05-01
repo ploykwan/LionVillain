@@ -39,8 +39,8 @@ public class DualPlayUI implements Runnable, Observer {
 	private JTextField answerField;
 	private JLabel people;
 
-	private int num1 = 0, num2 = 0, result, answer = 0;
-	private char op;
+	int num1 = 0, num2 = 0, result, answer = 999;
+	char op;
 	private String message;
 	private Calculator cal;
 	private Thread thread = new Thread(this);
@@ -54,6 +54,7 @@ public class DualPlayUI implements Runnable, Observer {
 	}
 
 	private void initialize() {
+
 		cal = new Calculator();
 		game = new ObjectPool();
 		game.addObserver(this);
