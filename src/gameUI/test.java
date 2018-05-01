@@ -54,7 +54,6 @@ public class test extends JFrame implements Observer {
 			public void keyPressed(KeyEvent e) {
 				System.out.println(e.getKeyCode());
 				try {
-
 					objectPool.burstVillagers(e.getKeyCode());
 
 				} catch (Exception e2) {
@@ -102,7 +101,6 @@ public class test extends JFrame implements Observer {
 			try {
 				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -132,5 +130,4 @@ public class test extends JFrame implements Observer {
 	// public static void main(String[] args) {
 	// launch(args);
 	// }
-
 }

@@ -47,16 +47,17 @@ public class DualPlayUI implements Runnable, Observer {
 	double timedown = 125 * 100;
 	private int pointRight = 560;
 	private ObjectPool game;
+	private Renderer renderer;
 
 	public DualPlayUI() {
 		initialize();
-
 	}
 
 	private void initialize() {
 		cal = new Calculator();
 		game = new ObjectPool();
 		game.addObserver(this);
+		renderer = new Renderer();
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -71,14 +72,6 @@ public class DualPlayUI implements Runnable, Observer {
 		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
-
-		playing = new JPanel();
-		playing.setOpaque(false);
-		playing.setDoubleBuffered(true);
-		playing.setPreferredSize(new Dimension(game.getWidth(), game.getHeight()));
-		playing.setBounds(0, 0, 1280, 720);
-		playing.setLayout(new BorderLayout());
-		panel.add(playing);
 
 		timeLabel = new JLabel();
 		timeLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
@@ -112,8 +105,10 @@ public class DualPlayUI implements Runnable, Observer {
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
+		playing.setOpaque(false);
+		panel.add(playing);
 		
-		
+		panel.add(renderer);
 		play();
 
 	}
@@ -123,7 +118,6 @@ public class DualPlayUI implements Runnable, Observer {
 	}
 
 	public void question() {
-
 		char operator[] = { '+', '-', '*', '/' };
 		// TODO ค่อยแก้เลข
 		num1 = (int) (1 + (Math.random() * 1));
@@ -188,30 +182,17 @@ public class DualPlayUI implements Runnable, Observer {
 						answerField.setText("");
 					}
 					if (!cal.check(answer, num1, num2, op)) {
+						System.out.println(answer + " ผิด");
 						answerField.setText("");
 					} else { // correct answer
+						start();
+						System.out.println(answer + " ถูก");
 						answerField.setText("");
 						cal.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						cal.push();
-						playing = new JPanel() {
-							@Override
-							public void paint(Graphics g) {
-								super.paint(g);
-								System.out.println("ggggg");
-								BufferedImage img = null;
-								try {
-									img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-								for (Villager villager : game.getVillager()) {
-									g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
-								}
-							}
-						};
-						panel.add(playing);
+						
 						try {
-							game.burstVillagers(e.getKeyCode());
+							game.burstVillagers(e.getKeyCode());		
 						} catch (Exception e2) {
 							e2.getMessage();
 						}
@@ -226,7 +207,6 @@ public class DualPlayUI implements Runnable, Observer {
 						questionLabel.setText(getMessage());
 					}
 				}
-
 			}
 
 			@Override
@@ -243,37 +223,24 @@ public class DualPlayUI implements Runnable, Observer {
 	}
 
 	// ถูกแล้วปล่อยคนออก
-	// public void releaseV1() {
-	// playing = new JPanel() {
-	// @Override
-	// public void paint(Graphics g) {
-	// super.paint(g);
-	// BufferedImage img = null;
-	// try {
-	// img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// for (Villager villager : game.getVillager()) {
-	// g.drawImage(img, 500, 500, 136, 58, null);
-	// }
-	// }
-	// };
-	// panel.add(playing);
-	// }
-	
-	public void paint(Graphics g) {
-		System.out.println("ggggg");
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		for (Villager villager : game.getVillager()) {
-			g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
-		}
-	}
+//	public void releaseV1() {
+//		playing = new JPanel() {
+//			@Override
+//			public void paint(Graphics g) {
+//				super.paint(g);
+//				BufferedImage img = null;
+//				try {
+//					img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				for (Villager villager : game.getVillager()) {
+//					g.drawImage(img, 500, 500, 136, 58, null);
+//				}
+//			}
+//		};
+//		panel.add(playing);
+//	}
 
 	@Override
 	public void run() {
@@ -306,6 +273,34 @@ public class DualPlayUI implements Runnable, Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		playing.repaint();
+	}
+	public void start() {
+		renderer.setVisible(true);
+	}
+	class Renderer extends JPanel {
+		public Renderer() {
+			setDoubleBuffered(true);
+			setPreferredSize(new Dimension(game.getWidth(), game.getHeight()));
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+
+			BufferedImage img = null;
+			try {
+				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			// Draw space
+			for (Villager villager : game.getVillager()) {
+				// g.fillOval(bullet.getX(), bullet.getY(), 100, 100);
+				// System.out.println(villager.getX() + " " + villager.getY());
+				g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
+			}
+		}
 	}
 
 }
