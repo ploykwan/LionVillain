@@ -51,7 +51,7 @@ public class ObjectPool extends Observable {
 		List<Villager> toRemove = new ArrayList<Villager>();
 		for (Villager bullet : villagers) {
 			timeremove++;
-			if (timeremove == 100) {
+			if (bullet.getX() == -700) {
 				System.out.println("delete");
 				toRemove.add(bullet);
 				timeremove = 0;
@@ -59,7 +59,7 @@ public class ObjectPool extends Observable {
 		}
 		for (Villager bullet : toRemove) {
 			bullet.setProperties(0, 0, 0, false);
-			mainLoop.stop();
+//			mainLoop.stop();
 			villagers.remove(bullet);
 		}
 	}

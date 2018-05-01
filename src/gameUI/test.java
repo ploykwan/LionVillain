@@ -13,13 +13,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-
 
 import game.ObjectPool;
 import game.Villager;
@@ -33,29 +34,29 @@ public class test extends JFrame implements Observer {
 
 	private ObjectPool objectPool;
 	private Renderer renderer;
-	
+
 	public test() {
 		objectPool = new ObjectPool();
 		objectPool.addObserver(this);
-		
+
 		renderer = new Renderer();
 		JTextField textField = new JTextField();
 		textField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println(e.getKeyCode());
 				try {
-					int offSet = 30;
-					objectPool.burstVillagers(e.getKeyCode() + offSet);
-					
+
+					objectPool.burstVillagers(e.getKeyCode());
+
 				} catch (Exception e2) {
 					e2.getMessage();
 				}
@@ -63,7 +64,7 @@ public class test extends JFrame implements Observer {
 		});
 		textField.setLocation(500, 500);
 		renderer.add(textField);
-		
+
 		setLayout(new BorderLayout());
 		add(renderer);
 
@@ -71,11 +72,11 @@ public class test extends JFrame implements Observer {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		pack();
 	}
-	
+
 	public void start() {
 		setVisible(true);
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println("start");
 		test test = new test();
@@ -86,17 +87,17 @@ public class test extends JFrame implements Observer {
 	public void update(Observable o, Object arg) {
 		repaint();
 	}
-	
+
 	class Renderer extends JPanel {
 		public Renderer() {
 			setDoubleBuffered(true);
 			setPreferredSize(new Dimension(objectPool.getWidth(), objectPool.getHeight()));
 		}
-		
+
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			
+
 			BufferedImage img = null;
 			try {
 				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
@@ -104,36 +105,32 @@ public class test extends JFrame implements Observer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			// Draw space
-			
 			for (Villager villager : objectPool.getVillager()) {
-//				g.fillOval(bullet.getX(), bullet.getY(), 100, 100);
-//				System.out.println(villager.getX() + " " + villager.getY());
-				g.drawImage(img, 1200 + villager.getX(), 375+villager.getY(),111,120,null);
+				// g.fillOval(bullet.getX(), bullet.getY(), 100, 100);
+				// System.out.println(villager.getX() + " " + villager.getY());
+				g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
 			}
 		}
 	}
-	
-	
-	
-	
-//	@Override
-//	public void start(Stage primaryStage) {
-//		Parent root;
-//		try {
-//			root = FXMLLoader.load(getClass().getResource("/gameUI/indexUI.fxml"));
-//			Scene scene = new Scene(root);
-//			primaryStage.setScene(scene);
-//			primaryStage.setTitle("test");
-//			primaryStage.show();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	public static void main(String[] args) {
-//		launch(args);
-//	}
+
+	// @Override
+	// public void start(Stage primaryStage) {
+	// Parent root;
+	// try {
+	// root = FXMLLoader.load(getClass().getResource("/gameUI/indexUI.fxml"));
+	// Scene scene = new Scene(root);
+	// primaryStage.setScene(scene);
+	// primaryStage.setTitle("test");
+	// primaryStage.show();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// public static void main(String[] args) {
+	// launch(args);
+	// }
 
 }

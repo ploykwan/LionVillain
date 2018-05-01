@@ -1,5 +1,6 @@
 package gameUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -55,7 +56,7 @@ public class DualPlayUI implements Runnable, Observer {
 	private void initialize() {
 		cal = new Calculator();
 		game = new ObjectPool();
-
+		game.addObserver(this);
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -70,6 +71,14 @@ public class DualPlayUI implements Runnable, Observer {
 		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
+
+		playing = new JPanel();
+		playing.setOpaque(false);
+		playing.setDoubleBuffered(true);
+		playing.setPreferredSize(new Dimension(game.getWidth(), game.getHeight()));
+		playing.setBounds(0, 0, 1280, 720);
+		playing.setLayout(new BorderLayout());
+		panel.add(playing);
 
 		timeLabel = new JLabel();
 		timeLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
@@ -103,9 +112,8 @@ public class DualPlayUI implements Runnable, Observer {
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
-		playing = new JPanel();
-//		playing.setOpaque(false);
-		panel.add(playing);
+		
+		
 		play();
 
 	}
@@ -180,17 +188,33 @@ public class DualPlayUI implements Runnable, Observer {
 						answerField.setText("");
 					}
 					if (!cal.check(answer, num1, num2, op)) {
-						System.out.println(answer + " ผิด");
 						answerField.setText("");
 					} else { // correct answer
-						System.out.println(answer + " ถูก");
 						answerField.setText("");
 						cal.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						cal.push();
-						int offSet = 30;
-						
-//						game.burstVillagers(panel.getWidth() - offSet, panel.getHeight() - offSet);
-						// panel.add(playing);
+						playing = new JPanel() {
+							@Override
+							public void paint(Graphics g) {
+								super.paint(g);
+								System.out.println("ggggg");
+								BufferedImage img = null;
+								try {
+									img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+								for (Villager villager : game.getVillager()) {
+									g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
+								}
+							}
+						};
+						panel.add(playing);
+						try {
+							game.burstVillagers(e.getKeyCode());
+						} catch (Exception e2) {
+							e2.getMessage();
+						}
 						lion.setLocation(cal.getX(), 375);
 						myDistanceLabel.setText(String.format("My Distance: %d meter", cal.getX() + 20));
 					}
@@ -219,23 +243,36 @@ public class DualPlayUI implements Runnable, Observer {
 	}
 
 	// ถูกแล้วปล่อยคนออก
-	public void releaseV1() {
-		playing = new JPanel() {
-			@Override
-			public void paint(Graphics g) {
-				super.paint(g);
-				BufferedImage img = null;
-				try {
-					img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				for (Villager villager : game.getVillager()) {
-					g.drawImage(img, 500, 500, 136, 58, null);
-				}
-			}
-		};
-		panel.add(playing);
+	// public void releaseV1() {
+	// playing = new JPanel() {
+	// @Override
+	// public void paint(Graphics g) {
+	// super.paint(g);
+	// BufferedImage img = null;
+	// try {
+	// img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// for (Villager villager : game.getVillager()) {
+	// g.drawImage(img, 500, 500, 136, 58, null);
+	// }
+	// }
+	// };
+	// panel.add(playing);
+	// }
+	
+	public void paint(Graphics g) {
+		System.out.println("ggggg");
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (Villager villager : game.getVillager()) {
+			g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
+		}
 	}
 
 	@Override

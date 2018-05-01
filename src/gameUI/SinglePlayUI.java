@@ -184,7 +184,7 @@ public class SinglePlayUI implements Runnable {
 						System.out.println(answer + " ผิด");
 						textfield.setText("");
 					} else { // correct answer
-						if( score % 5 == 0) {
+						if( score % 5 == 0 && score > 0) {
 							witch.setVisible(true);
 						}
 						score++;
