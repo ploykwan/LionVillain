@@ -13,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,42 +26,48 @@ import javax.swing.Timer;
 import com.sun.glass.ui.Size;
 
 import game.Calculator;
+import game.ObjectPool;
+import game.Villager;
+import sun.awt.RepaintArea;
 
-public class DualPlayUI implements Runnable {
+public class DualPlayUI implements Runnable, Observer {
 
 	private JPanel panel;
-	private JPanel playing = new JPanel();
+	private JPanel playing;
 	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel;
 	private JTextField answerField;
 	private JLabel people;
 
-	int num1 = 0, num2 = 0, result, answer = 0;
-	char op;
+	private int num1 = 0, num2 = 0, result, answer = 0;
+	private char op;
 	private String message;
-	private Calculator game;
+	private Calculator cal;
 	private Thread thread = new Thread(this);
 	double timedown = 125 * 100;
-	int pointRight = 560;
+	private int pointRight = 560;
+	private ObjectPool game;
 
 	public DualPlayUI() {
 		initialize();
+
 	}
 
 	private void initialize() {
-		game = new Calculator();
-//		panel = new JPanel() {
-//			@Override
-//			protected void paintComponent(Graphics g) {
-//				super.paintComponent(g);
-//				try {
-//					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
-//					g.drawImage(img, 0, 0, 1280, 720, null);
-//				} catch (IOException e) {
-//
-//				}
-//			}
-//		};
-		panel = new JPanel();
+		cal = new Calculator();
+		game = new ObjectPool();
+
+		panel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				try {
+					BufferedImage img = ImageIO.read(this.getClass().getResource("/res/dual_mode.png"));
+					g.drawImage(img, 0, 0, 1280, 720, null);
+				} catch (IOException e) {
+
+				}
+			}
+		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
 
@@ -94,10 +102,9 @@ public class DualPlayUI implements Runnable {
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
-		// lion.setBounds(493, 375, 333, 264);
 		panel.add(lion);
 		playing = new JPanel();
-		playing.setBounds(0, 0, 160, 175);
+//		playing.setOpaque(false);
 		panel.add(playing);
 		play();
 
@@ -156,9 +163,9 @@ public class DualPlayUI implements Runnable {
 
 	public void play() {
 		thread.start();
-		game.setX(340); // set first lion's position ; panel center:493
-		lion.setBounds(game.getX(), 375, 630, 253);
-		myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
+		cal.setX(340); // set first lion's position ; panel center:493
+		lion.setBounds(cal.getX(), 375, 521, 253);
+		myDistanceLabel.setText(String.format("My Distance: %d meter", cal.getX() + 20));
 		question();
 		questionLabel.setText(getMessage());
 		answerField.addKeyListener(new KeyListener() {
@@ -172,20 +179,22 @@ public class DualPlayUI implements Runnable {
 					} catch (NumberFormatException e1) {
 						answerField.setText("");
 					}
-					if (!game.check(answer, num1, num2, op)) {
+					if (!cal.check(answer, num1, num2, op)) {
 						System.out.println(answer + " ผิด");
 						answerField.setText("");
 					} else { // correct answer
 						System.out.println(answer + " ถูก");
 						answerField.setText("");
-						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
-						game.push();
-						releaseV1();
-						panel.add(playing);
-						lion.setBounds(game.getX(), 375, 630, 253);
-						myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
+						cal.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+						cal.push();
+						int offSet = 30;
+						
+//						game.burstVillagers(panel.getWidth() - offSet, panel.getHeight() - offSet);
+						// panel.add(playing);
+						lion.setLocation(cal.getX(), 375);
+						myDistanceLabel.setText(String.format("My Distance: %d meter", cal.getX() + 20));
 					}
-					if (game.isGameEnd()) {
+					if (cal.isGameEnd()) {
 						thread.stop();
 						gameEnd();
 					} else {
@@ -211,20 +220,22 @@ public class DualPlayUI implements Runnable {
 
 	// ถูกแล้วปล่อยคนออก
 	public void releaseV1() {
-
-		ImageIcon peopleV1 = new ImageIcon(this.getClass().getResource("/res/push.png"));
-		people = new JLabel(peopleV1);
-		playing.add(people);
-		//playing.setLocation(panel.getWidth()/2, panel.getHeight()/2);
-		playing.setLocation(panel.getWidth()/2, panel.getHeight()/2);
-		System.out.println("1:"+panel.getWidth()/2+" "+ panel.getHeight()/2);
-		
-		Timer timer = new Timer(50, new ActionListener() {
+		playing = new JPanel() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void paint(Graphics g) {
+				super.paint(g);
+				BufferedImage img = null;
+				try {
+					img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				for (Villager villager : game.getVillager()) {
+					g.drawImage(img, 500, 500, 136, 58, null);
+				}
 			}
-		});
+		};
+		panel.add(playing);
 	}
 
 	@Override
@@ -253,6 +264,11 @@ public class DualPlayUI implements Runnable {
 		endLabel = new JLabel(img);
 		end.add(endLabel);
 		panel.add(end);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		playing.repaint();
 	}
 
 }
