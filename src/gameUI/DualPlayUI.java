@@ -1,64 +1,42 @@
 package gameUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 
 import java.awt.Graphics;
-import java.awt.Label;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.Timer;
-
-import com.sun.glass.ui.Size;
 
 import game.Calculator;
-import game.ObjectPool;
-import game.Villager;
 
-
-public class DualPlayUI implements Runnable, Observer {
+public class DualPlayUI implements Runnable{
 
 	private JPanel panel;
-	private JPanel playing;
 	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel;
 	private JTextField answerField;
-	private JLabel people;
+	private JButton restartButton,homeButton;
 
 	int num1 = 0, num2 = 0, result, answer = 999;
 	char op;
 	private String message;
-	private Calculator cal;
+	private Calculator game;
 	private Thread thread = new Thread(this);
-	double timedown = 125 * 100;
-	private int pointRight = 560;
-	private ObjectPool game;
-	private Renderer renderer;
+	double timedown = 5*100;
 
 	public DualPlayUI() {
 		initialize();
 	}
 
 	private void initialize() {
-
-		cal = new Calculator();
-		game = new ObjectPool();
-		game.addObserver(this);
-		renderer = new Renderer();
+		game = new Calculator();
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -93,25 +71,21 @@ public class DualPlayUI implements Runnable, Observer {
 		panel.add(myDistanceLabel);
 
 		questionLabel = new JLabel();
-		questionLabel.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
+		questionLabel.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
 		questionLabel.setText("q");
 		questionLabel.setBounds(497, 178, 213, 57);
 		panel.add(questionLabel);
 
 		answerField = new JTextField();
-		answerField.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 45));
+		answerField.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
 		answerField.setBounds(711, 168, 106, 75);
 		panel.add(answerField);
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
-		playing.setOpaque(false);
-		panel.add(playing);
-		
-		panel.add(renderer);
-		play();
 
+		play();
 	}
 
 	public JPanel getDualPlayModePanel() {
@@ -166,86 +140,17 @@ public class DualPlayUI implements Runnable, Observer {
 
 	public void play() {
 		thread.start();
-		cal.setX(340); // set first lion's position ; panel center:493
-		lion.setBounds(cal.getX(), 375, 521, 253);
-		myDistanceLabel.setText(String.format("My Distance: %d meter", cal.getX() + 20));
+		game.setX(340); // set first lion's position ; panel center:493
+		lion.setBounds(game.getX(), 375, 521, 253);
+		myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
 		question();
 		questionLabel.setText(getMessage());
-		answerField.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					questionLabel.setText(getMessage());
-					try {
-						String ans = answerField.getText().trim();
-						answer = Integer.parseInt(ans);
-					} catch (NumberFormatException e1) {
-						answerField.setText("");
-					}
-					if (!cal.check(answer, num1, num2, op)) {
-						System.out.println(answer + " ผิด");
-						answerField.setText("");
-					} else { // correct answer
-						start();
-						System.out.println(answer + " ถูก");
-						answerField.setText("");
-						cal.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
-						cal.push();
-						
-						try {
-							game.burstVillagers(e.getKeyCode());		
-						} catch (Exception e2) {
-							e2.getMessage();
-						}
-						lion.setLocation(cal.getX(), 375);
-						myDistanceLabel.setText(String.format("My Distance: %d meter", cal.getX() + 20));
-					}
-					if (cal.isGameEnd()) {
-						thread.stop();
-						gameEnd();
-					} else {
-						question();
-						questionLabel.setText(getMessage());
-					}
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-		});
+		answerField.addKeyListener(new enter());
 	}
-
-	// ถูกแล้วปล่อยคนออก
-//	public void releaseV1() {
-//		playing = new JPanel() {
-//			@Override
-//			public void paint(Graphics g) {
-//				super.paint(g);
-//				BufferedImage img = null;
-//				try {
-//					img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				for (Villager villager : game.getVillager()) {
-//					g.drawImage(img, 500, 500, 136, 58, null);
-//				}
-//			}
-//		};
-//		panel.add(playing);
-//	}
 
 	@Override
 	public void run() {
-		while (true) {
+		while (timedown >= 0.1) {
 			try {
 				thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -254,6 +159,7 @@ public class DualPlayUI implements Runnable, Observer {
 			timedown--;
 			timeLabel.setText(String.format("Time: %.2f sec", timedown * 0.01));
 		}
+		gameEnd();
 	}
 
 	private void gameEnd() {
@@ -262,45 +168,76 @@ public class DualPlayUI implements Runnable, Observer {
 		answerField.removeKeyListener(answerField.getKeyListeners()[0]);
 		answerField.setVisible(false);
 		questionLabel.setVisible(false);
+		
 		JPanel end = new JPanel();
 		end.setOpaque(false);
-		end.setBounds(320, 70, 675, 495);
+		end.setBounds(320, 70, 695, 515);
+		
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
 		endLabel = new JLabel(img);
 		end.add(endLabel);
+		
+		ImageIcon restart = new ImageIcon(getClass().getResource("/res/restart.png"));
+		restartButton = new JButton(restart);
+		restartButton.setOpaque(false);
+		restartButton.setContentAreaFilled(false);
+		restartButton.setBorderPainted(false);
+		end.add(restartButton);
+		
+		ImageIcon home = new ImageIcon(getClass().getResource("/res/home.png"));
+		homeButton = new JButton(home);
+		homeButton.setOpaque(false);
+		homeButton.setContentAreaFilled(false);
+		homeButton.setBorderPainted(false);
+		homeButton.addActionListener((e) -> {
+			IndexUI ui = new IndexUI();
+			MainFrame.setPanel(ui.getPanel());
+		});
+		end.add(homeButton);
 		panel.add(end);
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		playing.repaint();
-	}
-	public void start() {
-		renderer.setVisible(true);
-	}
-	class Renderer extends JPanel {
-		public Renderer() {
-			setDoubleBuffered(true);
-			setPreferredSize(new Dimension(game.getWidth(), game.getHeight()));
+	class enter implements KeyListener {
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+
 		}
 
 		@Override
-		public void paint(Graphics g) {
-			super.paint(g);
-
-			BufferedImage img = null;
-			try {
-				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-			} catch (IOException e) {
-				e.printStackTrace();
+		public void keyPressed(KeyEvent e) {
+			
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				questionLabel.setText(getMessage());
+				try {
+					String ans = answerField.getText().trim();
+					answer = Integer.parseInt(ans);
+				} catch (NumberFormatException e1) {
+					answerField.setText("");
+				}
+				if (!game.check(answer, num1, num2, op)) {
+					System.out.println(answer + " ผิด");
+					answerField.setText("");
+				} else { // correct answer
+					System.out.println(answer + " ถูก");
+					answerField.setText("");
+					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+					game.push();
+					lion.setLocation(game.getX(), 375);
+					myDistanceLabel.setText(String.format("My Distance: %d meter", game.getX() + 20));
+				}
+				if (game.isGameEnd()) {
+					thread.stop();
+					gameEnd();
+				} else {
+					question();
+					questionLabel.setText(getMessage());
+				}
 			}
+		}
 
-			// Draw space
-			for (Villager villager : game.getVillager()) {
-				// g.fillOval(bullet.getX(), bullet.getY(), 100, 100);
-				// System.out.println(villager.getX() + " " + villager.getY());
-				g.drawImage(img, 1200 + villager.getX(), 375 + villager.getY(), 111, 120, null);
-			}
+		@Override
+		public void keyReleased(KeyEvent e) {
 		}
 	}
 

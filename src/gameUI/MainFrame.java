@@ -5,15 +5,13 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Connection.GameClient;
-
 /**
  * Ma
  * 
  * @author kwankaew
  *
  */
-public class MainFrame {
+public class MainFrame extends JFrame{
 	private final int FRAME_WIDTH = 1280;
 	private final int FRAME_HIGHT = 720;
 	private static JFrame frame;
@@ -25,15 +23,15 @@ public class MainFrame {
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setPanel(new gameUI.IndexUI().getPanel());
+//		setPanel(new gameUI.IndexUI().getPanel());
+		setPanel(new gameUI.InsertNameUI().getPanel());
+//		setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
 	}
 
-	public static void show() {
-		frame.setVisible(true);
-	}
+//	public static void show() {
+//		frame.setVisible(true);
+//	}
 	
-	
-
 	public static void setPanel(JPanel panel) {
 		frame.getContentPane().removeAll();
 		frame.repaint();
@@ -45,8 +43,12 @@ public class MainFrame {
 	}
 
 	public static void main(String[] args) {
+//		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
 		initialize();
-		show();
+		frame.setVisible(true);
+//		show();
+//		test test = new test();
+//		test.show();
 	}
 
 }

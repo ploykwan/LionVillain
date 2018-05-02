@@ -24,7 +24,7 @@ public class ObjectPool extends Observable {
 				while (alive) {
 					tick();
 					setChanged();
-					notifyObservers();
+					notifyObservers(villagers);
 					try {
 						Thread.sleep(30);
 					} catch (InterruptedException e) {

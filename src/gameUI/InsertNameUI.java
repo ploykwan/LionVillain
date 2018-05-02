@@ -13,17 +13,25 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Connection.DatabaseConnect;
+import Connection.PlayerTable;
+
 public class InsertNameUI {
 
+	private DatabaseConnect database;
+	
 	private JPanel panel;
 	private JButton back, start, skip;
 	private JTextField name;
+	
+	private String player;
 
 	public InsertNameUI() {
 		initialize();
 	}
 
 	private void initialize() {
+		database = DatabaseConnect.getInstance();
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -62,6 +70,10 @@ public class InsertNameUI {
 		start.setBorderPainted(false);
 		start.setBounds(495, 307, 138, 58);
 		start.addActionListener((e) -> {
+			player = name.getText().trim();
+			PlayerTable p = new PlayerTable();
+			p.setName(player);
+			database.createUser(p);
 			SinglePlayUI ui = new SinglePlayUI();
 			MainFrame.setPanel(ui.getSinglePlayModePanel());
 		});
@@ -75,6 +87,7 @@ public class InsertNameUI {
 		skip.setContentAreaFilled(false);
 		skip.setBorderPainted(false);
 		skip.addActionListener((e) -> {
+			player = "Guest";
 			DualPlayUI ui = new DualPlayUI();
 			MainFrame.setPanel(ui.getDualPlayModePanel());
 		}); 
