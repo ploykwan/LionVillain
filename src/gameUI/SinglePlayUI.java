@@ -1,16 +1,25 @@
 package gameUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,10 +33,13 @@ import javax.swing.border.Border;
  */
 
 import game.Calculator;
+import game.ObjectPool;
+import game.Villager;
+import javafx.scene.layout.AnchorPane;
 
-public class SinglePlayUI implements Runnable {
+public class SinglePlayUI extends JFrame implements Runnable, Observer {
 
-	private JPanel panel;
+	private JPanel panel,army,witchness;
 	private JLabel lion, distance, time, distanceLabel, timeLabel, endLabel;
 	private JLabel question,witch;
 	private JTextField textfield;
@@ -39,7 +51,11 @@ public class SinglePlayUI implements Runnable {
 	private String message;
 	Calculator game;
 	Thread thread = new Thread(this);
+	Thread thread2 = new Thread(this);
 	double timeup = 0;
+	double counttime = 0;
+	private ObjectPool objectPool;
+	private Renderer renderer;
 
 	public SinglePlayUI() {
 		initialize();
@@ -48,6 +64,10 @@ public class SinglePlayUI implements Runnable {
 	@SuppressWarnings("serial")
 	private void initialize() {
 		game = new Calculator();
+		witchness = new JPanel();
+		objectPool = new ObjectPool();
+		objectPool.addObserver(this);
+
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -62,6 +82,8 @@ public class SinglePlayUI implements Runnable {
 		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
+		panel.setLayout(new BorderLayout());
+
 
 		timeLabel = new JLabel();
 		timeLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
@@ -99,14 +121,18 @@ public class SinglePlayUI implements Runnable {
 		
 		ImageIcon w = new ImageIcon(getClass().getResource("/res/witch_r.gif"));
 		witch = new JLabel(w);
-		witch.setBounds(800, 360, 299, 212);
+		witch.setBounds(980, 310, 299, 212);
+		witch.setBorder(BorderFactory.createLineBorder(Color.black));
 		witch.setVisible(false);
 		panel.add(witch);
-
+		
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion_left.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
-
+		
+		renderer = new Renderer();
+//		panel.add(renderer);
+		
 		play();
 	}
 
@@ -165,6 +191,7 @@ public class SinglePlayUI implements Runnable {
 		thread.start();
 		game.setX(750); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 424, 253);
+		renderer.setVisible(true);
 		distance.setText(String.format("%d meter", game.getX() + 20));
 		question();
 		question.setText(getMessage());
@@ -184,19 +211,32 @@ public class SinglePlayUI implements Runnable {
 						System.out.println(answer + " ผิด");
 						textfield.setText("");
 					} else { // correct answer
+						objectPool.burstVillagers(e.getKeyCode());
 						if( score % 5 == 0 && score > 0) {
 							witch.setVisible(true);
+							counttime = timeup;
+//							thread2.start();
+//							counttime++;
+//							if( counttime == 1) {
+//								witch.setVisible(false);
+//								counttime = 0;
+//							}
+						}
+						if( timeup - counttime > 3) {
+							witch.setVisible(false);
+							counttime = 0  ;
 						}
 						score++;
 						System.out.println(answer + " ถูก");
 						textfield.setText("");
 						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						game.push();
-						lion.setBounds(game.getX(), 375, 424, 253);
+						lion.setLocation(game.getX(), 375);
 						distance.setText(String.format("%d meter", game.getX() + 20));
 					}
 					if (game.isGameEnd()) {
 						thread.stop();
+//						thread2.stop();
 						gameEnd();
 					} else {
 						question();
@@ -224,10 +264,12 @@ public class SinglePlayUI implements Runnable {
 		while (true) {
 			try {
 				thread.sleep(10);
+//				thread2.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			timeup++;
+//			counttime++;
 			time.setText(String.format("%.2f sec", timeup * 0.01));
 		}
 	}
@@ -245,6 +287,36 @@ public class SinglePlayUI implements Runnable {
 		endLabel = new JLabel(img);
 		end.add(endLabel);
 		panel.add(end);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		repaint();
+	}
+	
+	class Renderer extends JPanel {
+		public Renderer() {
+			setDoubleBuffered(true);
+			setPreferredSize(new Dimension(objectPool.getHeight(), objectPool.getHeight()));
+			}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+
+			BufferedImage img = null;
+			try {
+				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			// Draw space
+			for (Villager villager : objectPool.getVillager()) {
+				// System.out.println(villager.getX() + " " + villager.getY());
+				g.drawImage(img, 1280+villager.getX(), 360+ villager.getY(), 111, 120, null);
+			}
+		}
 	}
 
 }

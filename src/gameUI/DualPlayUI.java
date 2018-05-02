@@ -29,7 +29,6 @@ import com.sun.glass.ui.Size;
 import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
-import sun.awt.RepaintArea;
 
 public class DualPlayUI implements Runnable, Observer {
 
@@ -108,7 +107,7 @@ public class DualPlayUI implements Runnable, Observer {
 		panel.add(lion);
 		playing.setOpaque(false);
 		panel.add(playing);
-		
+
 		panel.add(renderer);
 		play();
 
@@ -191,9 +190,9 @@ public class DualPlayUI implements Runnable, Observer {
 						answerField.setText("");
 						cal.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 						cal.push();
-						
+
 						try {
-							game.burstVillagers(e.getKeyCode());		
+							game.burstVillagers(e.getKeyCode());
 						} catch (Exception e2) {
 							e2.getMessage();
 						}
@@ -224,24 +223,24 @@ public class DualPlayUI implements Runnable, Observer {
 	}
 
 	// ถูกแล้วปล่อยคนออก
-//	public void releaseV1() {
-//		playing = new JPanel() {
-//			@Override
-//			public void paint(Graphics g) {
-//				super.paint(g);
-//				BufferedImage img = null;
-//				try {
-//					img = ImageIO.read(this.getClass().getResource("/res/push.png"));
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				for (Villager villager : game.getVillager()) {
-//					g.drawImage(img, 500, 500, 136, 58, null);
-//				}
-//			}
-//		};
-//		panel.add(playing);
-//	}
+	// public void releaseV1() {
+	// playing = new JPanel() {
+	// @Override
+	// public void paint(Graphics g) {
+	// super.paint(g);
+	// BufferedImage img = null;
+	// try {
+	// img = ImageIO.read(this.getClass().getResource("/res/push.png"));
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// for (Villager villager : game.getVillager()) {
+	// g.drawImage(img, 500, 500, 136, 58, null);
+	// }
+	// }
+	// };
+	// panel.add(playing);
+	// }
 
 	@Override
 	public void run() {
@@ -273,11 +272,13 @@ public class DualPlayUI implements Runnable, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		playing.repaint();
+		panel.repaint();
 	}
+
 	public void start() {
 		renderer.setVisible(true);
 	}
+
 	class Renderer extends JPanel {
 		public Renderer() {
 			setDoubleBuffered(true);
