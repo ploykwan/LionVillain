@@ -29,7 +29,7 @@ import com.sun.glass.ui.Size;
 import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
-import sun.awt.RepaintArea;
+
 
 public class DualPlayUI implements Runnable, Observer {
 
