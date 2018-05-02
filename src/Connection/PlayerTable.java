@@ -5,10 +5,12 @@ import java.io.Serializable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "scoreborad")
+@DatabaseTable(tableName = "rank")
 public class PlayerTable implements Serializable{
 	
 	@DatabaseField(id = true)
+	private int id;
+	@DatabaseField
 	private String name;
 	@DatabaseField
 	private double score;

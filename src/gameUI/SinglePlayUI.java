@@ -34,11 +34,10 @@ import javax.swing.border.Border;
 import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
-import javafx.scene.layout.AnchorPane;
 
 public class SinglePlayUI extends JFrame implements Runnable, Observer {
 
-	private JPanel panel,army,witchness;
+	private JPanel panel;
 	private JLabel lion, distance, time, distanceLabel, timeLabel, endLabel;
 	private JLabel question,witch;
 	private JTextField textfield;
@@ -63,7 +62,6 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 	@SuppressWarnings("serial")
 	private void initialize() {
 		game = new Calculator();
-		witchness = new JPanel();
 		objectPool = new ObjectPool();
 		objectPool.addObserver(this);
 
@@ -81,7 +79,7 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
-		panel.setLayout(new BorderLayout());
+//		panel.setLayout(new BorderLayout());
 
 
 		timeLabel = new JLabel();
@@ -120,13 +118,14 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 		
 		ImageIcon w = new ImageIcon(getClass().getResource("/res/witch_r.gif"));
 		witch = new JLabel(w);
-		witch.setBounds(980, 310, 299, 212);
+		witch.setBounds(980, 250, 299, 212);
 		witch.setBorder(BorderFactory.createLineBorder(Color.black));
 		witch.setVisible(false);
 		panel.add(witch);
 		
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion_left.png"));
 		lion = new JLabel(lion_in_cage);
+		lion.setBounds(750, 375, 424, 253);
 		panel.add(lion);
 		
 		renderer = new Renderer();
@@ -194,68 +193,7 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 		distance.setText(String.format("%d meter", game.getX() + 20));
 		question();
 		question.setText(getMessage());
-		textfield.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					question.setText(getMessage());
-					int answer = 9999;
-					try {
-						String ans = textfield.getText().trim();
-						answer = Integer.parseInt(ans);
-					} catch (NumberFormatException e1) {
-						textfield.setText("");
-					}
-					if (!game.check(answer, num1, num2, op)) {
-						System.out.println(answer + " ผิด");
-						textfield.setText("");
-					} else { // correct answer
-						objectPool.burstVillagers(e.getKeyCode());
-						if( score % 5 == 0 && score > 0) {
-							witch.setVisible(true);
-							counttime = timeup;
-//							thread2.start();
-//							counttime++;
-//							if( counttime == 1) {
-//								witch.setVisible(false);
-//								counttime = 0;
-//							}
-						}
-						if( timeup - counttime > 3) {
-							witch.setVisible(false);
-							counttime = 0  ;
-						}
-						score++;
-						System.out.println(answer + " ถูก");
-						textfield.setText("");
-						game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
-						game.push();
-						lion.setLocation(game.getX(), 375);
-						distance.setText(String.format("%d meter", game.getX() + 20));
-					}
-					if (game.isGameEnd()) {
-						thread.stop();
-//						thread2.stop();
-						gameEnd();
-					} else {
-						question();
-						question.setText(getMessage());
-					}
-				}
-
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-		});
+		textfield.addKeyListener(new enter());
 	}
 
 	@Override
@@ -293,6 +231,70 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 		repaint();
 	}
 	
+	class enter implements KeyListener {
+		
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				question.setText(getMessage());
+				int answer = 9999;
+				try {
+					String ans = textfield.getText().trim();
+					answer = Integer.parseInt(ans);
+				} catch (NumberFormatException e1) {
+					textfield.setText("");
+				}
+				if (!game.check(answer, num1, num2, op)) {
+					System.out.println(answer + " ผิด");
+					textfield.setText("");
+				} else { // correct answer
+					objectPool.burstVillagers(e.getKeyCode());
+					if( score % 5 == 0 && score > 0) {
+						witch.setVisible(true);
+						counttime = timeup;
+						thread2.start();
+						counttime++;
+						if( counttime == 1) {
+							witch.setVisible(false);
+							counttime = 0;
+						}
+					}
+					if( timeup - counttime > 3) {
+						witch.setVisible(false);
+						counttime = 0  ;
+					}
+					score++;
+					System.out.println(answer + " ถูก");
+					textfield.setText("");
+					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+					game.push();
+					lion.setLocation(game.getX(), 375);
+					distance.setText(String.format("%d meter", game.getX() + 20));
+				}
+				if (game.isGameEnd()) {
+					thread.stop();
+//					thread2.stop();
+					gameEnd();
+				} else {
+					question();
+					question.setText(getMessage());
+				}
+			}
+
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
 	class Renderer extends JPanel {
 		public Renderer() {
 			setDoubleBuffered(true);
@@ -312,7 +314,6 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 
 			// Draw space
 			for (Villager villager : objectPool.getVillager()) {
-				// System.out.println(villager.getX() + " " + villager.getY());
 				g.drawImage(img, 1280+villager.getX(), 360+ villager.getY(), 111, 120, null);
 			}
 		}

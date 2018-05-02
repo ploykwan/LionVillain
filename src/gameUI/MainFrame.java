@@ -5,10 +5,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sun.corba.se.impl.orb.ParserTable.TestAcceptor1;
-
-import Connection.GameClient;
-
 /**
  * Ma
  * 
@@ -28,8 +24,8 @@ public class MainFrame extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 //		setPanel(new gameUI.IndexUI().getPanel());
-//		setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
-		setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
+		setPanel(new gameUI.InsertNameUI().getPanel());
+//		setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
 	}
 
 //	public static void show() {

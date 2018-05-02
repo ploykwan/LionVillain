@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;fa
+import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
@@ -16,9 +16,10 @@ public class DatabaseConnect {
 	private static DatabaseConnect databaseConnect = null;
 	private static ConnectionSource connectionSource = null;
 
-	private static ResourceBundle bundle = ResourceBundle.getBundle("");
+	private static ResourceBundle bundle = ResourceBundle.getBundle("config");
 	private static final String NAME = bundle.getString("jdbc.name");
 	private static final String URL = bundle.getString("jdbc.url");
+	private static final String PW = bundle.getString("jdbc.password");
 	private Dao<PlayerTable, String> playerDao;
 	private java.util.List<PlayerTable> getDetailPlayer;
 	private UpdateBuilder<PlayerTable, String> updateBuilder;
@@ -34,6 +35,7 @@ public class DatabaseConnect {
 	}
 
 	public static DatabaseConnect getInstance() {
+		System.out.println(NAME + "<<<>>>" + URL);
 		if( databaseConnect == null )
 			databaseConnect = new DatabaseConnect();
 		return databaseConnect;
@@ -69,7 +71,7 @@ public class DatabaseConnect {
 			playerDao.createIfNotExists(player);
 		}catch (SQLException e) {
 			System.out.println("create player error");
-			
+			e.printStackTrace();
 		}
 	}
 }
