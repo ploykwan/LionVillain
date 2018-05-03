@@ -11,6 +11,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.support.DatabaseConnection;
+import com.j256.ormlite.table.TableUtils;
 
 public class DatabaseConnect {
 	private static DatabaseConnect databaseConnect = null;
@@ -26,8 +27,9 @@ public class DatabaseConnect {
 
 	private DatabaseConnect() {
 		try {
-			connectionSource = new JdbcConnectionSource(URL);
+			connectionSource = new JdbcConnectionSource(URL,NAME,PW);
 			playerDao = DaoManager.createDao(connectionSource, PlayerTable.class);
+//			TableUtils.createTableIfNotExists(connectionSource,PlayerTable.class);
 		} catch (SQLException e) {
 			System.out.println("error");
 			e.printStackTrace();

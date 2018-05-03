@@ -9,18 +9,18 @@ import com.j256.ormlite.table.DatabaseTable;
 public class PlayerTable implements Serializable{
 	
 	@DatabaseField(id = true)
-	private int id;
-	@DatabaseField
 	private String name;
 	@DatabaseField
 	private double score;
+	
 	
 	public PlayerTable() {
 		
 	}
 	
-	public PlayerTable(String name) {
+	public PlayerTable(String name,double score) {
 		this.name = name;
+		this.score = score;
 	}
 	
 	public String getName() {
