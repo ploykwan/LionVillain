@@ -55,9 +55,6 @@ public class ObjectPool extends Observable {
 		for (Villager bullet : villagers) {
 			timeremove++;
 			if (bullet.getX() == (-900 + getStop())) {
-				System.out.println("butllet.getX() "+bullet.getX());
-				System.out.println(getStop() + "---");
-				System.out.println("delete");
 				toRemove.add(bullet);
 				timeremove = 0;
 			}

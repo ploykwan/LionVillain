@@ -1,5 +1,6 @@
 package gameUI;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import java.awt.Graphics;
@@ -7,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -14,13 +17,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import game.Calculator;
 
 public class DualPlayUI implements Runnable{
 
 	private JPanel panel;
-	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel;
+	private JLabel lion, questionLabel, timeLabel, myDistanceLabel, opponentDistanceLabel, endLabel,startLabel;
 	private JTextField answerField;
 	private JButton restartButton,homeButton;
 
@@ -29,13 +33,9 @@ public class DualPlayUI implements Runnable{
 	private String message;
 	private Calculator game;
 	private Thread thread = new Thread(this);
-	double timedown = 5*100;
+	double timedown = 120*100;
 
 	public DualPlayUI() {
-		initialize();
-	}
-
-	private void initialize() {
 		game = new Calculator();
 		panel = new JPanel() {
 			@Override
@@ -84,7 +84,16 @@ public class DualPlayUI implements Runnable{
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
-
+		
+		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
+		endLabel = new JLabel(img);
+		
+		startLabel = new JLabel();
+		startLabel.setFont(new Font("Andale Mono", Font.PLAIN, 40));
+		startLabel.setText("0");
+		startLabel.setBounds(360, 540, 300, 300);
+		panel.add(startLabel);
+		
 		play();
 	}
 
@@ -94,9 +103,8 @@ public class DualPlayUI implements Runnable{
 
 	public void question() {
 		char operator[] = { '+', '-', '*', '/' };
-		// TODO ค่อยแก้เลข
-		num1 = (int) (1 + (Math.random() * 1));
-		num2 = (int) (1 + (Math.random() * 1));
+		num1 = (int) (1 + (Math.random() * 99));
+		num2 = (int) (1 + (Math.random() * 99));
 		int id = (int) (Math.random() * 4);
 		op = operator[id];
 		switch (op) {
@@ -137,8 +145,25 @@ public class DualPlayUI implements Runnable{
 	public String getMessage() {
 		return message;
 	}
-
+	
+	private void gameStart() {
+//		startLabel = new JLabel();
+//		startLabel.setFont(new Font("Andale Mono", Font.PLAIN, 40));
+//		startLabel.setBounds(500, 500, 300, 300);
+//		panel.add(startLabel);
+		for(int i = 5 ; i > 0 ; i-- ) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			startLabel.setText(i+"");
+			System.out.println(i);
+		}
+		
+	}
 	public void play() {
+		//gameStart();
 		thread.start();
 		game.setX(340); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 521, 253);
@@ -173,8 +198,6 @@ public class DualPlayUI implements Runnable{
 		end.setOpaque(false);
 		end.setBounds(320, 70, 695, 515);
 		
-		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
-		endLabel = new JLabel(img);
 		end.add(endLabel);
 		
 		ImageIcon restart = new ImageIcon(getClass().getResource("/res/restart.png"));
@@ -182,6 +205,10 @@ public class DualPlayUI implements Runnable{
 		restartButton.setOpaque(false);
 		restartButton.setContentAreaFilled(false);
 		restartButton.setBorderPainted(false);
+		restartButton.addActionListener((e) -> {
+			DualPlayUI goTo = new DualPlayUI();
+			MainFrame.setPanel(goTo.getDualPlayModePanel());
+		});
 		end.add(restartButton);
 		
 		ImageIcon home = new ImageIcon(getClass().getResource("/res/home.png"));

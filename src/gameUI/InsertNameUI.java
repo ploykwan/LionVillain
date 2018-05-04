@@ -73,8 +73,9 @@ public class InsertNameUI {
 			player = name.getText().trim();
 			PlayerTable p = new PlayerTable(player,0);
 			database.createUser(p);
-			SinglePlayUI ui = new SinglePlayUI();
-			MainFrame.setPanel(ui.getSinglePlayModePanel());
+			test goTo = new test(p);
+			goTo.doWork();
+//			MainFrame.setPanel(goTo);
 		});
 		panel.add(start);
 
@@ -87,8 +88,9 @@ public class InsertNameUI {
 		skip.setBorderPainted(false);
 		skip.addActionListener((e) -> {
 			PlayerTable p = new PlayerTable("Guest",0);
-			DualPlayUI ui = new DualPlayUI();
-			MainFrame.setPanel(ui.getDualPlayModePanel());
+			database.createUser(p);
+			test goTo = new test(p);
+			MainFrame.setPanel(goTo.getPanel());
 		}); 
 		panel.add(skip);
 

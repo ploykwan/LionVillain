@@ -23,9 +23,8 @@ public class MainFrame extends JFrame{
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-//		setPanel(new gameUI.IndexUI().getPanel());
-		setPanel(new gameUI.InsertNameUI().getPanel());
-//		setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
+//		setPanel(new gameUI.InsertNameUI().getPanel());
+//		setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
 	}
 
 //	public static void show() {
@@ -43,12 +42,9 @@ public class MainFrame extends JFrame{
 	}
 
 	public static void main(String[] args) {
-//		initialize(new gameUI.DualPlayUI().getDualPlayModePanel());
 		initialize();
+		setPanel(new gameUI.IndexUI().getPanel());
 		frame.setVisible(true);
-//		show();
-//		test test = new test();
-//		test.show();
 	}
 
 }

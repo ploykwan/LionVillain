@@ -29,7 +29,7 @@ public class DatabaseConnect {
 		try {
 			connectionSource = new JdbcConnectionSource(URL,NAME,PW);
 			playerDao = DaoManager.createDao(connectionSource, PlayerTable.class);
-//			TableUtils.createTableIfNotExists(connectionSource,PlayerTable.class);
+			updateBuilder = playerDao.updateBuilder();
 		} catch (SQLException e) {
 			System.out.println("error");
 			e.printStackTrace();
@@ -75,5 +75,18 @@ public class DatabaseConnect {
 			System.out.println("create player error");
 			e.printStackTrace();
 		}
+	}
+	
+	public void update(PlayerTable player) {
+			try {
+				System.out.println("update time: "+ player.getScore()+", "+player.getName());
+				updateBuilder.where().eq("name", player.getName());
+				updateBuilder.updateColumnValue("score", player.getScore());
+				updateBuilder.update();
+			} catch (SQLException e) {
+				System.out.println("Update score error.");
+				e.printStackTrace();
+			}
+	
 	}
 }

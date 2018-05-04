@@ -21,6 +21,7 @@ public class IndexUI {
 	}
 	
 	private void initialize() {
+		System.out.println("Run index...");
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -43,8 +44,8 @@ public class IndexUI {
 		single.setBorderPainted(false);
 		single.setBounds(120,270,444,111);
 		single.addActionListener((e) -> {
-			InsertNameUI ui = new InsertNameUI();
-			MainFrame.setPanel(ui.getPanel());
+			InsertNameUI goTo = new InsertNameUI();
+			MainFrame.setPanel(goTo.getPanel());
 		});
 		panel.add(single);
 		
@@ -55,8 +56,8 @@ public class IndexUI {
 		dual.setBorderPainted(false);
 		dual.setBounds(690,270,444,111);
 		dual.addActionListener((e) -> {
-			DualPlayUI ui = new DualPlayUI();
-			MainFrame.setPanel(ui.getDualPlayModePanel());
+			DualPlayUI goTo = new DualPlayUI();
+			MainFrame.setPanel(goTo.getDualPlayModePanel());
 		});
 		panel.add(dual);
 		

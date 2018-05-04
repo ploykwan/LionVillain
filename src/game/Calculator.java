@@ -1,12 +1,18 @@
 package game;
 
+import Connection.PlayerTable;
+
 public class Calculator {
 	private int result;
 	private Villager v = new Villager(), v1, v2;
+	private PlayerTable p1,p2;
 
 	public Calculator() {
-//		v.setDx(10);
-		// this.dx = 10;
+	}
+	
+	public Calculator(PlayerTable p) {
+		p1.setName(p.getName());
+		p1.setScore(0);
 	}
 
 	// for 2 player.
@@ -38,8 +44,12 @@ public class Calculator {
 	}
 
 	public int push() {
-		// x -= getDx();
 		v.setX(v.getX() - v.getDx());
+		return v.getX();
+	}
+	
+	public int back() {
+		v.setX(v.getX() + 10);
 		return v.getX();
 	}
 
@@ -59,12 +69,10 @@ public class Calculator {
 
 	public void setX(int x) {
 		v.setX(x);
-		// this.x = x;
 	}
 
 	public void setDx(int dx) {
 		v.setDx(dx);
-		// this.dx += dx;
 	}
 
 	public void V1Correct() {
