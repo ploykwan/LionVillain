@@ -5,4 +5,4 @@ test/
 .classpath
 .project
 .DS_Store
-
+config.properties
