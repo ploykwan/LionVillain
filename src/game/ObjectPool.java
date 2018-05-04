@@ -12,8 +12,11 @@ public class ObjectPool extends Observable {
 	private List<Villager> villagers;
 	private Thread mainLoop;
 	private boolean alive;
+	private Calculator game = new Calculator();
 	// private Thread remove;
 	private int timeremove = 0;
+	
+	private int stop = 750;
 
 	public ObjectPool() {
 		alive = true;
@@ -51,7 +54,9 @@ public class ObjectPool extends Observable {
 		List<Villager> toRemove = new ArrayList<Villager>();
 		for (Villager bullet : villagers) {
 			timeremove++;
-			if (bullet.getX() == -700) {
+			if (bullet.getX() == (-900 + getStop())) {
+				System.out.println("butllet.getX() "+bullet.getX());
+				System.out.println(getStop() + "---");
 				System.out.println("delete");
 				toRemove.add(bullet);
 				timeremove = 0;
@@ -59,7 +64,6 @@ public class ObjectPool extends Observable {
 		}
 		for (Villager bullet : toRemove) {
 			bullet.setProperties(0, 0, 0, false);
-//			mainLoop.stop();
 			villagers.remove(bullet);
 		}
 	}
@@ -81,7 +85,15 @@ public class ObjectPool extends Observable {
 		Villager bullet = bulletList.get(0);
 		bullet.setProperties(x, -1, 0, true);
 		villagers.add(bullet);
-		// System.out.println(bullet.toString());
 	}
+
+	public int getStop() {
+		return stop;
+	}
+
+	public void setStop(int stop) {
+		this.stop = stop;
+	}
+	
 
 }

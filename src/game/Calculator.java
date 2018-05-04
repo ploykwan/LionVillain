@@ -5,7 +5,7 @@ public class Calculator {
 	private Villager v = new Villager(), v1, v2;
 
 	public Calculator() {
-		v.setDx(10);
+//		v.setDx(10);
 		// this.dx = 10;
 	}
 
@@ -44,7 +44,7 @@ public class Calculator {
 	}
 
 	public boolean isGameEnd() {
-		if (v.getX() <= -20)
+		if (v.getX() <= -10)
 			return true;
 		return false;
 	}

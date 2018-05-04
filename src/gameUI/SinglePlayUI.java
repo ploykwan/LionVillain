@@ -119,7 +119,6 @@ public class SinglePlayUI extends JFrame implements Runnable, Observer {
 		ImageIcon w = new ImageIcon(getClass().getResource("/res/witch_r.gif"));
 		witch = new JLabel(w);
 		witch.setBounds(980, 250, 299, 212);
-		witch.setBorder(BorderFactory.createLineBorder(Color.black));
 		witch.setVisible(false);
 		panel.add(witch);
 		
