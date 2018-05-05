@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 import Connection.DatabaseConnect;
 import Connection.PlayerTable;
 import game.Calculator;
@@ -29,10 +28,10 @@ public class test extends JPanel implements Observer, Runnable {
 
 	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel;
 	private JTextField textField;
-	private JButton restartButton,homeButton;
+	private JButton restartButton, homeButton;
 	private ImageIcon w, lion_in_cage;
 	private Renderer renderer;
-	
+
 	int num1 = 0;
 	int num2 = 0;
 	char op;
@@ -40,19 +39,19 @@ public class test extends JPanel implements Observer, Runnable {
 	int timeup = 0;
 	private String message;
 	private String name;
-	
+
 	private Calculator game;
 	private Thread thread = new Thread(this);
 	private ObjectPool objectPool;
 	private PlayerTable p = new PlayerTable();
-	
-	public test(PlayerTable player) {
+
+	public void initialize(PlayerTable player) {
 		p.setName(player.getName());
 		p.setScore(0);
-		System.out.println("gameEnd(): "+p.getName()+", "+p.getScore());
-//	}
-//
-//	public test() {
+		System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
+	}
+
+	public test() {
 		System.out.println("Run test...");
 		game = new Calculator();
 		objectPool = new ObjectPool();
@@ -105,26 +104,26 @@ public class test extends JPanel implements Observer, Runnable {
 		lion = new JLabel(lion_in_cage);
 		lion.setBounds(750, 375, 424, 253);
 		add(lion);
-		
+
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
 		endLabel = new JLabel(img);
-		endLabel.setBounds(400, 70, 517 ,373);
+		endLabel.setBounds(400, 70, 517, 373);
 		add(endLabel);
 		endLabel.setVisible(false);
-		
+
 		ImageIcon b1 = new ImageIcon(getClass().getResource("/res/restart.png"));
 		restartButton = new JButton(b1);
-		restartButton.addActionListener( (e) -> {
-			test goTo = new test(p);
+		restartButton.addActionListener((e) -> {
+			test goTo = new test();
 			MainFrame.setPanel(goTo);
 		});
 		restartButton.setBounds(440, 470, 204, 87);
 		add(restartButton);
 		restartButton.setVisible(false);
-		
+
 		ImageIcon b2 = new ImageIcon(getClass().getResource("/res/home.png"));
 		homeButton = new JButton(b2);
-		homeButton.addActionListener( (e) -> {
+		homeButton.addActionListener((e) -> {
 			IndexUI goTo = new IndexUI();
 			MainFrame.setPanel(goTo.getPanel());
 		});
@@ -149,6 +148,7 @@ public class test extends JPanel implements Observer, Runnable {
 		question.setText(getMessage());
 		textField.addKeyListener(new Enter());
 	}
+
 	@Override
 	public void update(Observable o, Object arg) {
 		repaint();
@@ -172,7 +172,7 @@ public class test extends JPanel implements Observer, Runnable {
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX() + 20));
 				} else { // correct answer
-					objectPool.setStop(game.getX()-game.getDx());
+					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
 					if (score % 5 == 0 && score > 0) {
 						witch.setVisible(true);
@@ -205,11 +205,13 @@ public class test extends JPanel implements Observer, Runnable {
 			endLabel.setVisible(true);
 			restartButton.setVisible(true);
 			homeButton.setVisible(true);
-			
-			p.setScore(time);
 
-			System.out.println("gameEnd(): "+p.getName()+", "+p.getScore());
-			DatabaseConnect.getInstance().update(p);
+			if (p.getName() != null) {
+				System.out.println("guset");
+				p.setScore(time);
+				System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
+				DatabaseConnect.getInstance().update(p);
+			}
 		}
 
 		@Override
@@ -321,11 +323,8 @@ public class test extends JPanel implements Observer, Runnable {
 		}
 
 	}
+
 	public JPanel getPanel() {
 		return this;
-	}
-	
-	public void doWork() {
-		MainFrame.setPanel(getPanel());
 	}
 }

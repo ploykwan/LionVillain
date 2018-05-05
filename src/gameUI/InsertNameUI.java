@@ -73,9 +73,9 @@ public class InsertNameUI {
 			player = name.getText().trim();
 			PlayerTable p = new PlayerTable(player,0);
 			database.createUser(p);
-			test goTo = new test(p);
-			goTo.doWork();
-//			MainFrame.setPanel(goTo);
+			test goTo = new test();
+			goTo.initialize(p);
+			MainFrame.setPanel(goTo);
 		});
 		panel.add(start);
 
@@ -87,9 +87,7 @@ public class InsertNameUI {
 		skip.setContentAreaFilled(false);
 		skip.setBorderPainted(false);
 		skip.addActionListener((e) -> {
-			PlayerTable p = new PlayerTable("Guest",0);
-			database.createUser(p);
-			test goTo = new test(p);
+			test goTo = new test();
 			MainFrame.setPanel(goTo.getPanel());
 		}); 
 		panel.add(skip);
