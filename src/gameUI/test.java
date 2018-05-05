@@ -8,8 +8,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -26,7 +29,7 @@ import game.Villager;
 
 public class test extends JPanel implements Observer, Runnable {
 
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel;
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
 	private ImageIcon w, lion_in_cage;
@@ -37,6 +40,7 @@ public class test extends JPanel implements Observer, Runnable {
 	char op;
 	int result, score = 0;
 	int timeup = 0;
+	private long TIME_DELAY = 1000;
 	private String message;
 	private String name;
 
@@ -68,7 +72,7 @@ public class test extends JPanel implements Observer, Runnable {
 
 		time = new JLabel();
 		time.setFont(new Font("Andale Mono", Font.PLAIN, 20));
-		time.setText("00 sec"); // ใส่เวลา
+		time.setText("00.00 sec"); // ใส่เวลา
 		time.setBounds(110, 35, 200, 25);
 		add(time);
 
@@ -117,7 +121,7 @@ public class test extends JPanel implements Observer, Runnable {
 			test goTo = new test();
 			MainFrame.setPanel(goTo);
 		});
-		restartButton.setBounds(440, 470, 204, 87);
+		restartButton.setBounds(1000, 200, 204, 87);
 		add(restartButton);
 		restartButton.setVisible(false);
 
@@ -127,10 +131,17 @@ public class test extends JPanel implements Observer, Runnable {
 			IndexUI goTo = new IndexUI();
 			MainFrame.setPanel(goTo.getPanel());
 		});
-		homeButton.setBounds(680, 470, 204, 87);
+		homeButton.setBounds(1000, 400, 204, 87);
 		add(homeButton);
 		homeButton.setVisible(false);
 
+		ImageIcon score = new ImageIcon(getClass().getResource("/res/score_board.png"));
+		showScore = new JLabel(score);
+		showScore.setBounds(410, 0, 500, 700);
+		showScore.setVisible(false);
+		add(showScore);
+
+		countdown();
 		play();
 
 		setLayout(new BorderLayout());
@@ -139,7 +150,6 @@ public class test extends JPanel implements Observer, Runnable {
 	}
 
 	public void play() {
-		thread.start();
 		game.setX(760); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 424, 253);
 		renderer.setVisible(true);
@@ -147,6 +157,44 @@ public class test extends JPanel implements Observer, Runnable {
 		question();
 		question.setText(getMessage());
 		textField.addKeyListener(new Enter());
+	}
+
+	public void countdown() {
+		question.setVisible(false);
+		textField.setVisible(false);
+		JLabel count = new JLabel();
+		count.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 500));
+		count.setBounds(500, 100, 500, 500);
+		add(count);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				count.setText("3");
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						count.setText("2");
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								count.setText("1");
+								timer.schedule(new TimerTask() {
+									@Override
+									public void run() {
+										count.setVisible(false);
+										question.setVisible(true);
+										textField.setVisible(true);
+										remove(count);
+										thread.start();
+									}
+								}, TIME_DELAY);
+							}
+						}, TIME_DELAY);
+					}
+				}, TIME_DELAY);
+			}
+		}, TIME_DELAY);
 	}
 
 	@Override
@@ -189,11 +237,45 @@ public class test extends JPanel implements Observer, Runnable {
 					thread.stop();
 					distance.setText("0 meter");
 					gameEnd();
+					showScoreBoard();
 				} else {
 					question();
 					question.setText(getMessage());
 				}
 			}
+		}
+
+		public void showScoreBoard() {
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							timer.schedule(new TimerTask() {
+								@Override
+								public void run() {
+									timer.schedule(new TimerTask() {
+										@Override
+										public void run() {
+											timer.schedule(new TimerTask() {
+												@Override
+												public void run() {
+													endLabel.setVisible(false);
+													showScore.setVisible(true);
+													restartButton.setVisible(true);
+													homeButton.setVisible(true);
+												}
+											}, TIME_DELAY);
+										}
+									}, TIME_DELAY);
+								}
+							}, TIME_DELAY);
+						}
+					}, TIME_DELAY);
+				}
+			}, TIME_DELAY);
 		}
 
 		private void gameEnd() {
@@ -203,8 +285,6 @@ public class test extends JPanel implements Observer, Runnable {
 			textField.setVisible(false);
 			question.setVisible(false);
 			endLabel.setVisible(true);
-			restartButton.setVisible(true);
-			homeButton.setVisible(true);
 
 			if (p.getName() != null) {
 				System.out.println("guset");

@@ -15,7 +15,7 @@ public class ObjectPool extends Observable {
 	private Calculator game = new Calculator();
 	// private Thread remove;
 	private int timeremove = 0;
-	
+
 	private int stop = 750;
 
 	public ObjectPool() {
@@ -91,6 +91,5 @@ public class ObjectPool extends Observable {
 	public void setStop(int stop) {
 		this.stop = stop;
 	}
-	
 
 }

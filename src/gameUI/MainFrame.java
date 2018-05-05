@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  * @author kwankaew
  *
  */
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame {
 	private final int FRAME_WIDTH = 1280;
 	private final int FRAME_HIGHT = 720;
 	private static JFrame frame;
@@ -23,14 +23,14 @@ public class MainFrame extends JFrame{
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-//		setPanel(new gameUI.InsertNameUI().getPanel());
-//		setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
+		// setPanel(new gameUI.InsertNameUI().getPanel());
+		// setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
 	}
 
-//	public static void show() {
-//		frame.setVisible(true);
-//	}
-	
+	// public static void show() {
+	// frame.setVisible(true);
+	// }
+
 	public static void setPanel(JPanel panel) {
 		frame.getContentPane().removeAll();
 		frame.repaint();
@@ -44,6 +44,8 @@ public class MainFrame extends JFrame{
 	public static void main(String[] args) {
 		initialize();
 		setPanel(new gameUI.IndexUI().getPanel());
+		// setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
+		// setPanel(new gameUI.test().getPanel());
 		frame.setVisible(true);
 	}
 

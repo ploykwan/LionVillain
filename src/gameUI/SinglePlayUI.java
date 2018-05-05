@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 /**
  * Interface for single play mode.
  * 
@@ -29,12 +28,13 @@ import javax.swing.JTextField;
 import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
+import jdk.internal.org.objectweb.asm.Label;
 
 public class SinglePlayUI extends JPanel implements Runnable, Observer {
 
-	private JPanel panel;
+	private JPanel panel, end;
 	private JLabel lion, distance, time, distanceLabel, timeLabel, endLabel;
-	private JLabel question, witch;
+	private JLabel question, witch, showScore;
 	private JTextField textfield;
 
 	private int num1 = 0;
@@ -44,7 +44,7 @@ public class SinglePlayUI extends JPanel implements Runnable, Observer {
 	private String message;
 	private Calculator game;
 	private Thread thread = new Thread(this);
-//	Thread thread2 = new Thread(this);
+	// Thread thread2 = new Thread(this);
 	private double timeup = 0;
 	private long TIME_DELAY = 1000;
 	private ObjectPool objectPool;
@@ -121,10 +121,16 @@ public class SinglePlayUI extends JPanel implements Runnable, Observer {
 		lion.setBounds(750, 375, 424, 253);
 		panel.add(lion);
 
+		ImageIcon score = new ImageIcon(getClass().getResource("/res/score_board.png"));
+		showScore = new JLabel(score);
+		showScore.setBounds(410, 0, 500, 700);
+		showScore.setVisible(false);
+		panel.add(showScore);
+
 		renderer = new Renderer();
 		// panel.add(renderer);
 		countdown();
-//		thread.start();
+		// thread.start();
 		play();
 	}
 
@@ -201,7 +207,7 @@ public class SinglePlayUI extends JPanel implements Runnable, Observer {
 			time.setText(String.format("%.2f sec", timeup * 0.01));
 		}
 	}
-	
+
 	public void countdown() {
 		question.setVisible(false);
 		textfield.setVisible(false);
@@ -240,13 +246,44 @@ public class SinglePlayUI extends JPanel implements Runnable, Observer {
 		}, TIME_DELAY);
 	}
 
+	public void showScoreBoard() {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								timer.schedule(new TimerTask() {
+									@Override
+									public void run() {
+										timer.schedule(new TimerTask() {
+											@Override
+											public void run() {
+												end.setVisible(false);
+												showScore.setVisible(true);
+											}
+										}, TIME_DELAY);
+									}
+								}, TIME_DELAY);
+							}
+						}, TIME_DELAY);
+					}
+				}, TIME_DELAY);
+			}
+		}, TIME_DELAY);
+	}
+
 	private void gameEnd() {
 		double time = timeup * 0.01; // เวลาทีทำได้
 		System.out.printf("%.2f sec\n", time);
 		textfield.removeKeyListener(textfield.getKeyListeners()[0]);
 		textfield.setVisible(false);
 		question.setVisible(false);
-		JPanel end = new JPanel();
+		end = new JPanel();
 		end.setOpaque(false);
 		end.setBounds(320, 70, 675, 495);
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
@@ -291,6 +328,7 @@ public class SinglePlayUI extends JPanel implements Runnable, Observer {
 				if (game.isGameEnd()) {
 					thread.stop();
 					gameEnd();
+					showScoreBoard();
 				} else {
 					question();
 					question.setText(getMessage());

@@ -5,11 +5,11 @@ import Connection.PlayerTable;
 public class Calculator {
 	private int result;
 	private Villager v = new Villager(), v1, v2;
-	private PlayerTable p1,p2;
+	private PlayerTable p1, p2;
 
 	public Calculator() {
 	}
-	
+
 	public Calculator(PlayerTable p) {
 		p1.setName(p.getName());
 		p1.setScore(0);
@@ -47,7 +47,7 @@ public class Calculator {
 		v.setX(v.getX() - v.getDx());
 		return v.getX();
 	}
-	
+
 	public int back() {
 		v.setX(v.getX() + 10);
 		return v.getX();
