@@ -28,7 +28,6 @@ import javax.swing.JTextField;
 import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
-import jdk.internal.org.objectweb.asm.Label;
 
 public class SinglePlayUI extends JPanel implements Runnable, Observer {
 

@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import game.Calculator;
 import gameUI.OnlineGame;
 
 public class GameClient extends Observable{
@@ -15,6 +16,7 @@ public class GameClient extends Observable{
 
 //	private DualPlayUI game;
 	private Client client;
+	private Calculator control;
 	private OnlineGame game;
 	private String status;
 	private int answer;
@@ -43,6 +45,7 @@ public class GameClient extends Observable{
 			if( o instanceof SendData) {
 				SendData receive = (SendData) o;
 				if(receive.status.equals("Ready")) {
+					
 					setStatus("Play");
 					startGame();
 				}
@@ -56,7 +59,7 @@ public class GameClient extends Observable{
 	}
 	private void startGame() {
 		System.out.println("start online game");
-		game = new OnlineGame();
+		game = new OnlineGame(control,this);
 		game.play();
 		setChanged();
 		notifyObservers();

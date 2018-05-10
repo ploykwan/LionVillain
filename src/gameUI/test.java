@@ -292,17 +292,11 @@ public class test extends JPanel implements Observer, Runnable {
 		}
 
 		public boolean isGameEnd() {
-<<<<<<< HEAD
 		if (game.getX() <= -10 || game.getX() >= 900)
 			return true;
 		return false;
 	}
-=======
-			if (game.getX() <= 0)
-				return true;
-			return false;
-		}
->>>>>>> 6ebd817558b6823d509940c2a13ec67746ac28c4
+
 
 		public void showScoreBoard() {
 			Timer timer = new Timer();

@@ -43,9 +43,10 @@ public class OnlineGame implements Runnable, Observer {
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
-	public OnlineGame(GameClient player) {
+	public OnlineGame(Calculator game,GameClient player) {
 		super();
 		this.gameClient = player;
+		this.game = game;
 		initialize();
 	}
 	public void initialize() {

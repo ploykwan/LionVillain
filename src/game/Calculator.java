@@ -1,7 +1,10 @@
 package game;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.esotericsoftware.kryonet.Connection;
 
 import Connection.PlayerTable;
 
@@ -120,12 +123,7 @@ public class Calculator{
 	}
 
 	public int back() {
-<<<<<<< HEAD
-		v1.setX(v1.getX() + 10);
-		System.out.println("v.getX(): "+ v1.getX());
-=======
 		v1.setX(v1.getX() + 20);
->>>>>>> 6ebd817558b6823d509940c2a13ec67746ac28c4
 		return v1.getX();
 	}
 	
@@ -145,31 +143,32 @@ public class Calculator{
 		v1.setDx(dx);
 	}
 
-	public void V1Correct() {
-		v2.setDistance(v2.getDistance() - v1.getPeople());
-	}
+//	public void V1Correct() {
+//		v2.setDistance(v2.getDistance() - v1.getPeople());
+//	}
+//
+//	public void V2Correct() {
+//		v1.setDistance(v1.getDistance() - v2.getPeople());
+//	}
+//
+//	public boolean V1Lose() {
+//		return v1.getDistance() < v2.getDistance();
+//	}
+//
+//	public boolean V2Lose() {
+//		return v2.getDistance() < v1.getDistance();
+//	}
+//
+//	public Villager getV1() {
+//		return v1;
+//	}
+//
+//	public Villager getV2() {
+//		return v2;
+//	}
+//
+//	public boolean end() {
+//		return V1Lose() || V2Lose();
+//	}
 
-	public void V2Correct() {
-		v1.setDistance(v1.getDistance() - v2.getPeople());
-	}
-
-	public boolean V1Lose() {
-		return v1.getDistance() < v2.getDistance();
-	}
-
-	public boolean V2Lose() {
-		return v2.getDistance() < v1.getDistance();
-	}
-
-	public Villager getV1() {
-		return v1;
-	}
-
-	public Villager getV2() {
-		return v2;
-	}
-
-	public boolean end() {
-		return V1Lose() || V2Lose();
-	}
 }
