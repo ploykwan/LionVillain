@@ -36,7 +36,7 @@ import game.Villager;
 
 public class test extends JPanel implements Observer, Runnable {
 
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose, background;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
 	private JTextArea textArea;
@@ -147,10 +147,11 @@ public class test extends JPanel implements Observer, Runnable {
 
 		textArea = new JTextArea();
 		textArea.setEditable(false);
-		textArea.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 15));
+		textArea.setFont(new Font("Qarmic_sans_Abridged", Font.BOLD, 15));
 		textArea.setOpaque(false);
 		scroll = new JScrollPane(textArea);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getViewport().setOpaque(false);
 		scroll.setOpaque(false);
 		scroll.setBounds(515, 190, 300, 200);
 		scroll.setVisible(false);
@@ -272,7 +273,7 @@ public class test extends JPanel implements Observer, Runnable {
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX()));
 				}
-				if (game.getX() == 900) {
+				if (game.getX() >= 900) {
 					thread.stop();
 					lose.setVisible(true);
 					gameEnd();
