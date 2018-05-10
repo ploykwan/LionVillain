@@ -236,7 +236,6 @@ public class test extends JPanel implements Observer, Runnable {
 				}
 				if (!game.check(answer, num1, num2, op)) {
 					textField.setText("");
-					game.setDx(-10);
 					game.back();
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX() + 20));
@@ -268,7 +267,7 @@ public class test extends JPanel implements Observer, Runnable {
 		}
 		
 		public boolean isGameEnd() {
-		if (game.getX() <= -10)
+		if (game.getX() <= -10 || game.getX() >= 900)
 			return true;
 		return false;
 	}
@@ -416,7 +415,7 @@ public class test extends JPanel implements Observer, Runnable {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-		System.out.println(num1 + " " + op + " " + num2);
+//		System.out.println(num1 + " " + op + " " + num2);
 	}
 
 	public void setMessage(String message) {

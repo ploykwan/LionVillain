@@ -112,11 +112,13 @@ public class Calculator{
 	
 	public int push() {
 		v1.setX(v1.getX() - v1.getDx());
+		System.out.println("v.getX(): "+ v1.getX());
 		return v1.getX();
 	}
 
 	public int back() {
 		v1.setX(v1.getX() + 10);
+		System.out.println("v.getX(): "+ v1.getX());
 		return v1.getX();
 	}
 	

@@ -10,6 +10,8 @@ import com.esotericsoftware.kryonet.Listener;
 import gameUI.OnlineGame;
 
 public class GameClient extends Observable{
+	
+	
 
 //	private DualPlayUI game;
 	private Client client;

@@ -11,11 +11,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class waitingUI {
+import Connection.GameClient;
 
+public class WaitingUI {
+
+	private GameClient gameClient;
+	
 	private JPanel panel;
 
-	public waitingUI() {
+	public WaitingUI() {
 		initialize();
 	}
 
@@ -34,6 +38,17 @@ public class waitingUI {
 		};
 		panel.setBounds(0, 0, 1280, 720);
 		panel.setLayout(null);
+		
+		try {
+			gameClient = new GameClient();
+			gameClient.setStatus("Connecting");
+			gameClient.sendMessage();
+//			OnlineGame ui = new OnlineGame();
+//			gameClient.addObserver(ui);
+//			MainFrame.setPanel(ui.getDualPlayModePanel());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 

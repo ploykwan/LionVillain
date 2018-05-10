@@ -19,10 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Connection.GameClient;
 import game.Calculator;
 import game.Villager;
 
 public class OnlineGame implements Runnable, Observer {
+	
+	private GameClient gameClient;
 
 	private JPanel panel;
 	private JLabel lion, questionLabel, timeLabel, v1DistanceLabel, v2DistanceLabel, endLabel;
@@ -40,7 +43,12 @@ public class OnlineGame implements Runnable, Observer {
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
-	public OnlineGame() {
+	public OnlineGame(GameClient player) {
+		super();
+		this.gameClient = player;
+		initialize();
+	}
+	public void initialize() {
 		game = new Calculator(v1, v2);
 		panel = new JPanel() {
 			@Override
@@ -257,6 +265,18 @@ public class OnlineGame implements Runnable, Observer {
 			return true;
 		return false;
 	}
+	private void v2push() {
+		answerField.setText("");
+		System.out.print("V2 push ");
+		game.V1reverse();
+		lion.setLocation(game.V1getX(), 375);
+	}
+	private void v1push() {
+		answerField.setText("");
+		System.out.print("V1 push ");
+		game.V1push();
+		lion.setLocation(game.V1getX(), 375);
+	}
 
 	class v1 implements KeyListener {
 
@@ -273,19 +293,23 @@ public class OnlineGame implements Runnable, Observer {
 				try {
 					String ans = answerField.getText().trim();
 					answer = Integer.parseInt(ans);
+					gameClient.setAnswer(answer);
+					gameClient.sendMessage();
 				} catch (NumberFormatException e1) {
 					answerField.setText("");
 				}
 				if (!game.check(answer, num1, num2, op)) {
-					answerField.setText("");
-					System.out.print("V2 push ");
-					game.V1reverse();
-					lion.setLocation(game.V1getX(), 375);
+					v2push();
+//					answerField.setText("");
+//					System.out.print("V2 push ");
+//					game.V1reverse();
+//					lion.setLocation(game.V1getX(), 375);
 				} else { // correct answer
-					answerField.setText("");
-					System.out.print("V1 push ");
-					game.V1push();
-					lion.setLocation(game.V1getX(), 375);
+					v1push();
+//					answerField.setText("");
+//					System.out.print("V1 push ");
+//					game.V1push();
+//					lion.setLocation(game.V1getX(), 375);
 				}
 				v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V1getX() + 10));
 				v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V2getX() + 10));
