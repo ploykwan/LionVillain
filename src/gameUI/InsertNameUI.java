@@ -74,7 +74,7 @@ public class InsertNameUI {
 			PlayerTable p = new PlayerTable(player,0);
 			database.createUser(p);
 			test goTo = new test();
-			goTo.initialize(p);
+			goTo.initializePlayer(p);
 			MainFrame.setPanel(goTo);
 		});
 		panel.add(start);

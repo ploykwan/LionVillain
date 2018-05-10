@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,7 +22,7 @@ import javax.swing.JTextField;
 import game.Calculator;
 import game.Villager;
 
-public class DualPlayUI implements Runnable {
+public class OnlineGame implements Runnable, Observer {
 
 	private JPanel panel;
 	private JLabel lion, questionLabel, timeLabel, v1DistanceLabel, v2DistanceLabel, endLabel;
@@ -38,7 +40,7 @@ public class DualPlayUI implements Runnable {
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
-	public DualPlayUI() {
+	public OnlineGame() {
 		game = new Calculator(v1, v2);
 		panel = new JPanel() {
 			@Override
@@ -90,7 +92,7 @@ public class DualPlayUI implements Runnable {
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
 		endLabel = new JLabel(img);
 
-		play();
+//		play();
 	}
 
 	public JPanel getDualPlayModePanel() {
@@ -98,11 +100,11 @@ public class DualPlayUI implements Runnable {
 	}
 
 	public void question() {
-//		char operator[] = { '+', '-', '*', '/' };
-//		num1 = (int) (1 + (Math.random() * 1));
-//		num2 = (int) (1 + (Math.random() * 9));
-//		int id = (int) (Math.random() * 4);
-//		op = operator[id];
+		// char operator[] = { '+', '-', '*', '/' };
+		// num1 = (int) (1 + (Math.random() * 1));
+		// num2 = (int) (1 + (Math.random() * 9));
+		// int id = (int) (Math.random() * 4);
+		// op = operator[id];
 		op = '-';
 		num1 = 1;
 		num2 = 1;
@@ -134,7 +136,7 @@ public class DualPlayUI implements Runnable {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-//		System.out.println(num1 + " " + op + " " + num2);
+		// System.out.println(num1 + " " + op + " " + num2);
 	}
 
 	public void setMessage(String message) {
@@ -195,7 +197,7 @@ public class DualPlayUI implements Runnable {
 		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V2getX() + 10));
 		question();
 		questionLabel.setText(getMessage());
-		//TODO change position
+		// TODO change position
 		answerField.addKeyListener(new v1());
 	}
 
@@ -249,7 +251,7 @@ public class DualPlayUI implements Runnable {
 		end.add(homeButton);
 		panel.add(end);
 	}
-	
+
 	private boolean isGameEnd() {
 		if (v2.getX() <= -10 || v1.getX() <= -10)
 			return true;
@@ -339,10 +341,18 @@ public class DualPlayUI implements Runnable {
 		}
 
 		@Override
-		public void keyTyped(KeyEvent e) {}
+		public void keyTyped(KeyEvent e) {
+		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {}
+		public void keyReleased(KeyEvent e) {
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

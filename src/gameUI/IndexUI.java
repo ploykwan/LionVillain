@@ -56,7 +56,8 @@ public class IndexUI {
 		dual.setBorderPainted(false);
 		dual.setBounds(690,270,444,111);
 		dual.addActionListener((e) -> {
-			DualPlayUI goTo = new DualPlayUI();
+//			DualPlayUI goTo = new DualPlayUI();
+			OnlineGame goTo = new OnlineGame();
 			MainFrame.setPanel(goTo.getDualPlayModePanel());
 		});
 		panel.add(dual);

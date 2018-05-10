@@ -7,7 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-public class ServerProgram extends Listener{
+public class AServerProgram extends Listener{
 	//Server Object
 		static  Server server;
 		//Ports to listen on
@@ -18,7 +18,7 @@ public class ServerProgram extends Listener{
 			server = new Server();
 			
 			//Register a package;
-			server.getKryo().register(PacketMessage.class);
+			server.getKryo().register(APacketMessage.class);
 			//we can only send objects as packets if they are registered
 			
 			//Bind to a port
@@ -34,12 +34,12 @@ public class ServerProgram extends Listener{
 		public void connected(Connection c) {
 			System.out.println("Received a connection from "+c.getRemoteAddressTCP().getHostString());
 			//created a message packet.
-			PacketMessage packetMessage = new PacketMessage();
+			APacketMessage aPacketMessage = new APacketMessage();
 			//Assign the message text
-			packetMessage.message = "Hello "+ new Date().toString();
+			aPacketMessage.message = "Hello "+ new Date().toString();
 			
 			//Send the message
-			c.sendTCP(packetMessage); //alternative c.sendUDP(packetMessage);		
+			c.sendTCP(aPacketMessage); //alternative c.sendUDP(packetMessage);		
 		}
 		
 		//this is run when we receive a packet.

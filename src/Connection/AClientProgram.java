@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-public class ClientProgram extends Listener {
+public class AClientProgram extends Listener {
 	// Client object;
 	static Client client;
 	// IP to connect
@@ -21,7 +21,7 @@ public class ClientProgram extends Listener {
 		client = new Client();
 
 		// Register the packet object
-		client.getKryo().register(PacketMessage.class);
+		client.getKryo().register(APacketMessage.class);
 		
 		//Start the client
 		client.start();
@@ -31,7 +31,7 @@ public class ClientProgram extends Listener {
 		client.connect(5000, ip, tcpPort, udpPort);
 		
 		//Add a Listener
-		client.addListener(new ClientProgram());
+		client.addListener(new AClientProgram());
 		
 		System.out.println("Connected! The client program is now waiting for a packet...\n");
 		
@@ -43,8 +43,8 @@ public class ClientProgram extends Listener {
 	}
 	
 	public void received(Connection c, Object p) {
-		if(p instanceof PacketMessage) {
-			PacketMessage packet = (PacketMessage) p;
+		if(p instanceof APacketMessage) {
+			APacketMessage packet = (APacketMessage) p;
 			System.out.println("receive a message from the host: "+packet.message);
 			
 			//we already received the message

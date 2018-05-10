@@ -2,12 +2,15 @@ package game;
 
 import Connection.PlayerTable;
 
-public class Calculator {
+public class Calculator{
 	private int result;
-	private Villager v = new Villager(), v1, v2;
+	private Villager v1;
+	private Villager v2;
 	private PlayerTable p1, p2;
 
 	public Calculator() {
+		this.v1 = new Villager();
+		this.v2 = new Villager();
 	}
 
 	public Calculator(PlayerTable p) {
@@ -42,37 +45,95 @@ public class Calculator {
 		}
 		return true;
 	}
+	
+//	public boolean isGameEnd() {
+//		if (v1.getX() <= -10)
+//			return true;
+//		return false;
+//	}
 
+	public int V1push() {
+		v1.setX(v1.getX() - v1.getDx());
+		v2.setX(v2.getX() + v1.getDx());
+		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
+		return v1.getX();
+	}
+
+	public int V1reverse() {
+		v1.setX(v1.getX() + v1.getDx());
+		v2.setX(v2.getX() - v1.getDx());
+		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
+		return v1.getX();
+	}
+
+	public int V1getX() {
+		return v1.getX();
+	}
+
+	public int V1getDx() {
+		return v1.getDx();
+	}
+
+	public void V1setX(int x) {
+		v1.setX(x);
+	}
+
+	public void V1setDx(int dx) {
+		v1.setDx(dx);
+	}
+	
+	public int V2push() {
+		v2.setX(v2.getX() + v2.getDx());
+		v1.setX(v1.getX() - v2.getDx());
+		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
+		return v2.getX();
+	}
+
+	public int V2reverse() {
+		v2.setX(v2.getX() - 10);
+		return v2.getX();
+	}
+
+	public int V2getX() {
+		return v2.getX();
+	}
+
+	public int V2getDx() {
+		return v2.getDx();
+	}
+
+	public void V2setX(int x) {
+		v2.setX(x);
+	}
+
+	public void V2setDx(int dx) {
+		v2.setDx(dx);
+	}
+	
 	public int push() {
-		v.setX(v.getX() - v.getDx());
-		return v.getX();
+		v1.setX(v1.getX() - v1.getDx());
+		return v1.getX();
 	}
 
 	public int back() {
-		v.setX(v.getX() + 10);
-		return v.getX();
+		v1.setX(v1.getX() + 10);
+		return v1.getX();
 	}
-
-	public boolean isGameEnd() {
-		if (v.getX() <= -10)
-			return true;
-		return false;
-	}
-
+	
 	public int getX() {
-		return v.getX();
+		return v1.getX();
 	}
 
 	public int getDx() {
-		return v.getDx();
+		return v1.getDx();
 	}
 
 	public void setX(int x) {
-		v.setX(x);
+		v1.setX(x);
 	}
 
 	public void setDx(int dx) {
-		v.setDx(dx);
+		v1.setDx(dx);
 	}
 
 	public void V1Correct() {
