@@ -1,5 +1,8 @@
 package game;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import Connection.PlayerTable;
 
 public class Calculator{
@@ -32,10 +35,10 @@ public class Calculator{
 		case '-':
 			result = (int) (num1 - num2);
 			break;
-		case '*':
+		case 'x':
 			result = (int) (num1 * num2);
 			break;
-		case '/':
+		case '÷':
 			result = (int) (num1 / num2);
 			break;
 		}
@@ -116,7 +119,7 @@ public class Calculator{
 	}
 
 	public int back() {
-		v1.setX(v1.getX() + 10);
+		v1.setX(v1.getX() + 20);
 		return v1.getX();
 	}
 	

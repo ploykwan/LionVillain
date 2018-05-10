@@ -36,10 +36,10 @@ import game.Villager;
 
 public class test extends JPanel implements Observer, Runnable {
 
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore;
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
-	private  JTextArea textArea;
+	private JTextArea textArea;
 	private JScrollPane scroll;
 	private ImageIcon w, lion_in_cage;
 	private Renderer renderer;
@@ -49,6 +49,7 @@ public class test extends JPanel implements Observer, Runnable {
 	char op;
 	int result, score = 0;
 	int timeup = 0;
+	int dist = 0;
 	private long TIME_DELAY = 1000;
 	private String message;
 	private String name;
@@ -120,6 +121,12 @@ public class test extends JPanel implements Observer, Runnable {
 		add(endLabel);
 		endLabel.setVisible(false);
 
+		ImageIcon youLose = new ImageIcon(getClass().getResource("/res/lose.png"));
+		lose = new JLabel(youLose);
+		lose.setBounds(400, 70, 517, 373);
+		add(lose);
+		lose.setVisible(false);
+
 		ImageIcon b1 = new ImageIcon(getClass().getResource("/res/restart.png"));
 		restartButton = new JButton(b1);
 		restartButton.addActionListener((e) -> {
@@ -145,22 +152,20 @@ public class test extends JPanel implements Observer, Runnable {
 		scroll = new JScrollPane(textArea);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setOpaque(false);
-		scroll.setBounds(515,190,300, 200);
+		scroll.setBounds(515, 190, 300, 200);
 		scroll.setVisible(false);
 		add(scroll);
-		
+
 		ImageIcon score = new ImageIcon(getClass().getResource("/res/score_board.png"));
 		showScore = new JLabel(score);
 		showScore.setBounds(410, 0, 500, 700);
 		showScore.setVisible(false);
 		add(showScore);
-		
 		countdown();
 		play();
 
 		setLayout(new BorderLayout());
 		add(renderer);
-
 	}
 
 	public void initializePlayer(PlayerTable player) {
@@ -171,10 +176,10 @@ public class test extends JPanel implements Observer, Runnable {
 	}
 
 	public void play() {
-		game.setX(760); // set first lion's position ; panel center:493
+		game.setX(780); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 424, 253);
 		renderer.setVisible(true);
-		distance.setText(String.format("%d meter", game.getX() + 20));
+		distance.setText(String.format("%d meter", game.getX()));
 		question();
 		question.setText(getMessage());
 		textField.addKeyListener(new Enter());
@@ -235,43 +240,62 @@ public class test extends JPanel implements Observer, Runnable {
 					textField.setText("");
 				}
 				if (!game.check(answer, num1, num2, op)) {
+					score--;
 					textField.setText("");
-					game.setDx(-10);
 					game.back();
 					lion.setLocation(game.getX(), 375);
-					distance.setText(String.format("%d meter", game.getX() + 20));
+					objectPool.setStop(game.getX() + 20);
+					distance.setText(String.format("%d meter", game.getX()));
 				} else { // correct answer
 					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
-					witch.setVisible(false);
 					if (score % 5 == 0 && score > 0) {
 						witch.setVisible(true);
+						Timer timer = new Timer();
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								witch.setVisible(false);
+							}
+						}, TIME_DELAY);
 					}
+					// score++;
+					// textField.setText("");
+					// game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+					// System.out.println("dx: "+game.getDx());
+					// System.out.println("push: "+game.getX());
+					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 					score++;
 					textField.setText("");
-					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
-					System.out.println("dx: "+game.getDx());
 					game.push();
-					System.out.println("push: "+game.getX());
+					// villagerPush();
 					lion.setLocation(game.getX(), 375);
-					distance.setText(String.format("%d meter", game.getX() + 20));
+					distance.setText(String.format("%d meter", game.getX()));
+				}
+				if (game.getX() == 900) {
+					thread.stop();
+					lose.setVisible(true);
+					gameEnd();
+					showScoreBoard();
 				}
 				if (isGameEnd()) {
 					thread.stop();
 					distance.setText("0 meter");
 					gameEnd();
+					endLabel.setVisible(true);
+					showScoreBoard();
 				} else {
 					question();
 					question.setText(getMessage());
 				}
 			}
 		}
-		
+
 		public boolean isGameEnd() {
-		if (game.getX() <= -10)
-			return true;
-		return false;
-	}
+			if (game.getX() <= 0)
+				return true;
+			return false;
+		}
 
 		public void showScoreBoard() {
 			Timer timer = new Timer();
@@ -285,6 +309,8 @@ public class test extends JPanel implements Observer, Runnable {
 								@Override
 								public void run() {
 									endLabel.setVisible(false);
+									lose.setVisible(false);
+									lion.setVisible(false);
 									showScore.setVisible(true);
 									scroll.setVisible(true);
 									restartButton.setBounds(900, 380, 204, 87);
@@ -305,13 +331,6 @@ public class test extends JPanel implements Observer, Runnable {
 			textField.removeKeyListener(textField.getKeyListeners()[0]);
 			textField.setVisible(false);
 			question.setVisible(false);
-			endLabel.setVisible(true);
-			if (guest == true) {
-				restartButton.setBounds(430, 550, 204, 87);
-				homeButton.setBounds(680, 550, 204, 87);
-				restartButton.setVisible(true);
-				homeButton.setVisible(true);
-			}
 
 			if (guest == false) {
 				System.out.println("guset");
@@ -319,23 +338,22 @@ public class test extends JPanel implements Observer, Runnable {
 				System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
 				DatabaseConnect.getInstance().update(p);
 				showScoreBoard();
-				
-				List<PlayerTable> playerList = new ArrayList<PlayerTable>(DatabaseConnect.getInstance().pullAllPlayerdata());
+
+				List<PlayerTable> playerList = new ArrayList<PlayerTable>(
+						DatabaseConnect.getInstance().pullAllPlayerdata());
 				Collections.sort(playerList);
-				
+
 				int i = 1;
-				for( PlayerTable players: playerList) {
-					if( players.getName().equalsIgnoreCase(p.getName())) {
-						textArea.append(String.format("%d) %s \t\t%.02f\n",i,players.getName(),players.getScore()));
+				for (PlayerTable players : playerList) {
+					if (players.getName().equalsIgnoreCase(p.getName())) {
+						textArea.append(String.format("%d) %s \t\t%.02f\n", i, players.getName(), players.getScore()));
 						System.out.print(">>>");
 					}
-					System.out.println("Name: "+players.getName()+" Score: "+players.getScore());
+					System.out.println("Name: " + players.getName() + " Score: " + players.getScore());
 					textArea.setForeground(Color.blue);
-					textArea.append(String.format("%d) %s \t\t%.02f\n",i,players.getName(),players.getScore()));
+					textArea.append(String.format("%d) %s \t\t%.02f\n", i, players.getName(), players.getScore()));
 					i++;
 				}
-				
-				
 			}
 		}
 
@@ -382,7 +400,7 @@ public class test extends JPanel implements Observer, Runnable {
 
 	public void question() {
 
-		char operator[] = { '+', '-', '*', '/' };
+		char operator[] = { '+', '-', 'x', '÷' };
 		// TODO ค่อยแก้เลข
 		num1 = (int) (1 + (Math.random() * 1));
 		num2 = (int) (1 + (Math.random() * 10));
@@ -397,7 +415,7 @@ public class test extends JPanel implements Observer, Runnable {
 			}
 			result = (int) (num1 - num2);
 			break;
-		case '/':
+		case '÷':
 			if (num2 > num1) {
 				int temp = num1;
 				num1 = num2;
@@ -408,7 +426,7 @@ public class test extends JPanel implements Observer, Runnable {
 			}
 			result = (int) (num1 / num2);
 			break;
-		case '*':
+		case 'x':
 			if (num2 > 10) {
 				num2 = num2 % 10;
 			}
