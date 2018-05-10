@@ -24,6 +24,7 @@ public class WaitingUI {
 	}
 
 	private void initialize() {
+		System.out.println("Run waiting...);
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {

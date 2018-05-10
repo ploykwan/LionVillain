@@ -45,7 +45,6 @@ public class GameClient extends Observable{
 			if( o instanceof SendData) {
 				SendData receive = (SendData) o;
 				if(receive.status.equals("Ready")) {
-					
 					setStatus("Play");
 					startGame();
 				}

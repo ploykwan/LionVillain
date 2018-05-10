@@ -66,7 +66,9 @@ public class GameServer extends Observable{
 							player.sendTCP(data);
 						}
 					}
+					
 				}
+				
 			}
 		}
 	}
@@ -90,6 +92,8 @@ public class GameServer extends Observable{
 			return room;
 		}
 	}
+	
+	public GameRoom 
 	
 	public static void main(String[] args) {
 		try {
