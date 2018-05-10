@@ -20,11 +20,11 @@ public class VillagerPool {
 	}
 
 	public List<Villager> getBulletList() {
-		List<Villager> inactiveBullet = new ArrayList<>();
+		List<Villager> inactiveVillager = new ArrayList<>();
 		for (Villager b : villagers) {
 			if (!b.getActive())
-				inactiveBullet.add(b);
+				inactiveVillager.add(b);
 		}
-		return inactiveBullet;
+		return inactiveVillager;
 	}
 }

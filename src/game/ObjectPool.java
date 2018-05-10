@@ -12,9 +12,6 @@ public class ObjectPool extends Observable {
 	private List<Villager> villagers;
 	private Thread mainLoop;
 	private boolean alive;
-	private Calculator game = new Calculator();
-	// private Thread remove;
-	private int timeremove = 0;
 
 	private int stop = 750;
 
@@ -53,10 +50,8 @@ public class ObjectPool extends Observable {
 	private void cleanupVillagers() {
 		List<Villager> toRemove = new ArrayList<Villager>();
 		for (Villager villager : villagers) {
-			timeremove++;
 			if (villager.getX() == (-900 + getStop())) {
 				toRemove.add(villager);
-				timeremove = 0;
 			}
 		}
 		for (Villager villager : toRemove) {
