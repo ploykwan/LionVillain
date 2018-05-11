@@ -48,12 +48,11 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
-	private GameClient player;
-
 	public OnlineGame(GameClient p) {
 		gameClient = p;
 		me = gameClient.getPlayerName();
 		initialize();
+		// gameStart();
 		play();
 	}
 
@@ -112,7 +111,6 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		drawImg = new ImageIcon(getClass().getResource("/res/draw.png"));
 		endLabel = new JLabel(winImg);
 
-		// play();
 	}
 
 	public JPanel getDualPlayModePanel() {
@@ -153,7 +151,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-		System.out.println(gameClient.getPlayerName()+" "+getMessage());
+		System.out.println(gameClient.getPlayerName() + " " + getMessage());
 	}
 
 	public void setMessage(String message) {
@@ -203,18 +201,17 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	}
 
 	public void play() {
-		gameStart();
 		thread.start();
-		game.V1setDx(30);
+		game.V2setDx(30);
 		game.V1setX(340);
 		game.V2setX(340); // set first lion's position ; panel center:493
 		lion.setBounds(game.V2getX(), 375, 521, 253);
-		if(me.equals("p1")) {
-			v1DistanceLabel.setText(String.format("My Distance: %d meter", game.V2getX() + 20));
-			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 20));
-		}else {
-			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 20));
-			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 20));
+		if (me.equals("p1")) {
+			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 0));
+			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 0));
+		} else {
+			v1DistanceLabel.setText(String.format("My Distance: %d meter", game.V2getX() + 0));
+			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 0));
 		}
 		question();
 		questionLabel.setText(getMessage());
@@ -259,18 +256,18 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		});
 		end.add(homeButton);
 		panel.add(end);
-		
+
 		if (why.equals("timeup")) {
 			System.out.println("TIME UP enter");
 			if (game.V2getX() - game.V1getX() > 0) {
-				System.out.println("p1win");
-				gameClient.setStatus("p1Win");
+				System.out.println("p2win");
+				gameClient.setStatus("p2Win");
 			} else if (game.V2getX() == game.V1getX()) {
 				System.out.println("draw");
 				gameClient.setStatus("draw");
 			} else {
-				System.out.println("p2win");
-				gameClient.setStatus("p2Win");
+				System.out.println("p1win");
+				gameClient.setStatus("p1Win");
 			}
 			gameClient.sendMessage();
 		}
@@ -286,7 +283,8 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private void v2push() {
 		answerField.setText("");
 		System.out.print("V2 push ");
-		game.V1reverse();
+		game.V2push();
+		System.out.println("V2push(): " + game.V1getX());
 		lion.setLocation(game.V1getX(), 375);
 	}
 
@@ -294,6 +292,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		answerField.setText("");
 		System.out.print("V1 push ");
 		game.V1push();
+		System.out.println("V1push(): " + game.V1getX());
 		lion.setLocation(game.V1getX(), 375);
 	}
 
@@ -319,13 +318,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(me.equals("p1")) {
-			v1DistanceLabel.setText(String.format("Your Distance: %d meter", game.V2getX() + 20));
-			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 20));
-		}else {
-			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 20));
-			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 20));
-		}
+
 		if (arg instanceof SendData) {
 			SendData data = (SendData) arg;
 			if (data.status.equals("win")) {
@@ -353,6 +346,13 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 				thread.stop();
 			}
 
+		}
+		if (me.equals("p1")) {
+			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 0));
+			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 0));
+		} else {
+			v1DistanceLabel.setText(String.format("My Distance: %d meter", game.V2getX() + 0));
+			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 0));
 		}
 
 	}

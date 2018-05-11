@@ -1,18 +1,11 @@
 package game;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.esotericsoftware.kryonet.Connection;
-
 import Connection.PlayerTable;
 
-public class Calculator{
+public class Calculator {
 	private int result;
-	private Villager v1;
-	private Villager v2;
-	private PlayerTable p1, p2;
+	private Villager v1,v2;
+	private PlayerTable p1;
 
 	public Calculator() {
 		this.v1 = new Villager();
@@ -54,46 +47,56 @@ public class Calculator{
 	}
 
 	public int V1push() {
-		v1.setX(v1.getX() - v1.getDx());
-		v2.setX(v2.getX() + v1.getDx());
-		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
-		return v1.getX();
+		V2setX((V2getX() - V2getDX()));
+		V1setX((V1getX() + V2getDX()));
+		System.out.println(V1getX() + " " + V2getX() + " " + V2getDX());
+		System.out.println("v2.getX(): " + V1getX() + " v1.getX(): " + V2getX());
+		return V2getX();
 	}
 
-	public int V1reverse() {
-		v1.setX(v1.getX() + v1.getDx());
-		v2.setX(v2.getX() - v1.getDx());
-		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
-		return v1.getX();
+	public int V2push() {
+		V2setX((V2getX() + V2getDX()));
+		V1setX((V1getX() - V2getDX()));
+		System.out.println(V1getX() + " " + V2getX() + " " + V2getDX());
+		System.out.println("v2.getX(): " + V1getX() + " v1.getX(): " + V2getX());
+		return V2getX();
 	}
 
 	public int V1getX() {
-		return v1.getX();
-	}
-
-	public int V1getDx() {
-		return v1.getDx();
-	}
-
-	public void V1setX(int x) {
-		v1.setX(x);
-	}
-
-	public void V1setDx(int dx) {
-		v1.setDx(dx);
-	}
-
-	public int V2getX() {
 		return v2.getX();
 	}
 
-	public void V2setX(int x) {
+	public void V1setX(int x) {
 		v2.setX(x);
 	}
-	
+
+//	public int V1getDx() {
+//		return v1.getDx();
+//	}
+//
+//	public void V1setDx(int dx) {
+//		v1.setDx(dx);
+//	}
+
+	public int V2getX() {
+		return v1.getX();
+	}
+
+	private int V2getDX() {
+		return v1.getDx();
+	}
+
+	public void V2setDx(int dx) {
+		v1.setDx(dx);
+	}
+
+	public void V2setX(int x) {
+		v1.setX(x);
+	}
+
 	public int push() {
 		v1.setX(v1.getX() - v1.getDx());
-		System.out.println("v.getX(): "+ v1.getX());
+		System.out.println("v.getX(): " + v1.getX());
 		return v1.getX();
 	}
 
@@ -101,7 +104,7 @@ public class Calculator{
 		v1.setX(v1.getX() + 20);
 		return v1.getX();
 	}
-	
+
 	public int getX() {
 		return v1.getX();
 	}

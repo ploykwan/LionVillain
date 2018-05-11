@@ -42,7 +42,7 @@ public class GameServer extends Observable {
 			data.playerName = player;
 			c.sendTCP(data);
 			if(game.isFull()) {
-				System.out.println("FULLLLLL FUCKING FULLLLLLLLL");
+				System.out.println("Room Full");
 				data.status = "Play";
 				game.getP1().sendTCP(data);
 				game.getP2().sendTCP(data);
@@ -77,7 +77,6 @@ public class GameServer extends Observable {
 				else if(receive.status.equals("End")) {
 					if(room!=null) {
 						if(receive.playerName.equals("p1")) {
-							System.out.println("โง่ๆ");
 							data.status = "lose";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);
@@ -86,7 +85,6 @@ public class GameServer extends Observable {
 							room.getP2().sendTCP(data);
 						}
 						else if(receive.playerName.equals("p2")) {
-							System.out.println("โง่ๆๆ");
 							data.status = "win";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);
@@ -161,7 +159,6 @@ public class GameServer extends Observable {
 		try {
 			GameServer server = new GameServer();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
