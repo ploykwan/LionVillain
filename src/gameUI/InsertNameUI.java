@@ -4,14 +4,24 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import Connection.DatabaseConnect;
 import Connection.PlayerTable;
@@ -23,7 +33,7 @@ public class InsertNameUI {
 	private JPanel panel;
 	private JButton back, start, skip;
 	private JTextField name;
-	
+	private JLabel lbLabel = new JLabel("Limit 10");
 	private String player;
 
 	public InsertNameUI() {
@@ -49,7 +59,42 @@ public class InsertNameUI {
 
 		name = new JTextField();
 		name.setBounds(488, 237, 343, 48);
+		name.setDocument(new JTextFieldLimit(10));
+		name.setHorizontalAlignment( SwingConstants.CENTER );
+		name.setText(lbLabel.getText());
 		panel.add(name);
+		name.add(lbLabel);
+		name.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				name.setText("");
+			}
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/back_v2.png"));
 		back = new JButton(img);
@@ -96,5 +141,22 @@ public class InsertNameUI {
 
 	public JPanel getPanel() {
 		return panel;
+	}
+	
+	class JTextFieldLimit extends PlainDocument {
+		private int limit;
+
+		JTextFieldLimit(int limit) {
+			super();
+			this.limit = limit;
+		}
+
+		public void insertString(int offset, String str, AttributeSet set) throws BadLocationException {
+			if (str == null)
+				return;
+			if ((getLength() + str.length()) <= limit) {
+				super.insertString(offset, str, set);
+			}
+		}
 	}
 }

@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,9 +24,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import Connection.DatabaseConnect;
 import Connection.PlayerTable;
@@ -36,13 +39,13 @@ import game.Villager;
 
 public class test extends JPanel implements Observer, Runnable {
 
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose, background;
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
-	private JTextArea textArea;
 	private JScrollPane scroll;
 	private ImageIcon w, lion_in_cage;
 	private Renderer renderer;
+	private JTable table;
 
 	int num1 = 0;
 	int num2 = 0;
@@ -56,7 +59,8 @@ public class test extends JPanel implements Observer, Runnable {
 	private boolean guest = true;
 
 	private Calculator game;
-	private Thread thread = new Thread(this);
+	private Thread thread;
+	private final AtomicBoolean running = new AtomicBoolean(true);
 	private ObjectPool objectPool;
 	private PlayerTable p = new PlayerTable();
 	private Villager v = new Villager();
@@ -117,7 +121,7 @@ public class test extends JPanel implements Observer, Runnable {
 
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
 		endLabel = new JLabel(img);
-		endLabel.setBounds(400, 150, 517, 373);
+		endLabel.setBounds(400, 70, 517, 373);
 		add(endLabel);
 		endLabel.setVisible(false);
 
@@ -129,6 +133,7 @@ public class test extends JPanel implements Observer, Runnable {
 
 		ImageIcon b1 = new ImageIcon(getClass().getResource("/res/restart.png"));
 		restartButton = new JButton(b1);
+		restartButton.setBounds(440, 470, 204, 87);
 		restartButton.addActionListener((e) -> {
 			test goTo = new test();
 			MainFrame.setPanel(goTo);
@@ -138,6 +143,7 @@ public class test extends JPanel implements Observer, Runnable {
 
 		ImageIcon b2 = new ImageIcon(getClass().getResource("/res/home.png"));
 		homeButton = new JButton(b2);
+		homeButton.setBounds(680, 470, 204, 87);
 		homeButton.addActionListener((e) -> {
 			IndexUI goTo = new IndexUI();
 			MainFrame.setPanel(goTo.getPanel());
@@ -145,23 +151,26 @@ public class test extends JPanel implements Observer, Runnable {
 		add(homeButton);
 		homeButton.setVisible(false);
 
-		textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setFont(new Font("Qarmic_sans_Abridged", Font.BOLD, 15));
-		textArea.setOpaque(false);
-		scroll = new JScrollPane(textArea);
+		table = new JTable();
+		table.setForeground(Color.black);
+		table.setOpaque(true);
+		table.setSelectionForeground(new Color(247, 219, 0));
+		table.setSelectionBackground(new Color(247, 219, 0));
+		scroll = new JScrollPane(table);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getViewport().setOpaque(false);
 		scroll.setOpaque(false);
-		scroll.setBounds(515, 190, 300, 200);
+		scroll.setBounds(500, 190, 320, 200);
 		scroll.setVisible(false);
 		add(scroll);
+		
 
 		ImageIcon score = new ImageIcon(getClass().getResource("/res/score_board.png"));
 		showScore = new JLabel(score);
 		showScore.setBounds(410, 0, 500, 700);
 		showScore.setVisible(false);
 		add(showScore);
+		
 		countdown();
 		play();
 
@@ -213,7 +222,7 @@ public class test extends JPanel implements Observer, Runnable {
 										question.setVisible(true);
 										textField.setVisible(true);
 										remove(count);
-										thread.start();
+										start();
 									}
 								}, TIME_DELAY);
 							}
@@ -274,17 +283,16 @@ public class test extends JPanel implements Observer, Runnable {
 					distance.setText(String.format("%d meter", game.getX()));
 				}
 				if (game.getX() >= 900) {
-					thread.stop();
+					stop();
 					lose.setVisible(true);
 					gameEnd();
-					showScoreBoard();
 				}
 				if (isGameEnd()) {
-					thread.stop();
+					stop();
 					distance.setText("0 meter");
-					gameEnd();
 					endLabel.setVisible(true);
 					showScoreBoard();
+					gameEnd();
 				} else {
 					question();
 					question.setText(getMessage());
@@ -317,8 +325,8 @@ public class test extends JPanel implements Observer, Runnable {
 									scroll.setVisible(true);
 									restartButton.setBounds(900, 380, 204, 87);
 									homeButton.setBounds(900, 500, 204, 87);
-									restartButton.setVisible(true);
-									homeButton.setVisible(true);
+									// restartButton.setVisible(true);
+									// homeButton.setVisible(true);
 								}
 							}, TIME_DELAY);
 						}
@@ -344,19 +352,29 @@ public class test extends JPanel implements Observer, Runnable {
 				List<PlayerTable> playerList = new ArrayList<PlayerTable>(
 						DatabaseConnect.getInstance().pullAllPlayerdata());
 				Collections.sort(playerList);
+				String columnNames[] = {"No", "Name", "Time"};
+				String[][] data = new String[playerList.size()][3];
 
-				int i = 1;
-				for (PlayerTable players : playerList) {
-					if (players.getName().equalsIgnoreCase(p.getName())) {
-						textArea.append(String.format("%d) %s \t\t%.02f\n", i, players.getName(), players.getScore()));
-						System.out.print(">>>");
-					}
-					System.out.println("Name: " + players.getName() + " Score: " + players.getScore());
-					textArea.setForeground(Color.blue);
-					textArea.append(String.format("%d) %s \t\t%.02f\n", i, players.getName(), players.getScore()));
-					i++;
+				for (int i = 0; i < playerList.size() ; i++) {
+						data[i][0] = (i+1) +"";
+						data[i][1] = playerList.get(i).getName();
+						data[i][2] = playerList.get(i).getScore()+"";
 				}
+				
+				TableModel model = new DefaultTableModel(data, columnNames) {
+					public boolean isCellEditable(int row, int column)
+				    {
+				      return false;
+				    }
+				};
+				table.setModel(model);
+				TableColumnModel columnModel = table.getColumnModel();
+				columnModel.getColumn(0).setPreferredWidth(50);
+				columnModel.getColumn(1).setPreferredWidth(200);
+				columnModel.getColumn(2).setPreferredWidth(100);
 			}
+			restartButton.setVisible(true);
+			homeButton.setVisible(true);
 		}
 
 		@Override
@@ -455,12 +473,22 @@ public class test extends JPanel implements Observer, Runnable {
 		this.name = name;
 	}
 
+	public void start() {
+		thread = new Thread(this);
+		thread.start();
+	}
+
+	public void stop() {
+		running.set(false);
+	}
+
 	@Override
 	public void run() {
-		while (true) {
+		while (running.get()) {
 			try {
-				thread.sleep(10);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 				e.printStackTrace();
 			}
 			timeup++;

@@ -46,6 +46,8 @@ public class MainFrame extends JFrame {
 		setPanel(new gameUI.IndexUI().getPanel());
 		// setPanel(new gameUI.SinglePlayUI().getSinglePlayModePanel());
 //		setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
+//		 setPanel(new gameUI.test().getPanel());
+
 		frame.setVisible(true);
 	}
 
