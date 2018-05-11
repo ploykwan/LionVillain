@@ -49,14 +49,9 @@ public class Calculator{
 		if (ans != result) {
 			return false;
 		}
+		System.out.println("true");
 		return true;
 	}
-	
-//	public boolean isGameEnd() {
-//		if (v1.getX() <= -10)
-//			return true;
-//		return false;
-//	}
 
 	public int V1push() {
 		v1.setX(v1.getX() - v1.getDx());
@@ -142,33 +137,5 @@ public class Calculator{
 	public void setDx(int dx) {
 		v1.setDx(dx);
 	}
-
-//	public void V1Correct() {
-//		v2.setDistance(v2.getDistance() - v1.getPeople());
-//	}
-//
-//	public void V2Correct() {
-//		v1.setDistance(v1.getDistance() - v2.getPeople());
-//	}
-//
-//	public boolean V1Lose() {
-//		return v1.getDistance() < v2.getDistance();
-//	}
-//
-//	public boolean V2Lose() {
-//		return v2.getDistance() < v1.getDistance();
-//	}
-//
-//	public Villager getV1() {
-//		return v1;
-//	}
-//
-//	public Villager getV2() {
-//		return v2;
-//	}
-//
-//	public boolean end() {
-//		return V1Lose() || V2Lose();
-//	}
 
 }

@@ -3,33 +3,37 @@ package Connection;
 import java.io.IOException;
 import java.util.Observable;
 
+import javax.swing.JPanel;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import game.Calculator;
+import gameUI.MainFrame;
 import gameUI.OnlineGame;
+import gameUI.WaitingUI;
 
-public class GameClient extends Observable{
-	
-	
+public class GameClient extends Observable {
 
-//	private DualPlayUI game;
+	// private DualPlayUI game;
 	private Client client;
 	private Calculator control;
-	private OnlineGame game;
 	private String status;
-	private int answer;
-	private int x;
+	private String answer;
+	private String playerName;
+	private WaitingUI waitingUI;
 
-	public GameClient() throws IOException {
+	public GameClient(String ip, int binding,WaitingUI ui) throws IOException {
 		client = new Client();
 
 		client.getKryo().register(SendData.class);
 
 		client.addListener(new ClientListener());
 		client.start();
-		client.connect(5000, "127.0.0.1", 54333);
+		waitingUI = ui;
+		client.connect(5000, ip, binding);
+		this.addObserver(waitingUI);
 	}
 
 	class ClientListener extends Listener {
@@ -38,72 +42,74 @@ public class GameClient extends Observable{
 			super.connected(c);
 			System.out.println("Connected to Server.");
 		}
-		
+
 		@Override
 		public void received(Connection c, Object o) {
-			super.received(c, o);
-			if( o instanceof SendData) {
-				SendData receive = (SendData) o;
-				if(receive.status.equals("Ready")) {
-					setStatus("Play");
+			if (o instanceof SendData) {
+				SendData receive = (SendData) o;	
+				System.out.println(receive.status);
+				if( receive.status.equals("Play")) {
+					System.out.println("Open OnlineGame Class");
 					startGame();
 				}
-				if(receive.status.equals("Answer")) {
-					answer = receive.answer;
+				if( receive.status.equals("SetName")) {
+					System.out.println("SetName");
+					playerName = receive.playerName;
+				}
+				if( receive.status.equals("Correct") ) {
 					setChanged();
-					notifyObservers();
+					notifyObservers(receive);
+				}
+				if( receive.status.equals("win") || receive.status.equals("lose") ) {
+					System.out.println("โง่สัสๆ");
+					setChanged();
+					notifyObservers(receive);
+				}
+				if( receive.status.equals("draw")) {
+					setChanged();
+					notifyObservers(receive);
 				}
 			}
 		}
 	}
-	private void startGame() {
-		System.out.println("start online game");
-		game = new OnlineGame(control,this);
-		game.play();
+
+	public void startGame() {
+		OnlineGame ui = new OnlineGame(this);
 		setChanged();
-		notifyObservers();
-		this.addObserver(game);
+		notifyObservers(ui);
+		addObserver(ui);
 	}
+
 	public void sendMessage() {
 		SendData data = new SendData();
-		data.answer = this.answer;
-		data.x = this.x;
+		data.ans = this.answer;
 		data.status = this.status;
-		
+		data.playerName = this.playerName;
 		client.sendTCP(data);
-		System.out.println("Message sent(answer,distance,staus): "+data.answer+" "+data.x+" "+data.status);
 	}
 
 	public String getStatus() {
 		return status;
 	}
 
-	public int getAnswer() {
+	public String getAnswer() {
 		return answer;
-	}
-
-	public int getX() {
-		return x;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public void setAnswer(int answer) {
+	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public String getPlayerName() {
+		return playerName;
 	}
 
-	public static void main(String[] args) {
-		try {
-			new GameClient();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
 	}
 
 }

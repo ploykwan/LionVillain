@@ -20,17 +20,21 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Connection.GameClient;
+import Connection.SendData;
 import game.Calculator;
 import game.Villager;
 
-public class OnlineGame implements Runnable, Observer {
-	
+public class OnlineGame implements Runnable, Observer, KeyListener {
+
 	private GameClient gameClient;
 
 	private JPanel panel;
 	private JLabel lion, questionLabel, timeLabel, v1DistanceLabel, v2DistanceLabel, endLabel;
+
+	private JPanel end = new JPanel();;
 	private JTextField answerField;
-	private JButton restartButton, homeButton;
+	private JButton homeButton;
+	private ImageIcon winImg, loseImg, drawImg;
 
 	private long TIME_DELAY = 1000;
 	private int num1 = 0, num2 = 0, result, answer = 999;
@@ -38,17 +42,19 @@ public class OnlineGame implements Runnable, Observer {
 	private String message;
 	private Calculator game;
 	private Thread thread = new Thread(this);
-	double timedown = 120 * 100;
+	double timedown = 30 * 100;
 
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
-	public OnlineGame(Calculator game,GameClient player) {
-		super();
-		this.gameClient = player;
-		this.game = game;
+	private GameClient player;
+
+	public OnlineGame(GameClient p) {
+		gameClient = p;
 		initialize();
+		play();
 	}
+
 	public void initialize() {
 		game = new Calculator(v1, v2);
 		panel = new JPanel() {
@@ -92,16 +98,19 @@ public class OnlineGame implements Runnable, Observer {
 		answerField = new JTextField();
 		answerField.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
 		answerField.setBounds(711, 168, 106, 75);
+		answerField.addKeyListener(this);
 		panel.add(answerField);
 
 		ImageIcon lion_in_cage = new ImageIcon(getClass().getResource("/res/push_lion.png"));
 		lion = new JLabel(lion_in_cage);
 		panel.add(lion);
 
-		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
-		endLabel = new JLabel(img);
+		winImg = new ImageIcon(getClass().getResource("/res/win.png"));
+		loseImg = new ImageIcon(getClass().getResource("/res/lose.png"));
+		drawImg = new ImageIcon(getClass().getResource("/res/draw.png"));
+		endLabel = new JLabel(winImg);
 
-//		play();
+		// play();
 	}
 
 	public JPanel getDualPlayModePanel() {
@@ -109,14 +118,11 @@ public class OnlineGame implements Runnable, Observer {
 	}
 
 	public void question() {
-		// char operator[] = { '+', '-', '*', '/' };
-		// num1 = (int) (1 + (Math.random() * 1));
-		// num2 = (int) (1 + (Math.random() * 9));
-		// int id = (int) (Math.random() * 4);
-		// op = operator[id];
-		op = '-';
-		num1 = 1;
-		num2 = 1;
+		char operator[] = { '+', '-', 'x', '÷' };
+		num1 = (int) (1 + (Math.random() * 1));
+		num2 = (int) (1 + (Math.random() * 9));
+		int id = (int) (Math.random() * 4);
+		op = operator[id];
 		switch (op) {
 		case '-':
 			if (num2 > num1) {
@@ -126,7 +132,7 @@ public class OnlineGame implements Runnable, Observer {
 			}
 			result = (int) (num1 - num2);
 			break;
-		case '/':
+		case '÷':
 			if (num2 > num1) {
 				int temp = num1;
 				num1 = num2;
@@ -137,7 +143,7 @@ public class OnlineGame implements Runnable, Observer {
 			}
 			result = (int) (num1 / num2);
 			break;
-		case '*':
+		case 'x':
 			if (num2 > 10) {
 				num2 = num2 % 10;
 			}
@@ -195,19 +201,17 @@ public class OnlineGame implements Runnable, Observer {
 	}
 
 	public void play() {
-		// gameStart();
+		gameStart();
 		thread.start();
-		game.V1setDx(5);
-		game.V2setDx(5);
+		game.V1setDx(30);
+		game.V2setDx(30);
 		game.V1setX(340);
 		game.V2setX(340); // set first lion's position ; panel center:493
 		lion.setBounds(game.V2getX(), 375, 521, 253);
-		v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V1getX() + 10));
-		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V2getX() + 10));
+		v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V2getX() + 20));
+		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V1getX() + 20));
 		question();
 		questionLabel.setText(getMessage());
-		// TODO change position
-		answerField.addKeyListener(new v1());
 	}
 
 	@Override
@@ -221,32 +225,22 @@ public class OnlineGame implements Runnable, Observer {
 			timedown--;
 			timeLabel.setText(String.format("Time: %.2f sec", timedown * 0.01));
 		}
-		gameEnd();
+		gameEnd("timeup");
 	}
 
-	private void gameEnd() {
+	private void gameEnd(String why) {
 		double time = timedown * 0.01; // เวลาทีทำได้
 		System.out.printf("%.2f sec\n", time);
-		answerField.removeKeyListener(answerField.getKeyListeners()[0]);
+		answerField.removeKeyListener(this);
 		answerField.setVisible(false);
 		questionLabel.setVisible(false);
+		lion.setVisible(false);
+		panel.remove(questionLabel);
+		panel.remove(answerField);
+		panel.remove(lion);
 
-		JPanel end = new JPanel();
 		end.setOpaque(false);
-		end.setBounds(320, 70, 695, 515);
-
-		end.add(endLabel);
-
-		ImageIcon restart = new ImageIcon(getClass().getResource("/res/restart.png"));
-		restartButton = new JButton(restart);
-		restartButton.setOpaque(false);
-		restartButton.setContentAreaFilled(false);
-		restartButton.setBorderPainted(false);
-		restartButton.addActionListener((e) -> {
-			DualPlayUI goTo = new DualPlayUI();
-			MainFrame.setPanel(goTo.getDualPlayModePanel());
-		});
-		end.add(restartButton);
+		end.setBounds(320, 90, 695, 485);
 
 		ImageIcon home = new ImageIcon(getClass().getResource("/res/home.png"));
 		homeButton = new JButton(home);
@@ -259,19 +253,37 @@ public class OnlineGame implements Runnable, Observer {
 		});
 		end.add(homeButton);
 		panel.add(end);
+		
+		if (why.equals("timeup")) {
+			System.out.println("TIME UP enter");
+			if (game.V2getX() - game.V1getX() > 0) {
+				System.out.println("p1win");
+				gameClient.setStatus("p1Win");
+			} else if (game.V2getX() == game.V1getX()) {
+				System.out.println("draw");
+				gameClient.setStatus("draw");
+			} else {
+				System.out.println("p2win");
+				gameClient.setStatus("p2Win");
+			}
+			gameClient.sendMessage();
+		}
 	}
 
 	private boolean isGameEnd() {
-		if (v2.getX() <= -10 || v1.getX() <= -10)
+		if (game.V2getX() <= -20 || game.V1getX() <= -20) {
 			return true;
+		}
 		return false;
 	}
+
 	private void v2push() {
 		answerField.setText("");
 		System.out.print("V2 push ");
 		game.V1reverse();
 		lion.setLocation(game.V1getX(), 375);
 	}
+
 	private void v1push() {
 		answerField.setText("");
 		System.out.print("V1 push ");
@@ -279,105 +291,70 @@ public class OnlineGame implements Runnable, Observer {
 		lion.setLocation(game.V1getX(), 375);
 	}
 
-	class v1 implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				questionLabel.setText(getMessage());
-				try {
-					String ans = answerField.getText().trim();
-					answer = Integer.parseInt(ans);
-					gameClient.setAnswer(answer);
-					gameClient.sendMessage();
-				} catch (NumberFormatException e1) {
-					answerField.setText("");
-				}
-				if (!game.check(answer, num1, num2, op)) {
-					v2push();
-//					answerField.setText("");
-//					System.out.print("V2 push ");
-//					game.V1reverse();
-//					lion.setLocation(game.V1getX(), 375);
-				} else { // correct answer
-					v1push();
-//					answerField.setText("");
-//					System.out.print("V1 push ");
-//					game.V1push();
-//					lion.setLocation(game.V1getX(), 375);
-				}
-				v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V1getX() + 10));
-				v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V2getX() + 10));
-				if (isGameEnd()) {
-					thread.stop();
-					gameEnd();
-				} else {
-					question();
-					questionLabel.setText(getMessage());
-				}
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			questionLabel.setText(getMessage());
+			try {
+				String ans = answerField.getText().trim();
+				answer = Integer.parseInt(ans);
+			} catch (NumberFormatException e1) {
+				answerField.setText("");
 			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-	}
-
-	class v2 implements KeyListener {
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				questionLabel.setText(getMessage());
-				try {
-					String ans = answerField.getText().trim();
-					answer = Integer.parseInt(ans);
-				} catch (NumberFormatException e1) {
-					answerField.setText("");
-				}
-				if (!game.check(answer, num1, num2, op)) {
-					answerField.setText("");
-					System.out.print("V1 push ");
-					game.V1push();
-					lion.setLocation(game.V1getX(), 375);
-				} else { // correct answer
-					answerField.setText("");
-					System.out.print("V2 push ");
-					game.V1reverse();
-					lion.setLocation(game.V1getX(), 375);
-				}
-				v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V1getX() + 10));
-				v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V2getX() + 10));
-				if (isGameEnd()) {
-					thread.stop();
-					gameEnd();
-				} else {
-					question();
-					questionLabel.setText(getMessage());
-				}
+			if (game.check(answer, num1, num2, op)) {
+				gameClient.setStatus("Correct");
+				gameClient.sendMessage();
+			} else {
+				answerField.setText("");
 			}
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
+			question();
+			questionLabel.setText(getMessage());
 		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
+		v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V2getX() + 20));
+		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V1getX() + 20));
+		if (arg instanceof SendData) {
+			SendData data = (SendData) arg;
+			if (data.status.equals("win")) {
+				System.out.println("win >" + data.playerName);
+				endLabel = new JLabel(winImg);
+				end.add(endLabel);
+			} else if (data.status.equals("lose")) {
+				System.out.println("lose >" + data.playerName);
+				endLabel = new JLabel(loseImg);
+				end.add(endLabel);
+			} else if (data.status.equals("draw")) {
+				System.out.println("draw >" + data.playerName);
+				endLabel = new JLabel(drawImg);
+				end.add(endLabel);
+			} else if (data.playerName.equals("p1")) {
+				v1push();
+				answer = 9999;
+			} else if (data.playerName.equals("p2")) {
+				v2push();
+				answer = 9999;
+			}
+			if (isGameEnd() && !data.status.equals("win") && !data.status.equals("lose")) {
+				gameClient.setStatus("End");
+				gameClient.sendMessage();
+				thread.stop();
+				gameEnd("win");
+				System.out.println("-------------------------");
+			}
+
+		}
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 
 }

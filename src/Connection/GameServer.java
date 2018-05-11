@@ -12,78 +12,133 @@ import com.esotericsoftware.kryonet.Server;
 import game.*;
 import gameUI.DualPlayUI;
 
-public class GameServer extends Observable{
-	
+public class GameServer extends Observable {
+
 	private Server server;
 	private List<GameRoom> gameRoom;
 	private List<Connection> connections;
-	private List<SendData> data;
 	
+
 	public GameServer() throws IOException {
 		server = new Server();
 		connections = new ArrayList<Connection>();
 		gameRoom = new ArrayList<GameRoom>();
-		
+		server.bind(54333);
 		server.getKryo().register(SendData.class);
 		server.addListener(new ServerListener());
-		
+
 		server.start();
-		server.bind(54333);
 		System.out.println("Server started.");
 	}
-	
-	class ServerListener extends Listener{
+
+	class ServerListener extends Listener {
 		@Override
 		public void connected(Connection c) {
 			super.connected(c);
 			GameRoom game = findAvailableRoom();
-			game.addConnection(c);
+			String player = game.addConnection(c);
 			SendData data = new SendData();
+			data.status = "SetName";
+			data.playerName = player;
 			c.sendTCP(data);
+			if(game.isFull()) {
+				System.out.println("FULLLLLL FUCKING FULLLLLLLLL");
+				data.status = "Play";
+				game.getP1().sendTCP(data);
+				game.getP2().sendTCP(data);
+			}
 		}
-		
+
 		@Override
 		public void disconnected(Connection c) {
 			super.disconnected(c);
 			connections.remove(c);
-			System.out.println("Client dis connected.");
+			System.out.println("Client disconnected.");
 			setChanged();
-			notifyObservers("Client dis connected.");
+			notifyObservers("Client disconnected.");
 		}
-		
+
 		@Override
 		public void received(Connection c, Object o) {
 			super.received(c, o);
-			if(o instanceof SendData) {
-				SendData recieve = (SendData) o;
-				if(recieve.status.equals("Connecting")) {
-					System.out.println("Connected to the room");
-					GameRoom game = findAvailableRoom();
-					if(game.isFull()) {
-						for(Connection player : game.getPlayer()) {
-							SendData data = new SendData();
-							data.status = "Ready";
-							player.sendTCP(data);
+			if (o instanceof SendData) {
+				SendData receive = (SendData) o;
+				SendData data = new SendData();
+				GameRoom room = findGameByConnection(c);
+				System.out.println(receive.status);
+				if(receive.status.equals("Correct")) {
+					System.out.println(receive.playerName);
+					if(room!=null) {
+						room.getP1().sendTCP(receive);
+						room.getP2().sendTCP(receive);
+					}
+					else System.out.println("Logic Error!!!!!!");
+				}
+				else if(receive.status.equals("End")) {
+					if(room!=null) {
+						if(receive.playerName.equals("p1")) {
+							System.out.println("โง่ๆ");
+							data.status = "lose";
+							data.playerName = "p1";
+							room.getP1().sendTCP(data);
+							data.status = "win";
+							data.playerName = "p2";
+							room.getP2().sendTCP(data);
+						}
+						else if(receive.playerName.equals("p2")) {
+							System.out.println("โง่ๆๆ");
+							data.status = "win";
+							data.playerName = "p1";
+							room.getP1().sendTCP(data);
+							data.status = "lose";
+							data.playerName = "p2";
+							room.getP2().sendTCP(data);	
 						}
 					}
-					
+					else System.out.println("Logic Error!!!!!!");
 				}
-				
+				if(receive.status.equals("p1Win")) {
+					System.out.println("status: p1Win");
+					data.status = "win";
+					data.playerName = "p1";
+					room.getP1().sendTCP(data);
+					data.status = "lose";
+					data.playerName = "p2";
+					room.getP2().sendTCP(data);
+				}
+				else if(receive.status.equals("p2Win")) {
+					System.out.println("status: p2Win");
+					data.status = "lose";
+					data.playerName = "p1";
+					room.getP1().sendTCP(data);
+					data.status = "win";
+					data.playerName = "p2";
+					room.getP2().sendTCP(data);	
+				}
+				else if(receive.status.equals("draw")) {
+					System.out.println("status: draw");
+					data.status = "draw";
+					data.playerName = "p1";
+					room.getP1().sendTCP(data);
+					data.status = "draw";
+					data.playerName = "p2";
+					room.getP2().sendTCP(data);	
+				}
 			}
 		}
 	}
-	
+
 	public GameRoom findAvailableRoom() {
-		if(gameRoom.size() == 0) {
+		if (gameRoom.size() == 0) {
 			System.out.println("No Room Available! Create New One");
 			setChanged();
 			notifyObservers("No Room Available! Create New One");
 			GameRoom room = new GameRoom();
 			gameRoom.add(room);
 			return room;
-		}else {
-			for(GameRoom room : gameRoom) {
-				if( !room.isFull() ) {
+		} else {
+			for (GameRoom room : gameRoom) {
+				if (!room.isFull()) {
 					return room;
 				}
 			}
@@ -92,16 +147,23 @@ public class GameServer extends Observable{
 			return room;
 		}
 	}
-	
-	public GameRoom 
-	
+
+	public GameRoom findGameByConnection(Connection connection) {
+		for(GameRoom room : gameRoom) {
+			if(room.getP1().equals(connection)||room.getP2().equals(connection)) {
+				return room;
+			}
+		}
+		return null;
+	}
+
 	public static void main(String[] args) {
 		try {
-			GameServer gameServer = new GameServer();
+			GameServer server = new GameServer();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 }
