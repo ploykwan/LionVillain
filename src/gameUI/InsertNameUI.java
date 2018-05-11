@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -25,11 +26,13 @@ import javax.swing.text.PlainDocument;
 
 import Connection.DatabaseConnect;
 import Connection.PlayerTable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class InsertNameUI {
 
 	private DatabaseConnect database;
-	
+
 	private JPanel panel;
 	private JButton back, start, skip;
 	private JTextField name;
@@ -60,39 +63,14 @@ public class InsertNameUI {
 		name = new JTextField();
 		name.setBounds(488, 237, 343, 48);
 		name.setDocument(new JTextFieldLimit(10));
-		name.setHorizontalAlignment( SwingConstants.CENTER );
+		name.setHorizontalAlignment(SwingConstants.CENTER);
 		name.setText(lbLabel.getText());
 		panel.add(name);
 		name.add(lbLabel);
-		name.addMouseListener(new MouseListener() {
-			
-			@Override
+		name.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				name.setText("");
-			}
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				if (name.getText().equals("Limit 10"))
+					name.setText("");
 			}
 		});
 
@@ -114,15 +92,21 @@ public class InsertNameUI {
 		start.setContentAreaFilled(false);
 		start.setBorderPainted(false);
 		start.setBounds(495, 307, 138, 58);
-		start.addActionListener((e) -> {
-			player = name.getText().trim();
-			PlayerTable p = new PlayerTable(player,0);
-			database.createUser(p);
-			test goTo = new test();
-			goTo.initializePlayer(p);
-			MainFrame.setPanel(goTo);
-		});
 		panel.add(start);
+		start.addActionListener((e) -> {
+			if (!name.getText().equals("") && !name.getText().equals(lbLabel.getText())) {
+				try {
+					player = name.getText().trim();
+					PlayerTable p = new PlayerTable(player, 0);
+					database.createUser(p);
+					test goTo = new test();
+					goTo.initializePlayer(p);
+					MainFrame.setPanel(goTo);
+				} catch (Exception e1) {
+					
+				}
+			}
+		});
 
 		skip = new JButton("Skip >>");
 		Font buttonFont = new Font(skip.getFont().getName(), Font.ITALIC + Font.BOLD, skip.getFont().getSize());
@@ -134,7 +118,7 @@ public class InsertNameUI {
 		skip.addActionListener((e) -> {
 			test goTo = new test();
 			MainFrame.setPanel(goTo.getPanel());
-		}); 
+		});
 		panel.add(skip);
 
 	}
@@ -142,7 +126,7 @@ public class InsertNameUI {
 	public JPanel getPanel() {
 		return panel;
 	}
-	
+
 	class JTextFieldLimit extends PlainDocument {
 		private int limit;
 

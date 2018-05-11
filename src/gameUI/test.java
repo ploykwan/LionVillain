@@ -2,6 +2,7 @@ package gameUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -19,6 +20,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,7 +29,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -152,10 +156,14 @@ public class test extends JPanel implements Observer, Runnable {
 		homeButton.setVisible(false);
 
 		table = new JTable();
-		table.setForeground(Color.black);
+		table.setRowHeight(25);
+		table.setFont(new Font("Arial Rounded Bold", Font.BOLD, 16));
+		table.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 12));
+		table.setForeground(Color.white);
 		table.setOpaque(true);
-		table.setSelectionForeground(new Color(247, 219, 0));
-		table.setSelectionBackground(new Color(247, 219, 0));
+		table.setBorder(BorderFactory.createLineBorder(new Color(148, 91, 39)));
+		table.setSelectionForeground(new Color(148, 91, 39));
+		// table.setSelectionBackground(new Color(247, 219, 0));
 		scroll = new JScrollPane(table);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getViewport().setOpaque(false);
@@ -163,14 +171,13 @@ public class test extends JPanel implements Observer, Runnable {
 		scroll.setBounds(500, 190, 320, 200);
 		scroll.setVisible(false);
 		add(scroll);
-		
 
 		ImageIcon score = new ImageIcon(getClass().getResource("/res/score_board.png"));
 		showScore = new JLabel(score);
 		showScore.setBounds(410, 0, 500, 700);
 		showScore.setVisible(false);
 		add(showScore);
-		
+
 		countdown();
 		play();
 
@@ -269,16 +276,10 @@ public class test extends JPanel implements Observer, Runnable {
 							}
 						}, TIME_DELAY);
 					}
-					// score++;
-					// textField.setText("");
-					// game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
-					// System.out.println("dx: "+game.getDx());
-					// System.out.println("push: "+game.getX());
 					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
 					score++;
 					textField.setText("");
 					game.push();
-					// villagerPush();
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX()));
 				}
@@ -291,7 +292,6 @@ public class test extends JPanel implements Observer, Runnable {
 					stop();
 					distance.setText("0 meter");
 					endLabel.setVisible(true);
-					showScoreBoard();
 					gameEnd();
 				} else {
 					question();
@@ -301,11 +301,10 @@ public class test extends JPanel implements Observer, Runnable {
 		}
 
 		public boolean isGameEnd() {
-		if (game.getX() <= -10 || game.getX() >= 900)
-			return true;
-		return false;
-	}
-
+			if (game.getX() <= -10 || game.getX() >= 900)
+				return true;
+			return false;
+		}
 
 		public void showScoreBoard() {
 			Timer timer = new Timer();
@@ -325,8 +324,8 @@ public class test extends JPanel implements Observer, Runnable {
 									scroll.setVisible(true);
 									restartButton.setBounds(900, 380, 204, 87);
 									homeButton.setBounds(900, 500, 204, 87);
-									// restartButton.setVisible(true);
-									// homeButton.setVisible(true);
+									restartButton.setVisible(true);
+									homeButton.setVisible(true);
 								}
 							}, TIME_DELAY);
 						}
@@ -343,6 +342,7 @@ public class test extends JPanel implements Observer, Runnable {
 			question.setVisible(false);
 
 			if (guest == false) {
+				showScoreBoard();
 				System.out.println("guset");
 				p.setScore(time);
 				System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
@@ -352,29 +352,58 @@ public class test extends JPanel implements Observer, Runnable {
 				List<PlayerTable> playerList = new ArrayList<PlayerTable>(
 						DatabaseConnect.getInstance().pullAllPlayerdata());
 				Collections.sort(playerList);
-				String columnNames[] = {"No", "Name", "Time"};
+				String columnNames[] = { "No", "Name", "Time" };
 				String[][] data = new String[playerList.size()][3];
 
-				for (int i = 0; i < playerList.size() ; i++) {
-						data[i][0] = (i+1) +"";
-						data[i][1] = playerList.get(i).getName();
-						data[i][2] = playerList.get(i).getScore()+"";
+				for (int i = 0; i < playerList.size(); i++) {
+					data[i][0] = (i + 1) + "";
+					data[i][1] = playerList.get(i).getName();
+					data[i][2] = playerList.get(i).getScore() + "";
+					if (playerList.get(i).getName().equalsIgnoreCase(p.getName())) {
+					}
 				}
-				
+
 				TableModel model = new DefaultTableModel(data, columnNames) {
-					public boolean isCellEditable(int row, int column)
-				    {
-				      return false;
-				    }
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					}
 				};
+
+				JTableHeader header = table.getTableHeader();
+				header.setBackground(new Color(148, 91, 39));
+				header.setForeground(Color.white);
+				header.setReorderingAllowed(false);
+				header.setPreferredSize(new Dimension(100, 30));
 				table.setModel(model);
 				TableColumnModel columnModel = table.getColumnModel();
 				columnModel.getColumn(0).setPreferredWidth(50);
 				columnModel.getColumn(1).setPreferredWidth(200);
 				columnModel.getColumn(2).setPreferredWidth(100);
+				getNewRenderedTable(table);
+			} else if (guest == true) {
+				restartButton.setVisible(true);
+				homeButton.setVisible(true);
 			}
-			restartButton.setVisible(true);
-			homeButton.setVisible(true);
+		}
+
+		private JTable getNewRenderedTable(JTable table) {
+			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+						boolean hasFocus, int row, int col) {
+					super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+					String status = (String) table.getModel().getValueAt(row, 1);
+					if ((p.getName()).equals(status)) {
+						setBackground(Color.white);
+						setForeground(Color.black);
+					} else {
+						setBackground(new Color(148, 91, 39));
+						setForeground(Color.white);
+					}
+					return this;
+				}
+			});
+			return table;
 		}
 
 		@Override
@@ -454,7 +483,7 @@ public class test extends JPanel implements Observer, Runnable {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-//		System.out.println(num1 + " " + op + " " + num2);
+		// System.out.println(num1 + " " + op + " " + num2);
 	}
 
 	public void setMessage(String message) {
