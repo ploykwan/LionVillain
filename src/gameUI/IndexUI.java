@@ -1,19 +1,25 @@
 package gameUI;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import Connection.GameClient;
 import Connection.SendData;
+import gameUI.InsertNameUI.JTextFieldLimit;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.SetChangeListener;
@@ -60,7 +66,38 @@ public class IndexUI{
 		panel.add(single);
 		
 		insertIP = new JTextField();
-		insertIP.setBounds(820, 390, 343, 48);
+		insertIP.setBounds(1005, 196, 125, 35);
+		insertIP.setForeground(Color.gray);
+		insertIP.setText(" Insert Sever's IP");
+		insertIP.setBorder(BorderFactory.createLineBorder(Color.black));
+		insertIP.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				insertIP.setText("");
+				insertIP.setForeground(Color.black);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 		panel.add(insertIP);
 		
 		ImageIcon img2 = new ImageIcon(getClass().getResource("/res/player2_v4.png"));
