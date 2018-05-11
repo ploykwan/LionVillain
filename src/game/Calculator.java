@@ -82,33 +82,13 @@ public class Calculator{
 	public void V1setDx(int dx) {
 		v1.setDx(dx);
 	}
-	
-	public int V2push() {
-		v2.setX(v2.getX() + v2.getDx());
-		v1.setX(v1.getX() - v2.getDx());
-		System.out.println("v2.getX(): "+v2.getX()+" v1.getX(): "+v1.getX());
-		return v2.getX();
-	}
-
-	public int V2reverse() {
-		v2.setX(v2.getX() - 10);
-		return v2.getX();
-	}
 
 	public int V2getX() {
 		return v2.getX();
 	}
 
-	public int V2getDx() {
-		return v2.getDx();
-	}
-
 	public void V2setX(int x) {
 		v2.setX(x);
-	}
-
-	public void V2setDx(int dx) {
-		v2.setDx(dx);
 	}
 	
 	public int push() {

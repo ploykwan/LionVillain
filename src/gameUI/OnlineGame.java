@@ -36,6 +36,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private JButton homeButton;
 	private ImageIcon winImg, loseImg, drawImg;
 
+	private String me;
 	private long TIME_DELAY = 1000;
 	private int num1 = 0, num2 = 0, result, answer = 999;
 	private char op;
@@ -51,6 +52,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 
 	public OnlineGame(GameClient p) {
 		gameClient = p;
+		me = gameClient.getPlayerName();
 		initialize();
 		play();
 	}
@@ -81,13 +83,13 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		v2DistanceLabel = new JLabel();
 		v2DistanceLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		v2DistanceLabel.setText("Opponent's Distance: ");
-		v2DistanceLabel.setBounds(44, 70, 300, 25);
+		v2DistanceLabel.setBounds(44, 70, 400, 25);
 		panel.add(v2DistanceLabel);
 
 		v1DistanceLabel = new JLabel();
 		v1DistanceLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		v1DistanceLabel.setText("My Distance: ");
-		v1DistanceLabel.setBounds(970, 70, 300, 25);
+		v1DistanceLabel.setBounds(910, 70, 400, 25);
 		panel.add(v1DistanceLabel);
 
 		questionLabel = new JLabel();
@@ -151,7 +153,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-		// System.out.println(num1 + " " + op + " " + num2);
+		System.out.println(gameClient.getPlayerName()+" "+getMessage());
 	}
 
 	public void setMessage(String message) {
@@ -204,12 +206,16 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		gameStart();
 		thread.start();
 		game.V1setDx(30);
-		game.V2setDx(30);
 		game.V1setX(340);
 		game.V2setX(340); // set first lion's position ; panel center:493
 		lion.setBounds(game.V2getX(), 375, 521, 253);
-		v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V2getX() + 20));
-		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V1getX() + 20));
+		if(me.equals("p1")) {
+			v1DistanceLabel.setText(String.format("My Distance: %d meter", game.V2getX() + 20));
+			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 20));
+		}else {
+			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 20));
+			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 20));
+		}
 		question();
 		questionLabel.setText(getMessage());
 	}
@@ -313,8 +319,13 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		v1DistanceLabel.setText(String.format("V1 Distance: %d meter", game.V2getX() + 20));
-		v2DistanceLabel.setText(String.format("V2 Distance: %d meter", game.V1getX() + 20));
+		if(me.equals("p1")) {
+			v1DistanceLabel.setText(String.format("Your Distance: %d meter", game.V2getX() + 20));
+			v2DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V1getX() + 20));
+		}else {
+			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 20));
+			v2DistanceLabel.setText(String.format("My Distance: %d meter", game.V1getX() + 20));
+		}
 		if (arg instanceof SendData) {
 			SendData data = (SendData) arg;
 			if (data.status.equals("win")) {
@@ -340,8 +351,6 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 				gameClient.setStatus("End");
 				gameClient.sendMessage();
 				thread.stop();
-				gameEnd("win");
-				System.out.println("-------------------------");
 			}
 
 		}
