@@ -77,6 +77,7 @@ public class GameServer extends Observable {
 				else if(receive.status.equals("End")) {
 					if(room!=null) {
 						if(receive.playerName.equals("p1")) {
+							System.out.println("p2 winnnnn");
 							data.status = "lose";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);
@@ -85,6 +86,7 @@ public class GameServer extends Observable {
 							room.getP2().sendTCP(data);
 						}
 						else if(receive.playerName.equals("p2")) {
+							System.out.println("p1 winnnnn");
 							data.status = "win";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);

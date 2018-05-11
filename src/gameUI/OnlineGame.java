@@ -43,7 +43,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private String message;
 	private Calculator game;
 	private Thread thread = new Thread(this);
-	double timedown = 30 * 100;
+	double timedown = 120 * 100;
 
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
@@ -203,8 +203,8 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	public void play() {
 		thread.start();
 		game.V2setDx(30);
-		game.V1setX(340);
-		game.V2setX(340); // set first lion's position ; panel center:493
+		game.V1setX(360);
+		game.V2setX(360); // set first lion's position ; panel center:493
 		lion.setBounds(game.V2getX(), 375, 521, 253);
 		if (me.equals("p1")) {
 			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 0));
@@ -243,7 +243,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		panel.remove(lion);
 
 		end.setOpaque(false);
-		end.setBounds(320, 90, 695, 485);
+		end.setBounds(400, 145, 517, 373);
 
 		ImageIcon home = new ImageIcon(getClass().getResource("/res/home.png"));
 		homeButton = new JButton(home);
@@ -254,7 +254,8 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 			IndexUI ui = new IndexUI();
 			MainFrame.setPanel(ui.getPanel());
 		});
-		end.add(homeButton);
+		homeButton.setBounds(560,540, 204, 87);
+		panel.add(homeButton);
 		panel.add(end);
 
 		if (why.equals("timeup")) {
@@ -274,9 +275,10 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	}
 
 	private boolean isGameEnd() {
-		if (game.V2getX() <= -20 || game.V1getX() <= -20) {
+		if (game.V2getX() <= 0 || game.V1getX() <= 0) {
+			System.out.println("isGameEnd(): true");
 			return true;
-		}
+		}System.out.println("isGameEnd(): false");
 		return false;
 	}
 
@@ -341,11 +343,18 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 				answer = 9999;
 			}
 			if (isGameEnd() && !data.status.equals("win") && !data.status.equals("lose")) {
+				System.out.println("-End-");
+				gameEnd("");
+				if(game.V2getX() <= 0) {
+					gameClient.setPlayerName("p2");
+				}else if(game.V1getX() <= 0) {
+					gameClient.setPlayerName("p1");
+				}
 				gameClient.setStatus("End");
 				gameClient.sendMessage();
 				thread.stop();
 			}
-
+			
 		}
 		if (me.equals("p1")) {
 			v1DistanceLabel.setText(String.format("Opponent's Distance: %d meter", game.V2getX() + 0));
