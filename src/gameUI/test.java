@@ -61,6 +61,7 @@ public class test extends JPanel implements Observer, Runnable {
 	private String message;
 	private String name;
 	private boolean guest = true;
+	private boolean powerup = false;
 
 	private Calculator game;
 	private Thread thread;
@@ -269,6 +270,7 @@ public class test extends JPanel implements Observer, Runnable {
 					if (score % 5 == 0 && score > 0) {
 						witch.setVisible(true);
 						Timer timer = new Timer();
+						powerup = true;
 						timer.schedule(new TimerTask() {
 							@Override
 							public void run() {
@@ -425,6 +427,7 @@ public class test extends JPanel implements Observer, Runnable {
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
+	
 
 			BufferedImage img1 = null;
 			try {
@@ -434,6 +437,7 @@ public class test extends JPanel implements Observer, Runnable {
 			}
 			g.drawImage(img1, 0, 0, 1280, 720, null);
 
+			
 			BufferedImage img = null;
 			try {
 				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
@@ -441,9 +445,17 @@ public class test extends JPanel implements Observer, Runnable {
 				e.printStackTrace();
 			}
 			// Draw space
+			Graphics g2 = img.createGraphics();
 			for (Villager villager : objectPool.getVillager()) {
-				g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
+//				if (powerup == true) {
+//						System.out.println("power up");
+//						g2.drawImage(img, 1200 + villager.getX(), 450 + villager.getY(), 111, 120, null);
+//						powerup = false;
+//				}
+					g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
 			}
+			
+
 		}
 	}
 

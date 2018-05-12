@@ -74,9 +74,24 @@ public class ObjectPool extends Observable {
 
 	public void burstVillagers(int x) {
 		List<Villager> villagerList = VillagerPool.getInstance().getBulletList();
-		Villager villager = villagerList.get(0);
-		villager.setProperties(x, -1, 0, true);
-		villagers.add(villager);
+		for(int i = 0 ; i < 2 ; i++ ) {
+			Villager villager = villagerList.get(0);
+			switch (i) {
+			case 0:
+				villager.setProperties(x, -1, 0, true);
+				break;
+			case 1:
+				villager.setProperties(x, -2, 0, true);
+				break;
+			default:
+				break;
+			}
+			villagers.add(villager);
+		}
+//		Villager villager = villagerList.get(0);
+//		villager.setProperties(x, -1, 0, true);
+//		villager.setProperties(x, -1, 0, true);
+//		villagers.add(villager);
 	}
 
 	public int getStop() {
