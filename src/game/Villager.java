@@ -1,87 +1,101 @@
 package game;
 
+/**
+ * The Villager for this game contain x-coordinate, y-coordinate, distance of x,
+ * distance of y, and active for use in objectpool.
+ * @author Pimwalun Witchawanitchanun
+ *
+ */
 public class Villager {
-	private int distance;
-	private int people;
-	private String nameVillage;
 	private boolean active;
 	private int x,y,dx,dy;
 	private int speed = 10;
 
+	/**
+	 * Initialize new Villager.
+	 */
 	public Villager() {
-		
 	}
-	public Villager(int x, int y, int dx, int dy, boolean active) {
+	
+	/**
+	 * Initialize new Villager with x, y, dx, dy, and active.
+	 * @param x is x-coordinate.
+	 * @param y is y-coordinate.
+	 * @param dx is distance of x.
+	 * @param dy is distance of y.
+	 * @param active
+	 */
+	public Villager(int x, int y,int dx, int dy, boolean active) {
 		setProperties(x, dx, dy, active);
 	}
 	
+	/**
+	 * Speed of villager.
+	 */
 	public void move() {
 		x += dx * speed;
 		y += dy * speed;
 	}
-	
-	public int getPeople() {
-		return people;
-	}
-	
-	public void setPeople(int people) {
-		this.people = people;
-	}
-	
-	public int getDistance() {
-		return distance;
-	}
-	
-	public void setDistance(int distance) {
-		this.distance = distance;
-	}
 
+	/**
+	 * Return coordinate of x.
+	 * @return x
+	 */
 	public int getX() {
 		return x;
 	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getDx() {
-		return dx;
-	}
-
-	public int getDy() {
-		return dy;
-	}
-
+	
+	/**
+	 * Set coordinate of x.
+	 * @param x
+	 */
 	public void setX(int x) {
 		this.x = x;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	/**
+	 * Return coordinate of y.
+	 * @return y
+	 */
+	public int getY() {
+		return y;
 	}
 
+	/**
+	 * Return distance of x.
+	 * @return dx
+	 */
+	public int getDx() {
+		return dx;
+	}
+
+	/**
+	 * Set distance of x to increase x unit.
+	 * @param dx
+	 */
 	public void setDx(int dx) {
 		this.dx += dx;
 	}
-
-	public void setDy(int dy) {
-		this.dy = dy;
-	}
 	
+	/**
+	 * Return boolean active of villager.
+	 * @return active
+	 */
 	public boolean getActive() {
 		return active;
 	}
 	
+	/**
+	 * Set properties of villager.
+	 * @param x
+	 * @param dx
+	 * @param dy
+	 * @param active
+	 */
 	public void setProperties(int x, int dx, int dy, boolean active) {
 		this.x = x;
 		this.dx = dx;
 		this.dy = dy;
 		this.active = active;
 	}
-	
-	@Override
-	public String toString() {
-		return nameVillage;
-	} 
-
 }

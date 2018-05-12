@@ -24,6 +24,10 @@ import Connection.SendData;
 import game.Calculator;
 import game.Villager;
 
+/**
+ * OnlineGmae UI it shows when a user wants to play in mode 2 players.
+ *
+ */
 public class OnlineGame implements Runnable, Observer, KeyListener {
 
 	private GameClient gameClient;
@@ -48,6 +52,10 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private Villager v1 = new Villager();
 	private Villager v2 = new Villager();
 
+	/**
+	 * Create the application.
+	 * @param p
+	 */
 	public OnlineGame(GameClient p) {
 		gameClient = p;
 		me = gameClient.getPlayerName();
@@ -56,6 +64,9 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		play();
 	}
 
+	/**
+	 * Initialize the contains of the panel.
+	 */
 	public void initialize() {
 		game = new Calculator(v1, v2);
 		panel = new JPanel() {
@@ -113,10 +124,17 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 
 	}
 
+	/**
+	 * Return panel of OnlineGame.
+	 * @return panel of OnlineGame.
+	 */
 	public JPanel getDualPlayModePanel() {
 		return panel;
 	}
 
+	/**
+	 * Random question to the player.
+	 */
 	public void question() {
 		char operator[] = { '+', '-', 'x', '÷' };
 		num1 = (int) (1 + (Math.random() * 1));
@@ -154,14 +172,25 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		System.out.println(gameClient.getPlayerName() + " " + getMessage());
 	}
 
+	/**
+	 * Set a message about the game.
+	 * @param message a string about the question in the game.
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	/**
+	 * Return a message about the question in the game.
+	 * @return string message related to the recent question.
+	 */
 	public String getMessage() {
 		return message;
 	}
 
+	/**
+	 * Start the game.
+	 */
 	private void gameStart() {
 		questionLabel.setVisible(false);
 		answerField.setVisible(false);
@@ -200,6 +229,9 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		}, TIME_DELAY);
 	}
 
+	/**
+	 * Playing the game.
+	 */
 	public void play() {
 		thread.start();
 		game.V2setDx(30);
@@ -217,6 +249,9 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		questionLabel.setText(getMessage());
 	}
 
+	/**
+	 * Timer to end the game.
+	 */
 	@Override
 	public void run() {
 		while (timedown >= 0.1) {
@@ -231,6 +266,10 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		gameEnd("timeup");
 	}
 
+	/**
+	 * End the game.
+	 * @param why
+	 */
 	private void gameEnd(String why) {
 		double time = timedown * 0.01; // เวลาทีทำได้
 		System.out.printf("%.2f sec\n", time);
@@ -293,6 +332,9 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		lion.setLocation(game.V1getX(), 375);
 	}
 
+	/**
+	 * Input the answer.
+	 */
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			questionLabel.setText(getMessage());

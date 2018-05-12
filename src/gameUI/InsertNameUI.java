@@ -29,6 +29,11 @@ import Connection.PlayerTable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * InsertName UI it shows when a user wants to play in mode 1 player.
+ * @author 
+ *
+ */
 public class InsertNameUI {
 
 	private DatabaseConnect database;
@@ -39,10 +44,16 @@ public class InsertNameUI {
 	private JLabel lbLabel = new JLabel("Limit 10");
 	private String player;
 
+	/**
+	 * Create the application.
+	 */
 	public InsertNameUI() {
 		initialize();
 	}
 
+	/**
+	 * Initialize the contains of the panel.
+	 */
 	private void initialize() {
 		database = DatabaseConnect.getInstance();
 		panel = new JPanel() {
@@ -99,7 +110,7 @@ public class InsertNameUI {
 					player = name.getText().trim();
 					PlayerTable p = new PlayerTable(player, 0);
 					database.createUser(p);
-					test goTo = new test();
+					OnePlayer goTo = new OnePlayer();
 					goTo.initializePlayer(p);
 					MainFrame.setPanel(goTo);
 				} catch (Exception e1) {
@@ -116,17 +127,26 @@ public class InsertNameUI {
 		skip.setContentAreaFilled(false);
 		skip.setBorderPainted(false);
 		skip.addActionListener((e) -> {
-			test goTo = new test();
+			OnePlayer goTo = new OnePlayer();
 			MainFrame.setPanel(goTo.getPanel());
 		});
 		panel.add(skip);
 
 	}
 
+	/**
+	 * Return panel of InsertNameUI.
+	 * @return panel of InsertNameUI.
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}
 
+	/**
+	 * User can insert they name at most 10 characters.
+	 * @author Pimwalun Witchawanitchanun
+	 *
+	 */
 	class JTextFieldLimit extends PlainDocument {
 		private int limit;
 

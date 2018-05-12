@@ -24,6 +24,11 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.SetChangeListener;
 
+/**
+ * Index UI for this game when user playing.
+ * @author 
+ *
+ */
 public class IndexUI{
 
 	private JPanel panel;
@@ -32,10 +37,16 @@ public class IndexUI{
 
 	private String ip;
 
+	/**
+	 * Create the application.
+	 */
 	public IndexUI() {
 		initialize();
 	}
 
+	/**
+	 * Initialize the contains of the panel.
+	 */
 	private void initialize() {
 		System.out.println("Run index...");
 		panel = new JPanel() {
@@ -123,11 +134,12 @@ public class IndexUI{
 			}
 			
 		});
-		
-		
-
 	}
 
+	/**
+	 * Return panel of IndexUI.
+	 * @return
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}

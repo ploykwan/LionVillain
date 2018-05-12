@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * Ma
+ * Main class to run the application.
  * 
  * @author kwankaew
  *
@@ -22,15 +22,12 @@ public class MainFrame extends JFrame {
 		frame.setSize(new Dimension(1280, 720));
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// setPanel(new gameUI.InsertNameUI().getPanel());
-		// setPanel(new gameUI.DualPlayUI().getDualPlayModePanel());
 	}
 
-	// public static void show() {
-	// frame.setVisible(true);
-	// }
-
+	/**
+	 * Set frame to show determined panel.
+	 * @param panel is current panel.
+	 */
 	public static void setPanel(JPanel panel) {
 		frame.getContentPane().removeAll();
 		frame.repaint();
@@ -41,6 +38,10 @@ public class MainFrame extends JFrame {
 		panel.requestFocusInWindow();
 	}
 
+	/**
+	 * Launch the application.
+	 * @param args not use
+	 */
 	public static void main(String[] args) {
 		initialize();
 		setPanel(new gameUI.IndexUI().getPanel());

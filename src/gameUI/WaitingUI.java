@@ -15,14 +15,25 @@ import javax.swing.JTextField;
 
 import Connection.GameClient;
 
+/**
+ * Waiting UI is waiting other user come in the same room.
+ * @author 
+ *
+ */
 public class WaitingUI implements Observer {
 
 	private JPanel panel;
 
+	/**
+	 * Create the application.
+	 */
 	public WaitingUI() {
 		initialize();
 	}
 
+	/**
+	 * Initialize the contains of the panel.
+	 */
 	private void initialize() {
 		System.out.println("Run waiting...");
 		panel = new JPanel() {
@@ -51,6 +62,10 @@ public class WaitingUI implements Observer {
 		
 	}
 
+	/**
+	 * Return panel of WaitingUI.
+	 * @return panel of WaitingUI.
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}

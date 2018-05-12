@@ -41,7 +41,12 @@ import game.Calculator;
 import game.ObjectPool;
 import game.Villager;
 
-public class test extends JPanel implements Observer, Runnable {
+/**
+ * OnePlyer UI for 1 player mode.
+ * @author Pimwalun Witchawanitchanun
+ *
+ */
+public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
 	private JTextField textField;
@@ -70,7 +75,10 @@ public class test extends JPanel implements Observer, Runnable {
 	private PlayerTable p = new PlayerTable();
 	private Villager v = new Villager();
 
-	public test() {
+	/**
+	 * Create the application.
+	 */
+	public OnePlayer() {
 		System.out.println("Run test...");
 		game = new Calculator();
 		objectPool = new ObjectPool();
@@ -140,7 +148,7 @@ public class test extends JPanel implements Observer, Runnable {
 		restartButton = new JButton(b1);
 		restartButton.setBounds(440, 470, 204, 87);
 		restartButton.addActionListener((e) -> {
-			test goTo = new test();
+			OnePlayer goTo = new OnePlayer();
 			MainFrame.setPanel(goTo);
 		});
 		add(restartButton);
@@ -186,6 +194,10 @@ public class test extends JPanel implements Observer, Runnable {
 		add(renderer);
 	}
 
+	/**
+	 * Initialize from PlayerTable to show the score board.
+	 * @param player is info from database.
+	 */
 	public void initializePlayer(PlayerTable player) {
 		guest = false;
 		p.setName(player.getName());
@@ -193,6 +205,9 @@ public class test extends JPanel implements Observer, Runnable {
 		System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
 	}
 
+	/**
+	 * Playing the game.
+	 */
 	public void play() {
 		game.setX(780); // set first lion's position ; panel center:493
 		lion.setBounds(game.getX(), 375, 424, 253);
@@ -203,6 +218,9 @@ public class test extends JPanel implements Observer, Runnable {
 		textField.addKeyListener(new Enter());
 	}
 
+	/**
+	 * Count down before the game starts.
+	 */
 	public void countdown() {
 		question.setVisible(false);
 		textField.setVisible(false);
@@ -246,6 +264,11 @@ public class test extends JPanel implements Observer, Runnable {
 		repaint();
 	}
 
+	/**
+	 * Input the answer and check that correct or not.
+	 * @author pimwalun
+	 *
+	 */
 	class Enter implements KeyListener {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -302,12 +325,16 @@ public class test extends JPanel implements Observer, Runnable {
 			}
 		}
 
+		
 		public boolean isGameEnd() {
 			if (game.getX() <= -10 || game.getX() >= 900)
 				return true;
 			return false;
 		}
 
+		/**
+		 * Waiting before show score board.
+		 */
 		public void showScoreBoard() {
 			Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
@@ -336,6 +363,10 @@ public class test extends JPanel implements Observer, Runnable {
 			}, TIME_DELAY);
 		}
 
+		/**
+		 * If player select start button the panel it show scoreboard.
+		 * If player select skip button the panel it doesn't show scoreboard.
+		 */
 		private void gameEnd() {
 			double time = timeup * 0.01; // เวลาทีทำได้
 			System.out.printf("%.2f sec\n", time);
@@ -388,6 +419,11 @@ public class test extends JPanel implements Observer, Runnable {
 			}
 		}
 
+		/**
+		 * Set color of the current user playing.
+		 * @param table is scoreboard.
+		 * @return every value of scoreboard.
+		 */
 		private JTable getNewRenderedTable(JTable table) {
 			table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 				@Override
@@ -418,6 +454,11 @@ public class test extends JPanel implements Observer, Runnable {
 
 	}
 
+	/**
+	 * Paint background and villager in the panel.
+	 * @author pimwalun
+	 *
+	 */
 	class Renderer extends JPanel {
 		public Renderer() {
 			setDoubleBuffered(true);
@@ -454,13 +495,13 @@ public class test extends JPanel implements Observer, Runnable {
 //				}
 					g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
 			}
-			
-
 		}
 	}
 
+	/**
+	 * Random question to the player.
+	 */
 	public void question() {
-
 		char operator[] = { '+', '-', 'x', '÷' };
 		// TODO ค่อยแก้เลข
 		num1 = (int) (1 + (Math.random() * 1));
@@ -498,31 +539,40 @@ public class test extends JPanel implements Observer, Runnable {
 		// System.out.println(num1 + " " + op + " " + num2);
 	}
 
+	/**
+	 * Set a message about the game.
+	 * @param message a string about the question in the game.
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	/**
+	 * Return a message about the question in the game.
+	 * @return string message related to the recent question.
+	 */
 	public String getMessage() {
 		return message;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	/**
+	 * Start timer.
+	 */
 	public void start() {
 		thread = new Thread(this);
 		thread.start();
 	}
 
+	/**
+	 * Stop timer.
+	 */
 	public void stop() {
 		running.set(false);
 	}
 
+	/**
+	 * Time of user to play in 1 game.
+	 */
 	@Override
 	public void run() {
 		while (running.get()) {
@@ -538,6 +588,10 @@ public class test extends JPanel implements Observer, Runnable {
 
 	}
 
+	/**
+	 * Return panel of OnePlayer.
+	 * @return panel of OnePlayer.
+	 */
 	public JPanel getPanel() {
 		return this;
 	}
