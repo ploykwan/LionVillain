@@ -3,28 +3,27 @@ package Connection;
 import java.io.IOException;
 import java.util.Observable;
 
-import javax.swing.JPanel;
-
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import game.Calculator;
-import gameUI.MainFrame;
 import gameUI.OnlineGame;
 import gameUI.WaitingUI;
 
+/**
+ * Create client.
+ * @author Kwankaew
+ *
+ */
 public class GameClient extends Observable {
 
-	// private DualPlayUI game;
 	private Client client;
-	private Calculator control;
 	private String status;
 	private String answer;
 	private String playerName;
 	private WaitingUI waitingUI;
 
-	public GameClient(String ip, int binding,WaitingUI ui) throws IOException {
+	public GameClient(String ip, int binding, WaitingUI ui) throws IOException {
 		client = new Client();
 
 		client.getKryo().register(SendData.class);
@@ -40,32 +39,31 @@ public class GameClient extends Observable {
 		@Override
 		public void connected(Connection c) {
 			super.connected(c);
-			System.out.println("Connected to Server.");
+//			 System.out.println("Connected to Server.");
 		}
 
 		@Override
 		public void received(Connection c, Object o) {
 			if (o instanceof SendData) {
-				SendData receive = (SendData) o;	
-				System.out.println(receive.status);
-				if( receive.status.equals("Play")) {
-					System.out.println("Open OnlineGame Class");
+				SendData receive = (SendData) o;
+				// System.out.println(receive.status);
+				if (receive.status.equals("Play")) {
+					// System.out.println("Open OnlineGame Class");
 					startGame();
 				}
-				if( receive.status.equals("SetName")) {
-					System.out.println("SetName");
+				if (receive.status.equals("SetName")) {
 					playerName = receive.playerName;
+					// System.out.println("SetName: "+playerName);
 				}
-				if( receive.status.equals("Correct") ) {
+				if (receive.status.equals("Correct")) {
 					setChanged();
 					notifyObservers(receive);
 				}
-				if( receive.status.equals("win") || receive.status.equals("lose") ) {
-					System.out.println("โง่สัสๆ");
+				if (receive.status.equals("win") || receive.status.equals("lose")) {
 					setChanged();
 					notifyObservers(receive);
 				}
-				if( receive.status.equals("draw")) {
+				if (receive.status.equals("draw")) {
 					setChanged();
 					notifyObservers(receive);
 				}

@@ -1,6 +1,5 @@
 package Connection;
 
-import java.awt.List;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -10,9 +9,11 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.support.DatabaseConnection;
-import com.j256.ormlite.table.TableUtils;
-
+/**
+ * Create and update the data in database.
+ * @author Kwankaew
+ *
+ */
 public class DatabaseConnect {
 	private static DatabaseConnect databaseConnect = null;
 	private static ConnectionSource connectionSource = null;
@@ -57,16 +58,16 @@ public class DatabaseConnect {
 		return getDetailPlayer;
 	}
 	
-	public boolean isPlayerExist(String id) {
-		PlayerTable playerTable = null;
-		try {
-			playerTable = playerDao.queryForId(id);
-		} catch (SQLException e) {
-			System.out.println("pullAllPlayerdata error");
-			e.printStackTrace();
-		}
-		return playerTable != null;
-	}
+//	public boolean isPlayerExist(String id) {
+//		PlayerTable playerTable = null;
+//		try {
+//			playerTable = playerDao.queryForId(id);
+//		} catch (SQLException e) {
+//			System.out.println("pullAllPlayerdata error");
+//			e.printStackTrace();
+//		}
+//		return playerTable != null;
+//	}
 	
 	public void createUser(PlayerTable player) {
 		try {
