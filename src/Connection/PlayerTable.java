@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
+/**
+ * Table that collect player's data.
+ * @author Kwankaew
+ *
+ */
 @DatabaseTable(tableName = "rank")
 public class PlayerTable implements Serializable, Comparable<PlayerTable> {
 
