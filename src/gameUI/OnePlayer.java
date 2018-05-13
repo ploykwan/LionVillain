@@ -49,8 +49,7 @@ import game.Villager;
  */
 public class OnePlayer extends JPanel implements Observer, Runnable {
 
-	private DatabaseConnect database;
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose, powerup,
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, win, showScore, lose, powerup,
 			combo;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
@@ -67,15 +66,13 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	int dist = 0;
 	private long TIME_DELAY = 1000;
 	private String message;
-	private String name;
-	private boolean guest = true;
+	private boolean guest = true, loser = false;
 
 	private Calculator game;
 	private Thread thread;
 	private final AtomicBoolean running = new AtomicBoolean(true);
 	private ObjectPool objectPool;
 	private PlayerTable player = new PlayerTable();
-	private Villager v = new Villager();
 
 	/**
 	 * Create the application.
@@ -147,10 +144,10 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		add(lion);
 
 		ImageIcon img = new ImageIcon(getClass().getResource("/res/save.png"));
-		endLabel = new JLabel(img);
-		endLabel.setBounds(400, 70, 517, 373);
-		add(endLabel);
-		endLabel.setVisible(false);
+		win = new JLabel(img);
+		win.setBounds(400, 70, 517, 373);
+		add(win);
+		win.setVisible(false);
 
 		ImageIcon youLose = new ImageIcon(getClass().getResource("/res/lose.png"));
 		lose = new JLabel(youLose);
@@ -308,6 +305,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					objectPool.setStop(game.getX() + 20);
 					distance.setText(String.format("%d meter", game.getX()));
 					combo.setText(String.format("Combo: %d", score));
+					System.out.println(game.getX());
 				} else { // correct answer
 					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
@@ -336,12 +334,14 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 				if (game.getX() >= 890) {
 					stop();
 					lose.setVisible(true);
+					loser = true;
 					gameEnd();
 				}
-				if (isGameEnd()) {
+				else if (isGameEnd()) {
 					stop();
 					distance.setText("0 meter");
-					endLabel.setVisible(true);
+					win.setVisible(true);
+					loser = false;
 					gameEnd();
 				} else {
 					question();
@@ -370,7 +370,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 							timer.schedule(new TimerTask() {
 								@Override
 								public void run() {
-									endLabel.setVisible(false);
+									win.setVisible(false);
 									lose.setVisible(false);
 									lion.setVisible(false);
 									showScore.setVisible(true);
@@ -399,7 +399,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			question.setVisible(false);
 			combo.setVisible(false);
 
-			if (guest == false) {
+			if (guest == false && loser == false) {
 				showScoreBoard();
 				System.out.println("guset");
 				player.setScore(time);
@@ -438,7 +438,8 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 				columnModel.getColumn(1).setPreferredWidth(200);
 				columnModel.getColumn(2).setPreferredWidth(100);
 				getNewRenderedTable(table);
-			} else if (guest == true) {
+			} else if (guest == true || loser == true) {
+				lose.setVisible(true);
 				restartButton.setVisible(true);
 				homeButton.setVisible(true);
 			}
