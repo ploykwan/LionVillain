@@ -9,7 +9,7 @@ The game we are developing is a kind of math game, which can be played competiti
 
 ## Vision of program :computer:
 ### How to run
-1 . If you want to be as a host of game, open ServerLauncher.jar
+1. If you want to be as a host of game, open ServerLauncher.jar
 2. Open GameLauncher.jar, Insert IP of server, Enjoy it!
 
 ### Require Library
@@ -18,5 +18,5 @@ The game we are developing is a kind of math game, which can be played competiti
 - kryonet-2.21-all.jar - https://github.com/EsotericSoftware/kryonet
 
 ### Design Patterns
-⁃ We use **object pool design pattern** concept but we use *Singleton* to create.
-⁃ We use **Observer design pattern** in OnlineGame for sent a data from program to server and client, and use in OnePlayer for completed the object pool design pattern.
+* We use **object pool design pattern** concept but we use *Singleton* to create.
+* We use **Observer design pattern** in OnlineGame for sent a data from program to server and client, and use in OnePlayer for completed the object pool design pattern.
