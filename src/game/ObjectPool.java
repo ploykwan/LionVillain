@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 /**
- * 
+ * Reuse a villager.
  * @author Pimwalun Witchawanitchanun
  *
  */
 public class ObjectPool extends Observable {
-
-	private int width = 1280;
-	private int height = 720;
 
 	private List<Villager> villagers;
 	private Thread mainLoop;
@@ -19,6 +16,9 @@ public class ObjectPool extends Observable {
 
 	private int stop = 750;
 
+	/**
+	 * Initialize new ObjectPool to reuse.
+	 */
 	public ObjectPool() {
 		alive = true;
 		villagers = new ArrayList<Villager>();
@@ -26,7 +26,8 @@ public class ObjectPool extends Observable {
 			@Override
 			public void run() {
 				while (alive) {
-					tick();
+					moveVillager();
+					cleanupVillagers();
 					setChanged();
 					notifyObservers(villagers);
 					try {
@@ -40,17 +41,18 @@ public class ObjectPool extends Observable {
 		mainLoop.start();
 	}
 
-	public void tick() {
-		moveBullets();
-		cleanupVillagers();
-	}
-
-	private void moveBullets() {
+	/**
+	 * Move villager.
+	 */
+	private void moveVillager() {
 		for (Villager villager : villagers) {
 			villager.move();
 		}
 	}
 
+	/**
+	 * Remove when villager at a specified distance.
+	 */
 	private void cleanupVillagers() {
 		List<Villager> toRemove = new ArrayList<Villager>();
 		for (Villager villager : villagers) {
@@ -59,34 +61,42 @@ public class ObjectPool extends Observable {
 			}
 		}
 		for (Villager villager : toRemove) {
-			villager.setProperties(0, 0, 0, false);
+			villager.setProperties(0, 0, false);
 			villagers.remove(villager);
 		}
 	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
+	/**
+	 * Return list of a villager to release.
+	 * @return
+	 */
 	public List<Villager> getVillager() {
 		return villagers;
 	}
 
+	/**
+	 * Release villager if user answered correctly.
+	 * @param x 
+	 */
 	public void burstVillagers(int x) {
 		List<Villager> villagerList = VillagerPool.getInstance().getVillagerList();
 		Villager villager = villagerList.get(0);
-		villager.setProperties(x, -1, 0, true);
+		villager.setProperties(x, -1, true);
 		villagers.add(villager);
 	}
 
+	/**
+	 * Return distance to stop.
+	 * @return distance to stop.
+	 */
 	public int getStop() {
 		return stop;
 	}
 
+	/**
+	 * Set distance to stop.
+	 * @param stop
+	 */
 	public void setStop(int stop) {
 		this.stop = stop;
 	}

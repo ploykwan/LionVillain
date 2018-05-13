@@ -8,7 +8,7 @@ package game;
  */
 public class Villager {
 	private boolean active;
-	private int x,y,dx,dy;
+	private int x,dx;
 	private int speed = 10;
 
 	/**
@@ -25,8 +25,8 @@ public class Villager {
 	 * @param dy is distance of y.
 	 * @param active
 	 */
-	public Villager(int x, int y,int dx, int dy, boolean active) {
-		setProperties(x, dx, dy, active);
+	public Villager(int x,int dx, boolean active) {
+		setProperties(x, dx, active);
 	}
 	
 	/**
@@ -34,7 +34,6 @@ public class Villager {
 	 */
 	public void move() {
 		x += dx * speed;
-		y += dy * speed;
 	}
 
 	/**
@@ -51,14 +50,6 @@ public class Villager {
 	 */
 	public void setX(int x) {
 		this.x = x;
-	}
-
-	/**
-	 * Return coordinate of y.
-	 * @return y
-	 */
-	public int getY() {
-		return y;
 	}
 
 	/**
@@ -92,10 +83,9 @@ public class Villager {
 	 * @param dy
 	 * @param active
 	 */
-	public void setProperties(int x, int dx, int dy, boolean active) {
+	public void setProperties(int x, int dx, boolean active) {
 		this.x = x;
 		this.dx = dx;
-		this.dy = dy;
 		this.active = active;
 	}
 }

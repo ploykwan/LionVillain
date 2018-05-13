@@ -138,7 +138,7 @@ public class IndexUI{
 
 	/**
 	 * Return panel of IndexUI.
-	 * @return
+	 * @return panel of IndexUI.
 	 */
 	public JPanel getPanel() {
 		return panel;

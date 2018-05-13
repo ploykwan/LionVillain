@@ -317,7 +317,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 						objectPool.burstVillagers(1);
 						game.setDx(5);
 						Timer timer = new Timer();
-						;
 						timer.schedule(new TimerTask() {
 							@Override
 							public void run() {
@@ -491,7 +490,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	class Renderer extends JPanel {
 		public Renderer() {
 			setDoubleBuffered(true);
-			setPreferredSize(new Dimension(objectPool.getWidth(), objectPool.getHeight()));
+			setPreferredSize(new Dimension(1280, 720));
 		}
 
 		@Override
@@ -514,7 +513,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			}
 			// Draw space
 			for (Villager villager : objectPool.getVillager()) {
-				g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
+				g.drawImage(img, 1200 + villager.getX(), 510, 111, 120, null);
 			}
 		}
 	}
