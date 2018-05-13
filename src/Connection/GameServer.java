@@ -35,7 +35,7 @@ public class GameServer extends Observable {
 		server.addListener(new ServerListener());
 
 		server.start();
-		System.out.println("Server started.");
+//		System.out.println("Server started.");
 	}
 
 	class ServerListener extends Listener {

@@ -228,8 +228,8 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	 * @param why
 	 */
 	private void gameEnd(String why) {
-		double time = timedown * 0.01; // เวลาทีทำได้
-		System.out.printf("%.2f sec\n", time);
+		double time = timedown * 0.01;
+//		System.out.printf("%.2f sec\n", time);
 		answerField.removeKeyListener(this);
 		answerField.setVisible(false);
 		questionLabel.setVisible(false);
@@ -255,15 +255,15 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		panel.add(end);
 
 		if (why.equals("timeup")) {
-			System.out.println("TIME UP enter");
+//			System.out.println("TIME UP enter");
 			if (game.V2getX() - game.V1getX() > 0) {
-				System.out.println("p2win");
+//				System.out.println("p2win");
 				gameClient.setStatus("p2Win");
 			} else if (game.V2getX() == game.V1getX()) {
-				System.out.println("draw");
+//				System.out.println("draw");
 				gameClient.setStatus("draw");
 			} else {
-				System.out.println("p1win");
+//				System.out.println("p1win");
 				gameClient.setStatus("p1Win");
 			}
 			gameClient.sendMessage();

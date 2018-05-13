@@ -34,7 +34,7 @@ public class WaitingUI implements Observer {
 	 * Initialize the contains of the panel.
 	 */
 	private void initialize() {
-		System.out.println("Run waiting...");
+//		System.out.println("Run waiting...");
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -72,7 +72,7 @@ public class WaitingUI implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(arg instanceof OnlineGame) {
-			System.out.println("OnlineGameInit");
+//			System.out.println("OnlineGameInit");
 			OnlineGame ui = (OnlineGame) arg;
 			MainFrame.setPanel(ui.getDualPlayModePanel());
 		}

@@ -48,7 +48,7 @@ public class IndexUI{
 	 * Initialize the contains of the panel.
 	 */
 	private void initialize() {
-		System.out.println("Run index...");
+//		System.out.println("Run index...");
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -123,11 +123,11 @@ public class IndexUI{
 			ip = insertIP.getText().trim();
 			try {
 				if(!ip.isEmpty()) {
-					System.out.println("IP: "+ip);
+//					System.out.println("IP: "+ip);
 					GameClient client = new GameClient(ip, 55555, goTo);
 					MainFrame.setPanel(goTo.getPanel());
 				}else {
-					System.out.println("insert IP");
+//					System.out.println("insert IP");
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();

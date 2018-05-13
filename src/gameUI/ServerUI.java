@@ -15,7 +15,6 @@ public class ServerUI extends JFrame {
 	private static JLabel text;
 
 	public ServerUI() {
-		System.out.println("start");
 		panel = new JPanel();
 		setSize(new Dimension(200, 100));
 		panel.setBounds(0, 0, 200, 100);
@@ -23,7 +22,7 @@ public class ServerUI extends JFrame {
 		text.setBounds(0, 0, 200, 100);
 		try {
 			GameServer server = new GameServer(55555);
-			text.setText("Server Strat");
+			text.setText("Server Start");
 		} catch (IOException e) {
 			text.setText("Server Strat error");
 			e.printStackTrace();

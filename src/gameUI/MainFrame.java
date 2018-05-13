@@ -17,7 +17,7 @@ public class MainFrame extends JFrame {
 	private static JFrame frame;
 
 	private static void initialize() {
-		System.out.println("start");
+//		System.out.println("start");
 		frame = new JFrame("Lion Villain");
 		frame.setSize(new Dimension(FRAME_WIDTH, FRAME_HIGHT));
 		frame.setResizable(false);

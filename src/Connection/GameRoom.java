@@ -9,7 +9,6 @@ import com.esotericsoftware.kryonet.Connection;
 public class GameRoom {
 
 	private Connection p1, p2;
-	// private int count = 0;
 
 	public GameRoom() {
 
@@ -44,13 +43,5 @@ public class GameRoom {
 	public Connection getP2() {
 		return p2;
 	}
-	//
-	// public int getCount() {
-	// return count;
-	// }
-	//
-	// public void setCount(int count) {
-	// this.count = count;
-	// }
 
 }
