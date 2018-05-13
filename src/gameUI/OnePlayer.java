@@ -317,7 +317,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 						objectPool.burstVillagers(1);
 						game.setDx(5);
 						Timer timer = new Timer();
-						;
 						timer.schedule(new TimerTask() {
 							@Override
 							public void run() {
@@ -352,7 +351,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		}
 
 		public boolean isGameEnd() {
-			if (game.getX() <= -10 || game.getX() >= 900)
+			if (game.getX() <= -10)
 				return true;
 			return false;
 		}
