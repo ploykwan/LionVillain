@@ -1,5 +1,7 @@
 # Lion villain :zap:
-The game we are developing is a kind of math game, which can be played competitively with a friend or play alone. The object of the game is to be the first person to push a lion across to another village.  
+The game we are developing is a kind of math game, which can be played competitively with a friend or play alone. The object of the game is to be the first person to push a lion across to another village.
+
+![screen shot 2561-05-13 at 19 27 27](https://user-images.githubusercontent.com/25145746/39967860-6da8daf4-56ed-11e8-94c7-4cf2a300b197.jpeg)
 
 ## Member :two_women_holding_hands:
 1. Kwankaew Uttama (https://github.com/ploykwan)
