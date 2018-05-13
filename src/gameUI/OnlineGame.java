@@ -35,13 +35,12 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	private JPanel panel;
 	private JLabel lion, questionLabel, timeLabel, v1DistanceLabel, v2DistanceLabel, endLabel;
 
-	private JPanel end = new JPanel();;
+	private JPanel end = new JPanel();
 	private JTextField answerField;
 	private JButton homeButton;
 	private ImageIcon winImg, loseImg, drawImg;
 
 	private String me;
-	private long TIME_DELAY = 1000;
 	private int num1 = 0, num2 = 0, result, answer = 999;
 	private char op;
 	private String message;
@@ -60,7 +59,6 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 		gameClient = p;
 		me = gameClient.getPlayerName();
 		initialize();
-		// gameStart();
 		play();
 	}
 
@@ -137,8 +135,8 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	 */
 	public void question() {
 		char operator[] = { '+', '-', 'x', '÷' };
-		num1 = (int) (1 + (Math.random() * 1));
-		num2 = (int) (1 + (Math.random() * 9));
+		num1 = (int) (1 + (Math.random() * 10));
+		num2 = (int) (1 + (Math.random() * 10));
 		int id = (int) (Math.random() * 4);
 		op = operator[id];
 		switch (op) {
@@ -169,7 +167,7 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 			break;
 		}
 		setMessage(num1 + " " + op + " " + num2 + " =");
-		System.out.println(gameClient.getPlayerName() + " " + getMessage());
+//		System.out.println(gameClient.getPlayerName() + " " + getMessage());
 	}
 
 	/**
@@ -186,47 +184,6 @@ public class OnlineGame implements Runnable, Observer, KeyListener {
 	 */
 	public String getMessage() {
 		return message;
-	}
-
-	/**
-	 * Start the game.
-	 */
-	private void gameStart() {
-		questionLabel.setVisible(false);
-		answerField.setVisible(false);
-		JLabel count = new JLabel();
-		count.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 500));
-		count.setBounds(500, 100, 500, 500);
-		panel.add(count);
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				count.setText("3");
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						count.setText("2");
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								count.setText("1");
-								timer.schedule(new TimerTask() {
-									@Override
-									public void run() {
-										count.setVisible(false);
-										questionLabel.setVisible(true);
-										answerField.setVisible(true);
-										panel.remove(count);
-										thread.start();
-									}
-								}, TIME_DELAY);
-							}
-						}, TIME_DELAY);
-					}
-				}, TIME_DELAY);
-			}
-		}, TIME_DELAY);
 	}
 
 	/**

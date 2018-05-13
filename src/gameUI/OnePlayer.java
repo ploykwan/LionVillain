@@ -151,7 +151,9 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		restartButton.setBounds(440, 470, 204, 87);
 		restartButton.addActionListener((e) -> {
 			OnePlayer goTo = new OnePlayer();
-			goTo.initializePlayer(player);
+			if(guest == false) {
+				goTo.initializePlayer(player);
+			}
 			MainFrame.setPanel(goTo);
 		});
 		add(restartButton);
@@ -296,8 +298,10 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 				} else { // correct answer
 					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
-					if (score % 5 == 0 && score > 0) {
+					if (score % 3 == 0 && score > 0) {
 						witch.setVisible(true);
+						objectPool.burstVillagers(1);
+						game.setDx(5);
 						Timer timer = new Timer();
 						powerup = true;
 						timer.schedule(new TimerTask() {
@@ -307,7 +311,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 							}
 						}, TIME_DELAY);
 					}
-					game.setDx(10); // เพิ่มขึ้นที่ละ x หน่วย
+					game.setDx(10);
 					score++;
 					textField.setText("");
 					game.push();
@@ -504,7 +508,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	public void question() {
 		char operator[] = { '+', '-', 'x', '÷' };
 		// TODO ค่อยแก้เลข
-		num1 = (int) (1 + (Math.random() * 1));
+		num1 = (int) (1 + (Math.random() * 10));
 		num2 = (int) (1 + (Math.random() * 10));
 		int id = (int) (Math.random() * 4);
 		op = operator[id];

@@ -134,7 +134,7 @@ public class Calculator {
 	}
 
 	/**
-	 * Return x-coordinate of V2.
+	 * Return x-coordinate of village.
 	 * 
 	 * @return
 	 */
@@ -143,7 +143,7 @@ public class Calculator {
 	}
 
 	/**
-	 * Return distance x of V2.
+	 * Return distance x of village.
 	 * 
 	 * @return
 	 */
@@ -152,7 +152,7 @@ public class Calculator {
 	}
 
 	/**
-	 * Set x-coordinate of V2.
+	 * Set x-coordinate of village.
 	 * 
 	 * @param x
 	 */
@@ -161,7 +161,7 @@ public class Calculator {
 	}
 
 	/**
-	 * Set distance x of V2.
+	 * Set distance x of village.
 	 * 
 	 * @param dx
 	 */

@@ -58,17 +58,6 @@ public class DatabaseConnect {
 		return getDetailPlayer;
 	}
 	
-	public boolean isPlayerExist(String id) {
-		PlayerTable playerTable = null;
-		try {
-			playerTable = playerDao.queryForId(id);
-		} catch (SQLException e) {
-			System.out.println("pullAllPlayerdata error");
-			e.printStackTrace();
-		}
-		return playerTable != null;
-	}
-	
 	public void createUser(PlayerTable player) {
 		try {
 			playerDao.createIfNotExists(player);

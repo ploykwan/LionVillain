@@ -3,7 +3,11 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-
+/**
+ * 
+ * @author Pimwalun Witchawanitchanun
+ *
+ */
 public class ObjectPool extends Observable {
 
 	private int width = 1280;
@@ -75,7 +79,7 @@ public class ObjectPool extends Observable {
 	public void burstVillagers(int x) {
 		List<Villager> villagerList = VillagerPool.getInstance().getVillagerList();
 		Villager villager = villagerList.get(0);
-		villager.setProperties(x, -2, 0, true);
+		villager.setProperties(x, -1, 0, true);
 		villagers.add(villager);
 	}
 
