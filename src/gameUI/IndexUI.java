@@ -124,7 +124,7 @@ public class IndexUI{
 			try {
 				if(!ip.isEmpty()) {
 					System.out.println("IP: "+ip);
-					GameClient client = new GameClient(ip, 54333, goTo);
+					GameClient client = new GameClient(ip, 55555, goTo);
 					MainFrame.setPanel(goTo.getPanel());
 				}else {
 					System.out.println("insert IP");

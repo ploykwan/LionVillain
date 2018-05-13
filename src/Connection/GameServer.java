@@ -1,17 +1,22 @@
 package Connection;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import game.*;
 /**
  * Create server and the server will send data to clients.
+ * 
  * @author Kwankaew
  *
  */
@@ -20,18 +25,17 @@ public class GameServer extends Observable {
 	private Server server;
 	private List<GameRoom> gameRoom;
 	private List<Connection> connections;
-	
 
-	public GameServer() throws IOException {
+	public GameServer(int binding) throws IOException {
 		server = new Server();
 		connections = new ArrayList<Connection>();
 		gameRoom = new ArrayList<GameRoom>();
-		server.bind(54333);
+		server.bind(binding);
 		server.getKryo().register(SendData.class);
 		server.addListener(new ServerListener());
 
 		server.start();
-//		System.out.println("Server started.");
+		System.out.println("Server started.");
 	}
 
 	class ServerListener extends Listener {
@@ -44,8 +48,8 @@ public class GameServer extends Observable {
 			data.status = "SetName";
 			data.playerName = player;
 			c.sendTCP(data);
-			if(game.isFull()) {
-//				System.out.println("Room Full");
+			if (game.isFull()) {
+				// System.out.println("Room Full");
 				data.status = "Play";
 				game.getP1().sendTCP(data);
 				game.getP2().sendTCP(data);
@@ -56,7 +60,7 @@ public class GameServer extends Observable {
 		public void disconnected(Connection c) {
 			super.disconnected(c);
 			connections.remove(c);
-//			System.out.println("Client disconnected.");
+			// System.out.println("Client disconnected.");
 			setChanged();
 			notifyObservers("Client disconnected.");
 		}
@@ -68,62 +72,58 @@ public class GameServer extends Observable {
 				SendData receive = (SendData) o;
 				SendData data = new SendData();
 				GameRoom room = findGameByConnection(c);
-//				System.out.println(receive.status);
-				if(receive.status.equals("Correct")) {
-//					System.out.println(receive.playerName);
-					if(room!=null) {
+				// System.out.println(receive.status);
+				if (receive.status.equals("Correct")) {
+					// System.out.println(receive.playerName);
+					if (room != null) {
 						room.getP1().sendTCP(receive);
 						room.getP2().sendTCP(receive);
-					}
-					else System.out.println("Logic Error!!!!!!");
-				}
-				else if(receive.status.equals("End")) {
-					if(room!=null) {
-						if(receive.playerName.equals("p1")) {
+					} else
+						System.out.println("Logic Error!!!!!!");
+				} else if (receive.status.equals("End")) {
+					if (room != null) {
+						if (receive.playerName.equals("p1")) {
 							data.status = "lose";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);
 							data.status = "win";
 							data.playerName = "p2";
 							room.getP2().sendTCP(data);
-						}
-						else if(receive.playerName.equals("p2")) {
+						} else if (receive.playerName.equals("p2")) {
 							data.status = "win";
 							data.playerName = "p1";
 							room.getP1().sendTCP(data);
 							data.status = "lose";
 							data.playerName = "p2";
-							room.getP2().sendTCP(data);	
+							room.getP2().sendTCP(data);
 						}
 					}
-//					else System.out.println("Logic Error!!!!!!");
+					// else System.out.println("Logic Error!!!!!!");
 				}
-				if(receive.status.equals("p1Win")) {
-//					System.out.println("status: p1Win");
+				if (receive.status.equals("p1Win")) {
+					// System.out.println("status: p1Win");
 					data.status = "win";
 					data.playerName = "p1";
 					room.getP1().sendTCP(data);
 					data.status = "lose";
 					data.playerName = "p2";
 					room.getP2().sendTCP(data);
-				}
-				else if(receive.status.equals("p2Win")) {
-//					System.out.println("status: p2Win");
+				} else if (receive.status.equals("p2Win")) {
+					// System.out.println("status: p2Win");
 					data.status = "lose";
 					data.playerName = "p1";
 					room.getP1().sendTCP(data);
 					data.status = "win";
 					data.playerName = "p2";
-					room.getP2().sendTCP(data);	
-				}
-				else if(receive.status.equals("draw")) {
-//					System.out.println("status: draw");
+					room.getP2().sendTCP(data);
+				} else if (receive.status.equals("draw")) {
+					// System.out.println("status: draw");
 					data.status = "draw";
 					data.playerName = "p1";
 					room.getP1().sendTCP(data);
 					data.status = "draw";
 					data.playerName = "p2";
-					room.getP2().sendTCP(data);	
+					room.getP2().sendTCP(data);
 				}
 			}
 		}
@@ -131,7 +131,7 @@ public class GameServer extends Observable {
 
 	public GameRoom findAvailableRoom() {
 		if (gameRoom.size() == 0) {
-//			System.out.println("No Room Available! Create New One");
+			// System.out.println("No Room Available! Create New One");
 			setChanged();
 			notifyObservers("No Room Available! Create New One");
 			GameRoom room = new GameRoom();
@@ -150,20 +150,12 @@ public class GameServer extends Observable {
 	}
 
 	public GameRoom findGameByConnection(Connection connection) {
-		for(GameRoom room : gameRoom) {
-			if(room.getP1().equals(connection)||room.getP2().equals(connection)) {
+		for (GameRoom room : gameRoom) {
+			if (room.getP1().equals(connection) || room.getP2().equals(connection)) {
 				return room;
 			}
 		}
 		return null;
-	}
-
-	public static void main(String[] args) {
-		try {
-			GameServer server = new GameServer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
