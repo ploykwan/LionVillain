@@ -72,10 +72,13 @@ public class Calculator {
 		if (ans != result) {
 			return false;
 		}
-//		System.out.println("true");
 		return true;
 	}
 
+	/**
+	 * V1 answer is correct.
+	 * @return x-coordinate of V2.
+	 */
 	public int V1push() {
 		V2setX((V2getX() - V2getDX()));
 		V1setX((V1getX() + V2getDX()));
@@ -83,6 +86,10 @@ public class Calculator {
 		return V2getX();
 	}
 
+	/**
+	 * V2 answer is correct.
+	 * @return x-coordinate of V2.
+	 */
 	public int V2push() {
 		V2setX((V2getX() + V2getDX()));
 		V1setX((V1getX() - V2getDX()));
@@ -90,10 +97,18 @@ public class Calculator {
 		return V2getX();
 	}
 
+	/**
+	 * Return x-coordinate of v1.
+	 * @return x-coordinate of v1.
+	 */
 	public int V1getX() {
 		return v1.getX();
 	}
 
+	/**
+	 * Set x-coordinate of v1.
+	 * @param x
+	 */
 	public void V1setX(int x) {
 		v1.setX(x);
 	}
@@ -106,28 +121,52 @@ public class Calculator {
 	// v1.setDx(dx);
 	// }
 
+	/**
+	 * Return x-coordinate of v2.
+	 * @return x-coordinate of v2.
+	 */
 	public int V2getX() {
 		return v2.getX();
 	}
 
+	/**
+	 * Return distance x of v2.
+	 * @return distance x of v2.
+	 */
 	private int V2getDX() {
 		return v2.getDx();
 	}
 
+	/**
+	 * Set distance x of v2.
+	 * @param dx
+	 */
 	public void V2setDx(int dx) {
 		v2.setDx(dx);
 	}
 
+	/**
+	 * Set x-coordinate of v2.
+	 * @param x
+	 */
 	public void V2setX(int x) {
 		v2.setX(x);
 	}
 
+	/**
+	 * It use in one player mode if user answered correctly.
+	 * @return 
+	 */
 	public int push() {
 		v2.setX(v2.getX() - v2.getDx());
 		System.out.println("v.getX(): " + v2.getX());
 		return v2.getX();
 	}
 
+	/**
+	 * If user answer wrong.
+	 * @return 
+	 */
 	public int back() {
 		v2.setX(v2.getX() + 20);
 		return v2.getX();

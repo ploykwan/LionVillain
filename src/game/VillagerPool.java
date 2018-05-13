@@ -18,7 +18,7 @@ public class VillagerPool {
 	public VillagerPool() {
 		villagers = new ArrayList<>();
 		for (int i = 0; i < 10; i++)
-			villagers.add(new Villager(0, 0, 0, 0, false));
+			villagers.add(new Villager(0, 0, false));
 	}
 
 	/**

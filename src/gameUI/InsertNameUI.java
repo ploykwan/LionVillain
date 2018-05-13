@@ -24,6 +24,7 @@ import Connection.PlayerTable;
 
 /**
  * InsertName UI it shows when a user wants to play in mode 1 player.
+ * 
  * @author Pimwalun Witchawanitchanun
  *
  */
@@ -110,7 +111,7 @@ public class InsertNameUI {
 					goTo.initializePlayer(p);
 					MainFrame.setPanel(goTo);
 				} catch (Exception e1) {
-					
+
 				}
 			}
 		});
@@ -132,6 +133,7 @@ public class InsertNameUI {
 
 	/**
 	 * Return panel of InsertNameUI.
+	 * 
 	 * @return panel of InsertNameUI.
 	 */
 	public JPanel getPanel() {
@@ -140,6 +142,7 @@ public class InsertNameUI {
 
 	/**
 	 * User can insert they name at most 10 characters.
+	 * 
 	 * @author Pimwalun Witchawanitchanun
 	 *
 	 */
