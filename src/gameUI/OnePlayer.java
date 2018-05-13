@@ -398,6 +398,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			textField.removeKeyListener(textField.getKeyListeners()[0]);
 			textField.setVisible(false);
 			question.setVisible(false);
+			combo.setVisible(false);
 
 			if (guest == false) {
 				showScoreBoard();

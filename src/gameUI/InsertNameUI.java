@@ -24,7 +24,7 @@ import Connection.PlayerTable;
 
 /**
  * InsertName UI it shows when a user wants to play in mode 1 player.
- * @author 
+ * @author Pimwalun Witchawanitchanun
  *
  */
 public class InsertNameUI {
@@ -77,6 +77,7 @@ public class InsertNameUI {
 			public void mousePressed(MouseEvent e) {
 				name.setText("");
 				name.setForeground(Color.black);
+				name.setFont(new Font("Andale Mono", Font.BOLD, 18));
 			}
 		});
 
