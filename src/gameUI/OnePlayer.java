@@ -50,11 +50,12 @@ import game.Villager;
 public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	private DatabaseConnect database;
-	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
+	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose, powerup,
+			combo;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
 	private JScrollPane scroll;
-	private ImageIcon w, lion_in_cage;
+	private ImageIcon w, lion_in_cage, power;
 	private Renderer renderer;
 	private JTable table;
 
@@ -68,7 +69,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	private String message;
 	private String name;
 	private boolean guest = true;
-	private boolean powerup = false;
 
 	private Calculator game;
 	private Thread thread;
@@ -101,6 +101,12 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		time.setBounds(110, 35, 200, 25);
 		add(time);
 
+		combo = new JLabel();
+		combo.setFont(new Font("Andale Mono", Font.PLAIN, 20));
+		combo.setText("Combo: 0");
+		combo.setBounds(1160, 310, 400, 25);
+		add(combo);
+
 		distanceLabel = new JLabel();
 		distanceLabel.setFont(new Font("Andale Mono", Font.PLAIN, 20));
 		distanceLabel.setText("Distance: ");
@@ -122,6 +128,12 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		textField.setFont(new Font("Arial Rounded Bold", Font.PLAIN, 43));
 		textField.setBounds(710, 168, 105, 75);
 		add(textField);
+
+		power = new ImageIcon(getClass().getResource("/res/power.png"));
+		powerup = new JLabel(power);
+		powerup.setBounds(1110, 330, 150, 71);
+		powerup.setVisible(false);
+		add(powerup);
 
 		w = new ImageIcon(getClass().getResource("/res/witch_r.gif"));
 		witch = new JLabel(w);
@@ -151,7 +163,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		restartButton.setBounds(440, 470, 204, 87);
 		restartButton.addActionListener((e) -> {
 			OnePlayer goTo = new OnePlayer();
-			if(guest == false) {
+			if (guest == false) {
 				goTo.initializePlayer(player);
 			}
 			MainFrame.setPanel(goTo);
@@ -289,25 +301,28 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					textField.setText("");
 				}
 				if (!game.check(answer, num1, num2, op)) {
-					score--;
+					score = 0;
 					textField.setText("");
 					game.back();
 					lion.setLocation(game.getX(), 375);
 					objectPool.setStop(game.getX() + 20);
 					distance.setText(String.format("%d meter", game.getX()));
+					combo.setText(String.format("Combo: %d", score));
 				} else { // correct answer
 					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
 					if (score % 3 == 0 && score > 0) {
 						witch.setVisible(true);
+						powerup.setVisible(true);
 						objectPool.burstVillagers(1);
 						game.setDx(5);
 						Timer timer = new Timer();
-						powerup = true;
+						;
 						timer.schedule(new TimerTask() {
 							@Override
 							public void run() {
 								witch.setVisible(false);
+								powerup.setVisible(false);
 							}
 						}, TIME_DELAY);
 					}
@@ -317,6 +332,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					game.push();
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX()));
+					combo.setText(String.format("Combo: %d", score));
 				}
 				if (game.getX() >= 890) {
 					stop();
