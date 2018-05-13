@@ -1,5 +1,6 @@
 package gameUI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -33,7 +34,7 @@ public class InsertNameUI {
 	private JPanel panel;
 	private JButton back, start, skip;
 	private JTextField name;
-	private JLabel lbLabel = new JLabel("Limit 10");
+	private JLabel lbLabel = new JLabel();
 	private String player;
 
 	/**
@@ -67,13 +68,15 @@ public class InsertNameUI {
 		name.setBounds(488, 237, 343, 48);
 		name.setDocument(new JTextFieldLimit(10));
 		name.setHorizontalAlignment(SwingConstants.CENTER);
-		name.setText(lbLabel.getText());
+		name.setForeground(Color.gray);
+		name.setFont(new Font("Andale Mono", Font.ITALIC, 12));
+		name.setText("max 10char");
 		panel.add(name);
 		name.add(lbLabel);
 		name.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (name.getText().equals("Limit 10"))
-					name.setText("");
+				name.setText("");
+				name.setForeground(Color.black);
 			}
 		});
 
