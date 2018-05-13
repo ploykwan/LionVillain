@@ -43,11 +43,13 @@ import game.Villager;
 
 /**
  * OnePlyer UI for 1 player mode.
+ * 
  * @author Pimwalun Witchawanitchanun
  *
  */
 public class OnePlayer extends JPanel implements Observer, Runnable {
 
+	private DatabaseConnect database;
 	private JLabel question, timeLabel, time, distance, distanceLabel, witch, lion, endLabel, showScore, lose;
 	private JTextField textField;
 	private JButton restartButton, homeButton;
@@ -72,7 +74,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	private Thread thread;
 	private final AtomicBoolean running = new AtomicBoolean(true);
 	private ObjectPool objectPool;
-	private PlayerTable p = new PlayerTable();
+	private PlayerTable player = new PlayerTable();
 	private Villager v = new Villager();
 
 	/**
@@ -149,6 +151,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		restartButton.setBounds(440, 470, 204, 87);
 		restartButton.addActionListener((e) -> {
 			OnePlayer goTo = new OnePlayer();
+			goTo.initializePlayer(player);
 			MainFrame.setPanel(goTo);
 		});
 		add(restartButton);
@@ -196,13 +199,15 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Initialize from PlayerTable to show the score board.
-	 * @param player is info from database.
+	 * 
+	 * @param player
+	 *            is info from database.
 	 */
-	public void initializePlayer(PlayerTable player) {
+	public void initializePlayer(PlayerTable newPlayer) {
 		guest = false;
-		p.setName(player.getName());
-		p.setScore(0);
-		System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
+		player.setName(newPlayer.getName());
+		player.setScore(0);
+		System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
 	}
 
 	/**
@@ -266,6 +271,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Input the answer and check that correct or not.
+	 * 
 	 * @author pimwalun
 	 *
 	 */
@@ -308,7 +314,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					lion.setLocation(game.getX(), 375);
 					distance.setText(String.format("%d meter", game.getX()));
 				}
-				if (game.getX() >= 900) {
+				if (game.getX() >= 890) {
 					stop();
 					lose.setVisible(true);
 					gameEnd();
@@ -325,7 +331,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			}
 		}
 
-		
 		public boolean isGameEnd() {
 			if (game.getX() <= -10 || game.getX() >= 900)
 				return true;
@@ -364,8 +369,8 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		}
 
 		/**
-		 * If player select start button the panel it show scoreboard.
-		 * If player select skip button the panel it doesn't show scoreboard.
+		 * If player select start button the panel it show scoreboard. If player select
+		 * skip button the panel it doesn't show scoreboard.
 		 */
 		private void gameEnd() {
 			double time = timeup * 0.01; // เวลาทีทำได้
@@ -377,9 +382,9 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			if (guest == false) {
 				showScoreBoard();
 				System.out.println("guset");
-				p.setScore(time);
-				System.out.println("gameEnd(): " + p.getName() + ", " + p.getScore());
-				DatabaseConnect.getInstance().update(p);
+				player.setScore(time);
+				System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
+				DatabaseConnect.getInstance().update(player);
 				showScoreBoard();
 
 				List<PlayerTable> playerList = new ArrayList<PlayerTable>(
@@ -392,7 +397,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					data[i][0] = (i + 1) + "";
 					data[i][1] = playerList.get(i).getName();
 					data[i][2] = playerList.get(i).getScore() + "";
-					if (playerList.get(i).getName().equalsIgnoreCase(p.getName())) {
+					if (playerList.get(i).getName().equalsIgnoreCase(player.getName())) {
 					}
 				}
 
@@ -421,7 +426,9 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 		/**
 		 * Set color of the current user playing.
-		 * @param table is scoreboard.
+		 * 
+		 * @param table
+		 *            is scoreboard.
 		 * @return every value of scoreboard.
 		 */
 		private JTable getNewRenderedTable(JTable table) {
@@ -431,7 +438,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 						boolean hasFocus, int row, int col) {
 					super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 					String status = (String) table.getModel().getValueAt(row, 1);
-					if ((p.getName()).equals(status)) {
+					if ((player.getName()).equals(status)) {
 						setBackground(Color.white);
 						setForeground(Color.black);
 					} else {
@@ -456,6 +463,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Paint background and villager in the panel.
+	 * 
 	 * @author pimwalun
 	 *
 	 */
@@ -468,7 +476,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-	
 
 			BufferedImage img1 = null;
 			try {
@@ -478,7 +485,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			}
 			g.drawImage(img1, 0, 0, 1280, 720, null);
 
-			
 			BufferedImage img = null;
 			try {
 				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
@@ -486,14 +492,8 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 				e.printStackTrace();
 			}
 			// Draw space
-			Graphics g2 = img.createGraphics();
 			for (Villager villager : objectPool.getVillager()) {
-//				if (powerup == true) {
-//						System.out.println("power up");
-//						g2.drawImage(img, 1200 + villager.getX(), 450 + villager.getY(), 111, 120, null);
-//						powerup = false;
-//				}
-					g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
+				g.drawImage(img, 1200 + villager.getX(), 510 + villager.getY(), 111, 120, null);
 			}
 		}
 	}
@@ -541,7 +541,9 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Set a message about the game.
-	 * @param message a string about the question in the game.
+	 * 
+	 * @param message
+	 *            a string about the question in the game.
 	 */
 	public void setMessage(String message) {
 		this.message = message;
@@ -549,6 +551,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Return a message about the question in the game.
+	 * 
 	 * @return string message related to the recent question.
 	 */
 	public String getMessage() {
@@ -590,6 +593,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 	/**
 	 * Return panel of OnePlayer.
+	 * 
 	 * @return panel of OnePlayer.
 	 */
 	public JPanel getPanel() {

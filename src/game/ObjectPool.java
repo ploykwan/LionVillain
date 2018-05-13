@@ -50,7 +50,7 @@ public class ObjectPool extends Observable {
 	private void cleanupVillagers() {
 		List<Villager> toRemove = new ArrayList<Villager>();
 		for (Villager villager : villagers) {
-			if (villager.getX() == (-900 + getStop())) {
+			if (villager.getX() <= (-900 + getStop())) {
 				toRemove.add(villager);
 			}
 		}
@@ -73,25 +73,10 @@ public class ObjectPool extends Observable {
 	}
 
 	public void burstVillagers(int x) {
-		List<Villager> villagerList = VillagerPool.getInstance().getBulletList();
-		for(int i = 0 ; i < 2 ; i++ ) {
-			Villager villager = villagerList.get(0);
-			switch (i) {
-			case 0:
-				villager.setProperties(x, -1, 0, true);
-				break;
-			case 1:
-				villager.setProperties(x, -2, 0, true);
-				break;
-			default:
-				break;
-			}
-			villagers.add(villager);
-		}
-//		Villager villager = villagerList.get(0);
-//		villager.setProperties(x, -1, 0, true);
-//		villager.setProperties(x, -1, 0, true);
-//		villagers.add(villager);
+		List<Villager> villagerList = VillagerPool.getInstance().getVillagerList();
+		Villager villager = villagerList.get(0);
+		villager.setProperties(x, -2, 0, true);
+		villagers.add(villager);
 	}
 
 	public int getStop() {

@@ -17,7 +17,6 @@ import Connection.GameClient;
 
 /**
  * Waiting UI is waiting other user come in the same room.
- * @author 
  *
  */
 public class WaitingUI implements Observer {

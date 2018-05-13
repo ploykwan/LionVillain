@@ -10,7 +10,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import game.*;
-import gameUI.DualPlayUI;
 /**
  * Create server and the server will send data to clients.
  * @author Kwankaew
