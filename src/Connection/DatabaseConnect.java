@@ -33,12 +33,11 @@ public class DatabaseConnect {
 			updateBuilder = playerDao.updateBuilder();
 		} catch (SQLException e) {
 			System.out.println("error");
-			e.printStackTrace();
 		}
 	}
 
 	public static DatabaseConnect getInstance() {
-		System.out.println(NAME + "<<<>>>" + URL);
+//		System.out.println(NAME + "<<<>>>" + URL);
 		if( databaseConnect == null )
 			databaseConnect = new DatabaseConnect();
 		return databaseConnect;
@@ -53,7 +52,6 @@ public class DatabaseConnect {
 			getDetailPlayer = playerDao.queryForAll();
 		} catch (SQLException e) {
 			System.out.println("pullAllPlayerdata error");
-			e.printStackTrace();
 		}
 		return getDetailPlayer;
 	}
@@ -63,19 +61,17 @@ public class DatabaseConnect {
 			playerDao.createIfNotExists(player);
 		}catch (SQLException e) {
 			System.out.println("create player error");
-			e.printStackTrace();
 		}
 	}
 	
 	public void update(PlayerTable player) {
 			try {
-				System.out.println("update time: "+ player.getScore()+", "+player.getName());
+//				System.out.println("update time: "+ player.getScore()+", "+player.getName());
 				updateBuilder.where().eq("name", player.getName());
 				updateBuilder.updateColumnValue("score", player.getScore());
 				updateBuilder.update();
 			} catch (SQLException e) {
 				System.out.println("Update score error.");
-				e.printStackTrace();
 			}
 	
 	}

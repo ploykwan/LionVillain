@@ -78,7 +78,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 	 * Create the application.
 	 */
 	public OnePlayer() {
-		System.out.println("Run test...");
+//		System.out.println("Run 1 player...");
 		game = new Calculator();
 		objectPool = new ObjectPool();
 		objectPool.addObserver(this);
@@ -94,7 +94,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 		time = new JLabel();
 		time.setFont(new Font("Andale Mono", Font.PLAIN, 20));
-		time.setText("00.00 sec"); // ใส่เวลา
+		time.setText("00.00 sec"); 
 		time.setBounds(110, 35, 200, 25);
 		add(time);
 
@@ -218,7 +218,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		guest = false;
 		player.setName(newPlayer.getName());
 		player.setScore(0);
-		System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
+//		System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 					objectPool.setStop(game.getX() + 20);
 					distance.setText(String.format("%d meter", game.getX()));
 					combo.setText(String.format("Combo: %d", score));
-					System.out.println(game.getX());
+//					System.out.println(game.getX());
 				} else { // correct answer
 					objectPool.setStop(game.getX() - game.getDx());
 					objectPool.burstVillagers(e.getKeyCode());
@@ -393,7 +393,7 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 		 */
 		private void gameEnd() {
 			double time = timeup * 0.01; // เวลาทีทำได้
-			System.out.printf("%.2f sec\n", time);
+//			System.out.printf("%.2f sec\n", time);
 			textField.removeKeyListener(textField.getKeyListeners()[0]);
 			textField.setVisible(false);
 			question.setVisible(false);
@@ -401,9 +401,9 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 
 			if (guest == false && loser == false) {
 				showScoreBoard();
-				System.out.println("guset");
+//				System.out.println("guset");
 				player.setScore(time);
-				System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
+//				System.out.println("gameEnd(): " + player.getName() + ", " + player.getScore());
 				DatabaseConnect.getInstance().update(player);
 				showScoreBoard();
 
@@ -502,7 +502,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			try {
 				img1 = ImageIO.read(this.getClass().getResource("/res/single_mode.png"));
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			g.drawImage(img1, 0, 0, 1280, 720, null);
 
@@ -510,7 +509,6 @@ public class OnePlayer extends JPanel implements Observer, Runnable {
 			try {
 				img = ImageIO.read(this.getClass().getResource("/res/push.png"));
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			// Draw space
 			for (Villager villager : objectPool.getVillager()) {

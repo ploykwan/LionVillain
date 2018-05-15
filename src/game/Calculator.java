@@ -113,14 +113,6 @@ public class Calculator {
 		v1.setX(x);
 	}
 
-	// public int V1getDx() {
-	// return v1.getDx();
-	// }
-	//
-	// public void V1setDx(int dx) {
-	// v1.setDx(dx);
-	// }
-
 	/**
 	 * Return x-coordinate of v2.
 	 * @return x-coordinate of v2.
@@ -159,7 +151,6 @@ public class Calculator {
 	 */
 	public int push() {
 		v2.setX(v2.getX() - v2.getDx());
-		System.out.println("v.getX(): " + v2.getX());
 		return v2.getX();
 	}
 
